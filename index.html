@@ -6,18 +6,51 @@
     <title>Software Engineer Resume</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">Portfolio</div>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <a href="#hero" class="logo">
+                <img src="logo.png" alt="Logo" class="logo-img">
+            </a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-content" id="navContent">
+                <ul class="nav-links">
+                    <li><a href="#about"><span data-i18n="nav_about">ABOUT</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                    <li><a href="#education"><span data-i18n="nav_education">EDUCATION</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                    <li><a href="#skills"><span data-i18n="nav_skills">SKILLS</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                    <li><a href="#projects"><span data-i18n="nav_projects">PROJECTS</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                    <li><a href="#hobbies"><span data-i18n="nav_hobbies">HOBBIES</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                    <li><a href="#contact"><span data-i18n="nav_contact">CONTACT</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
+                </ul>
+                <div class="lang-switcher" id="langSwitcher">
+                    <button class="lang-btn" id="langBtn">
+                        <span id="langLabel">ENGLISH</span>
+                        <span class="lang-bracket">[<span class="lang-caret">⌄</span>]</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown">
+                        <button class="lang-option" data-lang="en">English</button>
+                        <button class="lang-option" data-lang="zh">中文</button>
+                    </div>
+                </div>
+            </div>
+            <div class="header-social">
+                <a href="https://github.com/DelightFoo" target="_blank" class="social-btn github-btn" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/chen-xuan-foo-810a57282" target="_blank" class="social-btn linkedin-btn" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
         </nav>
     </header>
 
@@ -25,11 +58,21 @@
         <!-- Hero Section -->
         <section id="hero" class="hero">
             <div class="hero-content">
-                <h1>Software Engineer</h1>
+                <h1>TESTING</h1>
                 <p class="tagline">Building innovative solutions with modern technologies</p>
                 <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">Get in Touch</a>
+                    <a href="#contact" class="btn btn-primary">
+                        <span class="btn-bracket btn-bracket-tl"></span>
+                        <span class="btn-bracket btn-bracket-tr"></span>
+                        <span class="btn-bracket btn-bracket-bl"></span>
+                        <span class="btn-bracket btn-bracket-br"></span>
+                        Get in Touch
+                    </a>
                     <a href="cv.pdf" class="btn btn-secondary" download>
+                        <span class="btn-bracket btn-bracket-tl"></span>
+                        <span class="btn-bracket btn-bracket-tr"></span>
+                        <span class="btn-bracket btn-bracket-bl"></span>
+                        <span class="btn-bracket btn-bracket-br"></span>
                         <i class="fas fa-download"></i> Download CV
                     </a>
                 </div>
@@ -39,31 +82,57 @@
         <!-- About Section -->
         <section id="about" class="section">
             <div class="container">
-                <h2>About Me</h2>
-                <div class="about-content">
-                    <div class="about-text">
+               <div class="about-content">
+                <div class="drawer-panel drawer-panel-top">
+                    <div class="drawer-panel-inner">
+                        <div class="drawer-image">
+                            <img src="profile.jpg" >
+                        </div>
+                        <div class="drawer-bio">
+                            <p>A quick glimpse — photo and a short line about who I am.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <span class="corner-mark corner-tl"></span>
+                    <span class="corner-mark corner-tr"></span>
+                    <span class="corner-mark corner-bl"></span>
+                    <span class="corner-mark corner-br"></span>
+                    <p>
+                        I am a passionate Software Engineer with hands-on experience in software support and development. 
+                        With 6 months of internship experience in software support and 3 months of probation period in the same field, 
+                        I have developed strong problem-solving skills and a deep understanding of software lifecycle management.
+                    </p>
+                    <p>
+                        My technical expertise spans across multiple programming languages and frameworks including ASP.NET & C#, 
+                        Java, Kotlin for Android development, MSSQL, Azure cloud services, CUDA/OpenCV for computer vision, 
+                        and Flutter for cross-platform mobile development. I am eager to leverage my skills to build innovative 
+                        and efficient software solutions.
+                    </p>
+                </div>
+                <div class="drawer-panel drawer-panel-bottom">
+                    <div class="drawer-panel-inner">
+                        <h4>Working Experience</h4>
                         <p>
-                            I am a passionate Software Engineer with hands-on experience in software support and development. 
-                            With 6 months of internship experience in software support and 3 months of probation period in the same field, 
-                            I have developed strong problem-solving skills and a deep understanding of software lifecycle management.
-                        </p>
-                        <p>
-                            My technical expertise spans across multiple programming languages and frameworks including ASP.NET & C#, 
-                            Java, Kotlin for Android development, MSSQL, Azure cloud services, CUDA/OpenCV for computer vision, 
-                            and Flutter for cross-platform mobile development. I am eager to leverage my skills to build innovative 
-                            and efficient software solutions.
+                            6-month internship in software support, followed by a 3-month probation period in the same role.
+                            Gained hands-on exposure to real-world software lifecycle management, cross-team collaboration,
+                            and troubleshooting production issues under time pressure.
                         </p>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
 
         <!-- Education Section -->
         <section id="education" class="section alternate-bg">
             <div class="container">
-                <h2>Education</h2>
                 <div class="education-grid">
                     <div class="education-card">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
                         <div class="education-icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
@@ -79,18 +148,27 @@
         <!-- Skills Section -->
         <section id="skills" class="section">
             <div class="container">
-                <h2>Technical Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-category">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
                         <h3><i class="fas fa-code"></i> Programming Languages</h3>
                         <div class="skill-tags">
                             <span class="skill-tag">C#</span>
+                            <span class="skill-tag">C++</span>
                             <span class="skill-tag">Java</span>
                             <span class="skill-tag">Kotlin</span>
+                            <span class="skill-tag">Python</span>
                             <span class="skill-tag">SQL</span>
                         </div>
                     </div>
                     <div class="skill-category">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
                         <h3><i class="fas fa-laptop-code"></i> Frameworks & Technologies</h3>
                         <div class="skill-tags">
                             <span class="skill-tag">ASP.NET</span>
@@ -100,14 +178,15 @@
                         </div>
                     </div>
                     <div class="skill-category">
-                        <h3><i class="fas fa-cloud"></i> Cloud & Tools</h3>
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
+                        <h3><i class="fas fa-cloud"></i>Other Tools</h3>
                         <div class="skill-tags">
-                            <span class="skill-tag">Microsoft Azure</span>
-                            <span class="skill-tag">CUDA</span>
-                            <span class="skill-tag">OpenCV</span>
-                            <span class="skill-tag">Mobile App</span>
-                            <span class="skill-tag">Desktop App</span>
-                            <span class="skill-tag">Ai Agency Tools</span>
+                            <span class="skill-tag">Office Tools</span>
+                            <span class="skill-tag">Code Editor</span>
+                            <span class="skill-tag">GitHub</span>
                             <span class="skill-tag">Git</span>
                         </div>
                     </div>
@@ -118,80 +197,94 @@
         <!-- Projects Section -->
         <section id="projects" class="section alternate-bg">
             <div class="container">
-                <h2>Recent Projects & Tools</h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <div class="project-icon">
-                            <i class="fas fa-mobile-alt"></i>
+                <div class="project-showcase">
+                    <div class="showcase-media" id="showcaseMedia">
+                        <!-- Replace background-image below with your actual screenshot/video poster per project via JS -->
+                        <img id="showcaseImg" src="test.png">
+                        <div class="showcase-overlay">
+                            <h3 id="showcaseTitle">Desktop Music Player</h3>
+                            <p id="showcaseDesc">Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.</p>
+                        <div class="project-nav-scroll" id="projectNavScroll">
+                            <button class="project-nav-item active" data-index="0">
+                                <i class="fas fa-music"></i>
+                                <span>Desktop Music Player</span>
+                                    <span class="nav-item-crosshair">
+                                        <span class="crosshair-corner crosshair-corner-tl"></span>
+                                        <span class="crosshair-corner crosshair-corner-tr"></span>
+                                        <span class="crosshair-corner crosshair-corner-bl"></span>
+                                        <span class="crosshair-corner crosshair-corner-br"></span>
+                                    </span>
+                            </button>
+                            <button class="project-nav-item" data-index="1">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Mobile Music Player</span>
+                                <span class="nav-item-crosshair">
+                                    <span class="crosshair-corner crosshair-corner-tl"></span>
+                                    <span class="crosshair-corner crosshair-corner-tr"></span>
+                                    <span class="crosshair-corner crosshair-corner-bl"></span>
+                                    <span class="crosshair-corner crosshair-corner-br"></span>
+                                </span>
+                            </button>
+                            <button class="project-nav-item" data-index="2">
+                                <i class="fas fa-keyboard"></i>
+                                <span>Overlay Textbox</span>
+                                <span class="nav-item-crosshair">
+                                    <span class="crosshair-corner crosshair-corner-tl"></span>
+                                    <span class="crosshair-corner crosshair-corner-tr"></span>
+                                    <span class="crosshair-corner crosshair-corner-bl"></span>
+                                    <span class="crosshair-corner crosshair-corner-br"></span>
+                                </span>
+                            </button>
+                            <button class="project-nav-item" data-index="3">
+                                <i class="fas fa-bomb"></i>
+                                <span>Mine Sweeper</span>
+                                <span class="nav-item-crosshair">
+                                    <span class="crosshair-corner crosshair-corner-tl"></span>
+                                    <span class="crosshair-corner crosshair-corner-tr"></span>
+                                    <span class="crosshair-corner crosshair-corner-bl"></span>
+                                    <span class="crosshair-corner crosshair-corner-br"></span>
+                                </span>
+                            </button>
                         </div>
-                        <h3>Android Application Development</h3>
-                        <p>Developed mobile applications using Kotlin and Android Studio. Implemented modern UI designs and integrated with REST APIs for data management.</p>
-                        <div class="project-tags">
-                            <span>Kotlin</span>
-                            <span>Android</span>
-                            <span>REST API</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-icon">
-                            <i class="fas fa-desktop"></i>
-                        </div>
-                        <h3>ASP.NET Web Application</h3>
-                        <p>Built enterprise-level web applications using ASP.NET and C#. Implemented secure authentication, database integration with MSSQL, and Azure deployment.</p>
-                        <div class="project-tags">
-                            <span>ASP.NET</span>
-                            <span>C#</span>
-                            <span>MSSQL</span>
-                            <span>Azure</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-icon">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <h3>Computer Vision with OpenCV</h3>
-                        <p>Implemented image processing and computer vision algorithms using CUDA and OpenCV for real-time object detection and image analysis.</p>
-                        <div class="project-tags">
-                            <span>OpenCV</span>
-                            <span>CUDA</span>
-                            <span>Python</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-icon">
-                            <i class="fas fa-mobile"></i>
-                        </div>
-                        <h3>Cross-Platform Mobile App</h3>
-                        <p>Developed cross-platform mobile applications using Flutter, ensuring consistent performance across iOS and Android devices.</p>
-                        <div class="project-tags">
-                            <span>Flutter</span>
-                            <span>Dart</span>
-                            <span>Firebase</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section>  
 
         <!-- Hobbies Section -->
         <section id="hobbies" class="section">
             <div class="container">
-                <h2>Hobbies</h2>
                 <div class="hobbies-grid">
-                    <div class="hobby-card">
+                    <div class="hobby-card" data-hobby="reading">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
                         <i class="fas fa-book"></i>
                         <h3>Reading</h3>
-                        <p>Dystopian fiction, Speculative fiction, sci-fi fiction, and psychology books</p>
+                        <p>Dystopian fiction, Speculative fiction, Sci-fi fiction, and Psychology books</p>
+                        <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
                     </div>
-                    <div class="hobby-card">
-                        <i class="fas fa-drawing"></i>
+                    <div class="hobby-card" data-hobby="drawing">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
+                        <i class="fas fa-pencil-alt"></i>
                         <h3>Drawing</h3>
-                        <p>Bust, Portrait drawing</p>
+                        <p>Bust, Portrait Drawing</p>
+                        <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
                     </div>
-                    <div class="hobby-card">
+                    <div class="hobby-card" data-hobby="gaming">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
                         <i class="fas fa-gamepad"></i>
                         <h3>Gaming</h3>
-                        <p>Strategy games, problem-solving puzzles, card games, Souls-like games, and board games</p>
+                        <p>Strategy games, Problem-solving puzzles, Card games, Souls-like games, and Board games</p>
+                        <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
                     </div>
                 </div>
             </div>
@@ -200,14 +293,13 @@
         <!-- Contact Section -->
         <section id="contact" class="section alternate-bg">
             <div class="container">
-                <h2>Contact Me</h2>
                 <div class="contact-content">
                     <div class="contact-info">
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <h3>Email</h3>
-                                <p>[foochenxuan@gmail.com]</p>
+                                <p>foochenxuan@gmail.com</p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -221,7 +313,7 @@
                             <i class="fab fa-github"></i>
                             <div>
                                 <h3>GitHub</h3>
-                                <p><a href="https://github.com/DelightFoo]" target="_blank">github.com/DelightFoo</a></p>
+                                <p><a href="https://github.com/DelightFoo" target="_blank">github.com/DelightFoo</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -245,25 +337,89 @@
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2024 Software Engineer Portfolio. Built with HTML, CSS, and GitHub Pages.</p>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/chen-xuan-foo-810a57282/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/DelightFoo" target="_blank"><i class="fab fa-github"></i></a>
+    <div class="container">
+        <p>&copy; 2024 Software Engineer Portfolio. Built with HTML, CSS, and GitHub Pages.</p>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/chen-xuan-foo-810a57282/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/DelightFoo" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+    </footer>
+     <div class="hobby-overlay" id="hobbyOverlay">
+    <div class="hobby-overlay-backdrop" id="hobbyOverlayBackdrop"></div>
+    <div class="hobby-overlay-panel">
+        <div class="hobby-overlay-header">
+            <div class="hobby-overlay-nav">
+            <button class="hobby-nav-btn" id="hobbyPrevBtn" aria-label="Previous">
+                <span class="btn-bracket btn-bracket-tl"></span>
+                <span class="btn-bracket btn-bracket-tr"></span>
+                <span class="btn-bracket btn-bracket-bl"></span>
+                <span class="btn-bracket btn-bracket-br"></span>
+                <span class="ic--baseline-arrow-back"></span>
+            </button>
+            <span class="hobby-nav-divider"></span>
+            <button class="hobby-nav-btn" id="hobbyNextBtn" aria-label="Next">
+                <span class="btn-bracket btn-bracket-tl"></span>
+                <span class="btn-bracket btn-bracket-tr"></span>
+                <span class="btn-bracket btn-bracket-bl"></span>
+                <span class="btn-bracket btn-bracket-br"></span>
+                <span class="ic--baseline-arrow-forward"></span>
+            </button>
             </div>
         </div>
-    </footer>
-
+        <div class="hobby-overlay-queue" id="hobbyOverlayQueue"></div>
+    </div>
+    </div>
     <script>
-        // Smooth scrolling for navigation links
+        // Green block slide animation for navigation on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const navContent = document.querySelector('.nav-content');
+            if (navContent) {
+                navContent.classList.add('animate-in');
+            }
+        });
+
+        // Hamburger menu toggle for mobile
+        const hamburger = document.getElementById('hamburger');
+        const navContent = document.getElementById('navContent');
+
+        if (hamburger && navContent) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navContent.classList.toggle('active');
+            });
+
+            // Close menu when clicking on a navigation link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navContent.classList.remove('active');
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navContent.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navContent.classList.remove('active');
+                }
+            });
+        }
+
+        // Smooth scrolling for navigation links with improved easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
                     });
                 }
             });
@@ -277,7 +433,428 @@
             } else {
                 header.classList.remove('scrolled');
             }
+
+            // Rotate individual plus signs on scroll
+            const rotation = window.scrollY * 0.5;
+            const plusSigns = document.querySelectorAll('.plus-sign');
+            plusSigns.forEach((plus) => {
+                plus.style.transform = `rotate(${rotation}deg)`;
+            });
         });
-    </script>
+
+        // Project navigation active state handling
+        const projectNavItems = document.querySelectorAll('.project-nav-item');
+        projectNavItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                projectNavItems.forEach(nav => nav.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Create individual plus signs in background
+        function createPlusSigns() {
+            const body = document.body;
+            const spacing = 100;
+            const cols = Math.ceil(window.innerWidth / spacing);
+            const rows = Math.ceil(window.innerHeight / spacing);
+            const fontSize = 30;
+
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const plus = document.createElement('div');
+                    plus.className = 'plus-sign';
+                    plus.innerHTML = '+';
+                    plus.style.position = 'fixed';
+                    plus.style.left = `${i * spacing + spacing / 2 - fontSize / 2}px`;
+                    plus.style.top = `${j * spacing + spacing / 2 - fontSize / 2}px`;
+                    plus.style.color = 'rgb(250, 250, 250)';
+                    plus.style.opacity = '0.15';
+                    plus.style.fontSize = '50px';
+                    plus.style.fontWeight = 'bold';
+                    plus.style.pointerEvents = 'none';
+                    plus.style.zIndex = '-1';
+                    plus.style.transition = 'transform 0.1s ease-out';
+                    body.appendChild(plus);
+                }
+            }
+        }
+
+        createPlusSigns();
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.plus-sign').forEach(el => el.remove());
+            createPlusSigns();
+        });
+        const projectsData = [
+        {
+            title: "Desktop Music Player",
+            desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
+            tags: ["YouTube", "Music Player", "Desktop App"],
+            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Desktop+Music+Player"
+        },
+        {
+            title: "Mobile Music Player",
+            desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
+            tags: ["Google Drive", "YouTube", "Mobile App", "Offline Player"],
+            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Mobile+Music+Player"
+        },
+        {
+            title: "Overlay Textbox",
+            desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling.",
+            tags: ["Screen Recording", "Hotkeys", "Desktop Tool"],
+            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Overlay+Textbox"
+        },
+        {
+            title: "Mine Sweeper",
+            desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid. Running Time, flags quantity, and mines quantity stated. Local leaderboard for ranking.",
+            tags: ["Game", "Minesweeper", "Leaderboard"],
+            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Mine+Sweeper"
+        }
+    ];
+
+    function updateShowcase(index) {
+        const project = projectsData[index];
+        document.getElementById('showcaseImg').src = project.image;
+        document.getElementById('showcaseTitle').textContent = project.title;
+        document.getElementById('showcaseDesc').textContent = project.desc;
+
+        document.querySelectorAll('.project-nav-item').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+    }
+
+    document.querySelectorAll('.project-nav-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const index = parseInt(btn.getAttribute('data-index'));
+            updateShowcase(index);
+        });
+    });
+
+    const translations = {
+    en: {
+        nav_about: "About",
+        nav_education: "Education",
+        nav_skills: "Skills",
+        nav_projects: "Projects",
+        nav_contact: "Contact",
+        hero_title: "TESTING",
+        hero_tagline: "Building innovative solutions with modern technologies",
+        btn_contact: "Get in Touch",
+        btn_cv: "Download CV",
+        about_heading: "About Me",
+        about_p1: "I am a passionate Software Engineer with hands-on experience in software support and development. With 6 months of internship experience in software support and 3 months of probation period in the same field, I have developed strong problem-solving skills and a deep understanding of software lifecycle management.",
+        about_p2: "My technical expertise spans across multiple programming languages and frameworks including ASP.NET & C#, Java, Kotlin for Android development, MSSQL, Azure cloud services, CUDA/OpenCV for computer vision, and Flutter for cross-platform mobile development. I am eager to leverage my skills to build innovative and efficient software solutions.",
+        education_heading: "Education",
+        skills_heading: "Technical Skills",
+        projects_heading: "Recent Projects & Tools",
+        hobbies_heading: "Hobbies",
+        contact_heading: "Contact Me"
+    },
+    zh: {
+        nav_about: "关于",
+        nav_education: "学历",
+        nav_skills: "技能",
+        nav_projects: "项目",
+        nav_hobbies: "爱好",
+        nav_contact: "联系",
+        hero_title: "测试",
+        hero_tagline: "运用现代技术打造创新解决方案",
+        btn_contact: "联系我",
+        btn_cv: "下载简历",
+        about_heading: "关于我",
+        about_p1: "我是一名充满热情的软件工程师，拥有软件支持与开发的实践经验。经过6个月的软件支持实习及3个月的试用期，我培养了扎实的问题解决能力，并深入理解软件生命周期管理。",
+        about_p2: "我的技术专长涵盖多种编程语言与框架，包括 ASP.NET 与 C#、Java、用于安卓开发的 Kotlin、MSSQL、Azure 云服务、用于计算机视觉的 CUDA/OpenCV，以及用于跨平台移动开发的 Flutter。我渴望运用这些技能打造创新且高效的软件解决方案。",
+        education_heading: "学历",
+        skills_heading: "技术技能",
+        projects_heading: "近期项目与工具",
+        hobbies_heading: "兴趣爱好",
+        contact_heading: "联系我"
+            }
+        };
+
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            document.getElementById('langLabel').textContent = lang === 'en' ? 'ENGLISH' : '中文';
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+            });
+            localStorage.setItem('preferredLang', lang);
+        }
+
+        const langSwitcher = document.getElementById('langSwitcher');
+        const langBtn = document.getElementById('langBtn');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langSwitcher.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                applyLanguage(opt.getAttribute('data-lang'));
+                langSwitcher.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            langSwitcher.classList.remove('open');
+        });
+
+        // Load saved preference on page load
+        const savedLang = localStorage.getItem('preferredLang') || 'en';
+        applyLanguage(savedLang);
+
+
+        // Hobby overlay functionality
+        const hobbiesData = {
+    reading: {
+        title: "Reading",
+        icon: "fas fa-book",
+        images: [
+            { src: "NeverLetMeGo.jpg",        inside: "NeverLetMeGo.jpg",        caption: "" },
+            { src: "test.png",                inside: "test.png",                caption: "" },
+            { src: "logo.png",                inside: "logo.png",                caption: "" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Psychology",
+              inside: "https://via.placeholder.com/600x800/1a1a1a/f2ead9?text=Inside+Cover",
+              caption: "" }
+        ]
+    },
+    drawing: {
+        title: "Drawing",
+        icon: "fas fa-pencil-alt",
+        images: [
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Bust", caption: "Bust Study" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Portrait+1", caption: "Portrait Drawing" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Portrait+2", caption: "Portrait Study" }
+        ]
+    },
+    gaming: {
+        title: "Gaming",
+        icon: "fas fa-gamepad",
+        images: [
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Strategy", caption: "Strategy Games" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Puzzle", caption: "Puzzles" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Souls-like", caption: "Souls-like" },
+            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Board+Game", caption: "Board Games" }
+        ]
+    }
+    };
+
+    const hobbyOverlay = document.getElementById('hobbyOverlay');
+    const hobbyOverlayQueue = document.getElementById('hobbyOverlayQueue');
+    const hobbyPrevBtn = document.getElementById('hobbyPrevBtn');
+    const hobbyNextBtn = document.getElementById('hobbyNextBtn');
+
+let currentHobbyKey = null;
+let currentBookIndex = 0;
+
+function openHobbyOverlay(key) {
+    const data = hobbiesData[key];
+    if (!data) return;
+
+    currentHobbyKey = key;
+
+    if (key === 'reading') {
+        currentBookIndex = 0;
+        hobbyOverlayQueue.classList.add('book-stack-mode');
+        renderBookStack(data.images, currentBookIndex);
+    } else {
+        hobbyOverlayQueue.classList.remove('book-stack-mode');
+        renderFlatQueue(data.images, key);
+    }
+
+    hobbyOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(updateHobbyNavState);
+}
+
+function renderBookStack(images, activeIndex) {
+    hobbyOverlayQueue.innerHTML = images.map((img, i) => `
+        <div class="book-stack-item" data-index="${i}">
+            <div class="book-3d">
+                <div class="book-pages"></div>
+                <div class="book-cover">
+                    <div class="book-cover-face book-cover-front">
+                        <img src="${img.src}" alt="${img.caption || ''}" loading="eager" decoding="async">
+                    </div>
+                    <div class="book-cover-face book-cover-inside" data-src="${img.src}"></div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    updateBookStackPositions(activeIndex);
+}
+
+function updateBookStackPositions(activeIndex, direction = 0, oldIndex = null) {
+    const items = hobbyOverlayQueue.querySelectorAll('.book-stack-item');
+    const n = items.length;
+    
+
+    items.forEach((item, i) => {
+        let delta = i - activeIndex;
+        if (delta < -(n / 2)) delta += n;   // wrap forward
+        if (delta > n / 2) delta -= n;      // wrap backward
+
+        const isBehind = delta < 0;
+        const depth = Math.abs(delta);
+
+        let restTransform, restOpacity, restZ;
+        if (isBehind) {
+            restTransform = `translate(-6px, -34px) rotateZ(-6deg) scale(${0.88 - (depth - 1) * 0.03})`;
+            restOpacity = depth <= 3 ? '0.85' : '0';
+            restZ = String(depth);
+        } else {
+            restTransform = `translate(${depth * 8}px, ${depth * 12}px) rotateZ(0deg) scale(${1 - depth * 0.04})`;
+            restOpacity = depth <= 4 ? '1' : '0';
+            restZ = String(n - depth);
+        }
+
+        item.style.zIndex = restZ;
+        item.style.pointerEvents = (!isBehind && depth === 0) ? 'auto' : 'none';
+        item.style.setProperty('--rest-transform', restTransform);
+        item.style.setProperty('--rest-opacity', restOpacity);
+
+        const goingToBack = direction > 0 && i === oldIndex;   // book leaving the front
+        const comingToFront = direction < 0 && i === activeIndex; // book returning to front
+
+        item.classList.remove('shuffle-tuck', 'shuffle-lift');
+
+        if (goingToBack) {
+            item.classList.add('shuffle-tuck');
+        } else if (comingToFront) {
+            item.classList.add('shuffle-lift');
+        } else {
+            item.style.transform = restTransform;
+            item.style.opacity = restOpacity;
+        }
+    });
+}
+
+
+
+function renderFlatQueue(images, key) {
+    const isBookLayout = false;
+    const baseHeight = 340;
+    const minScale = 0.65;
+    const n = images.length;
+    const center = (n - 1) / 2;
+    const maxDist = Math.max(center, 1);
+
+    hobbyOverlayQueue.innerHTML = images.map((img, i) => {
+        const dist = Math.abs(i - center);
+        const scale = 1 - (dist / maxDist) * (1 - minScale);
+        const height = Math.round(baseHeight * scale);
+        const zIndex = Math.round((maxDist - dist) * 10) + 1;
+
+        return `
+            <div class="hobby-queue-item" style="height: ${height}px; z-index: ${zIndex};">
+                <img src="${img.src}" alt="${img.caption || ''}" loading="eager" decoding="async">
+                <div class="hobby-queue-caption">${img.caption}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function scrollHobbyQueue(direction) {
+    if (currentHobbyKey === 'reading') {
+        const data = hobbiesData.reading;
+        const n = data.images.length;
+        const oldIndex = currentBookIndex;
+        const newIndex = (currentBookIndex + direction + n) % n;
+
+        currentBookIndex = newIndex;
+
+        hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
+            const cover = el.querySelector('.book-cover');
+            if (cover) {
+                cover.style.transition = 'none';   // kill the 0.7s flip transition
+                el.classList.remove('open');
+                cover.getBoundingClientRect();      // force reflow so the change applies immediately
+                cover.style.transition = '';         // restore normal transition for next manual click
+            } else {
+                el.classList.remove('open');
+            }
+        });
+
+        updateBookStackPositions(currentBookIndex, direction, oldIndex);
+        updateHobbyNavState();
+        return;
+    }
+
+    const item = hobbyOverlayQueue.querySelector('.hobby-queue-item');
+    if (!item) return;
+    const gap = parseFloat(getComputedStyle(hobbyOverlayQueue).gap) || 16;
+    const itemWidth = item.getBoundingClientRect().width + gap;
+    hobbyOverlayQueue.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
+}
+
+function updateHobbyNavState() {
+    if (currentHobbyKey === 'reading') {
+        hobbyPrevBtn.disabled = false;
+        hobbyNextBtn.disabled = false;
+        return;
+    }
+
+    const maxScroll = hobbyOverlayQueue.scrollWidth - hobbyOverlayQueue.clientWidth;
+    hobbyPrevBtn.disabled = hobbyOverlayQueue.scrollLeft <= 2;
+    hobbyNextBtn.disabled = hobbyOverlayQueue.scrollLeft >= maxScroll - 2;
+}
+
+function closeHobbyOverlay() {
+    hobbyOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    currentHobbyKey = null;
+}
+
+    document.querySelectorAll('.hobby-card').forEach(card => {
+        card.addEventListener('click', () => openHobbyOverlay(card.dataset.hobby));
+    });
+
+    document.getElementById('hobbyOverlayBackdrop').addEventListener('click', closeHobbyOverlay);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeHobbyOverlay();
+    });
+    hobbyOverlayQueue.addEventListener('click', (e) => {
+    const cover = e.target.closest('.book-cover');
+    if (!cover) return;
+    const item = cover.closest('.book-stack-item');
+
+    const inside = cover.querySelector('.book-cover-inside');
+    if (inside && !inside.querySelector('img')) {
+        const img = document.createElement('img');
+        img.src = inside.dataset.src;
+        img.loading = 'eager';
+        img.decoding = 'async';
+        inside.appendChild(img);
+    }
+
+    item.classList.toggle('open');
+    });
+    // Toggle book open/closed on cover click
+    hobbyOverlayQueue.addEventListener('animationend', (e) => {
+        const item = e.target.closest('.book-stack-item');
+        if (!item) return;
+        if (item.classList.contains('shuffle-tuck') || item.classList.contains('shuffle-lift')) {
+            item.classList.remove('shuffle-tuck', 'shuffle-lift');
+            item.style.transition = 'none';
+            item.style.transform = getComputedStyle(item).getPropertyValue('--rest-transform').trim();
+            item.style.opacity = '1';
+            item.getBoundingClientRect();
+            item.style.transition = '';
+        }
+    }); 
+    if (hobbyPrevBtn && hobbyNextBtn) {
+        hobbyPrevBtn.addEventListener('click', () => scrollHobbyQueue(-1));
+        hobbyNextBtn.addEventListener('click', () => scrollHobbyQueue(1));
+    }
+
+    
+        </script>
 </body>
 </html>
