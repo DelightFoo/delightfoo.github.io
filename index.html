@@ -345,7 +345,7 @@
         </div>
     </div>
     </footer>
-     <div class="hobby-overlay" id="hobbyOverlay">
+    <div class="hobby-overlay" id="hobbyOverlay">
     <div class="hobby-overlay-backdrop" id="hobbyOverlayBackdrop"></div>
     <div class="hobby-overlay-panel">
         <div class="hobby-overlay-header">
@@ -368,7 +368,15 @@
             </div>
         </div>
         <div class="hobby-overlay-queue" id="hobbyOverlayQueue"></div>
+        
     </div>
+    <div class="book-desc-overlay" id="bookDescOverlay">
+            <div class="book-desc-panel" id="bookDescPanel">
+                <button class="book-desc-close" id="bookDescClose" aria-label="Close description">&times;</button>
+                <h3 class="book-desc-title" id="bookDescTitle"></h3>
+                <p class="book-desc-text" id="bookDescText"></p>
+            </div>
+        </div>
     </div>
     <script>
         // Green block slide animation for navigation on page load
@@ -617,14 +625,36 @@
         title: "Reading",
         icon: "fas fa-book",
         images: [
-            { src: "NeverLetMeGo.jpg",        inside: "NeverLetMeGo.jpg",        caption: "" },
-            { src: "test.png",                inside: "test.png",                caption: "" },
-            { src: "logo.png",                inside: "logo.png",                caption: "" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Psychology",
-              inside: "https://via.placeholder.com/600x800/1a1a1a/f2ead9?text=Inside+Cover",
-              caption: "" }
-        ]
-    },
+            {
+            src: "NeverLetMeGo.jpg",
+            inside: "NeverLetMeGo.jpg",
+            caption: "",
+            title: "Never Let Me Go",
+            description: "A haunting story following three friends raised at an English boarding school, slowly uncovering the truth about their purpose in life."
+        },
+        {
+            src: "test.png",
+            inside: "test.png",
+            caption: "",
+            title: "Book Title Here",
+            description: "Description for this book goes here."
+        },
+        {
+            src: "logo.png",
+            inside: "logo.png",
+            caption: "",
+            title: "Book Title Here",
+            description: "Description for this book goes here."
+        },
+        {
+            src: "https://via.placeholder.com/600x800/000000/b9f303?text=Psychology",
+            inside: "https://via.placeholder.com/600x800/1a1a1a/f2ead9?text=Inside+Cover",
+            caption: "",
+            title: "Never Let Me Go",
+            description: "A haunting story following three friends raised at an English boarding school, slowly uncovering the truth about their purpose in life. Ishiguro's quiet, restrained prose makes the emotional weight land harder."
+        }
+    ]
+},
     drawing: {
         title: "Drawing",
         icon: "fas fa-pencil-alt",
@@ -650,6 +680,24 @@
     const hobbyOverlayQueue = document.getElementById('hobbyOverlayQueue');
     const hobbyPrevBtn = document.getElementById('hobbyPrevBtn');
     const hobbyNextBtn = document.getElementById('hobbyNextBtn');
+    const bookDescOverlay = document.getElementById('bookDescOverlay');
+    const bookDescTitle = document.getElementById('bookDescTitle');
+    const bookDescText = document.getElementById('bookDescText');
+    const bookDescClose = document.getElementById('bookDescClose');
+
+    function openBookDescription(index) {
+    const book = hobbiesData.reading.images[index];
+    if (!book) return;
+    bookDescTitle.textContent = book.title || '';
+    bookDescText.textContent = book.description || '';
+    bookDescOverlay.classList.add('active');
+}
+
+function closeBookDescription() {
+    bookDescOverlay.classList.remove('active');
+}
+
+bookDescClose.addEventListener('click', closeBookDescription);
 
 let currentHobbyKey = null;
 let currentBookIndex = 0;
@@ -770,17 +818,18 @@ function scrollHobbyQueue(direction) {
 
         currentBookIndex = newIndex;
 
-        hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
-            const cover = el.querySelector('.book-cover');
-            if (cover) {
-                cover.style.transition = 'none';   // kill the 0.7s flip transition
-                el.classList.remove('open');
-                cover.getBoundingClientRect();      // force reflow so the change applies immediately
-                cover.style.transition = '';         // restore normal transition for next manual click
-            } else {
-                el.classList.remove('open');
-            }
-        });
+hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
+    const cover = el.querySelector('.book-cover');
+    if (cover) {
+        cover.style.transition = 'none';
+        el.classList.remove('open');
+        cover.getBoundingClientRect();
+        cover.style.transition = '';
+    } else {
+        el.classList.remove('open');
+    }
+});
+closeBookDescription();
 
         updateBookStackPositions(currentBookIndex, direction, oldIndex);
         updateHobbyNavState();
@@ -810,6 +859,7 @@ function closeHobbyOverlay() {
     hobbyOverlay.classList.remove('active');
     document.body.style.overflow = '';
     currentHobbyKey = null;
+    closeBookDescription();
 }
 
     document.querySelectorAll('.hobby-card').forEach(card => {
@@ -820,6 +870,7 @@ function closeHobbyOverlay() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeHobbyOverlay();
     });
+
     hobbyOverlayQueue.addEventListener('click', (e) => {
     const cover = e.target.closest('.book-cover');
     if (!cover) return;
@@ -834,7 +885,14 @@ function closeHobbyOverlay() {
         inside.appendChild(img);
     }
 
+    const willOpen = !item.classList.contains('open');
     item.classList.toggle('open');
+
+    if (willOpen) {
+        openBookDescription(parseInt(item.dataset.index, 10));
+    } else {
+        closeBookDescription();
+    }
     });
     // Toggle book open/closed on cover click
     hobbyOverlayQueue.addEventListener('animationend', (e) => {
