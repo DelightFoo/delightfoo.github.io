@@ -1480,6 +1480,76 @@ footer p {
 .hobby-book:not(:first-child) {
     margin-left: -60px;
 }
+.book-desc-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.book-desc-panel {
+    position: relative;
+    width: min(420px, 90vw);
+    height: 0;
+    max-height: 100vh;
+    overflow: hidden;
+    background: rgba(20, 20, 20, 0.97);
+    border-left: 1px solid var(--green);
+    border-right: 1px solid var(--green);
+    padding: 0 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transition: height 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+                opacity 0.3s ease,
+                padding 0.5s ease;
+}
+
+.book-desc-overlay.active {
+    pointer-events: auto;
+}
+
+.book-desc-overlay.active .book-desc-panel {
+    height: 100vh;
+    opacity: 1;
+    padding: 4rem 2.5rem;
+}
+
+.book-desc-title {
+    color: var(--green);
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.book-desc-text {
+    color: var(--white);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    overflow-y: auto;
+}
+
+.book-desc-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.book-desc-close:hover {
+    color: var(--green);
+}
 .hobby-overlay-queue.book-stack-mode {
     position: relative;
     display: block;
