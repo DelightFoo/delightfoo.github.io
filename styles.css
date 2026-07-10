@@ -494,17 +494,16 @@ nav {
 
 
 /* About Section */
-
 .about-content {
     background-color: rgb(49, 49, 49);
     --drawer-height: 200px;
+    --drawer-height-bottom: 250px;
     position: relative;
     max-width: 800px;
     margin: 0 auto;
     transition: transform 0.45s ease;
     transform-origin: center;
 }
-
 .about-content .about-text {
     position: relative;
     z-index: 2;
@@ -542,7 +541,7 @@ nav {
 
 .drawer-panel-bottom {
     height: 0;
-    z-index: 1; 
+    z-index: 1;
     overflow: hidden;
     transition: height 0.3s ease;
     background: #c0fe04;
@@ -557,8 +556,8 @@ nav {
 
 .drawer-panel-top .drawer-panel-inner {
     display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 1.5rem;
+    grid-template-columns: 0.8fr 1.6fr;
+    gap: 0.75rem;
     align-items: center;
 }
 
@@ -568,34 +567,79 @@ nav {
 }
 
 .drawer-image img {
-    width: 100%;
+    width: auto;
     height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.drawer-bio p {
+.drawer-bio span {
     color: var(--white);
     font-size: 0.9rem;
     line-height: 1.6;
 }
 
-.drawer-panel-bottom .drawer-panel-inner h4 {
+.drawer-panel-bottom .drawer-panel-inner {
+    height: var(--drawer-height-bottom);
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.drawer-panel-bottom .drawer-panel-inner h4,
+.drawer-panel-bottom .drawer-panel-inner h3 {
     color: var(--black);
     font-size: 1.1rem;
-    font-weight: 400;
-    margin-bottom: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.75rem;
 }
 
 .drawer-panel-bottom .drawer-panel-inner p {
     color: var(--black);
-    font-size: 0.9rem;
+    font-size: 1rem;
     line-height: 1.6;
 }
+.drawer-bio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1.5rem;
+    align-content: center;
+}
 
-.about-content:hover .drawer-panel-top,
-.about-content:hover .drawer-panel-bottom {
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.profile-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.profile-value {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+/* Let long values (like address) span both columns instead of wrapping awkwardly */
+.profile-field:has(.profile-value:only-child) {
+    grid-column: span 1;
+}
+
+.about-content:hover .drawer-panel-top {
     height: var(--drawer-height);
+    z-index: -2;
+}
+
+.about-content:hover .drawer-panel-top {
+    height: var(--drawer-height);
+    z-index: -2;
+}
+
+.about-content:hover .drawer-panel-bottom {
+    height: var(--drawer-height-bottom);
     z-index: -2;
 }
 
@@ -700,10 +744,19 @@ nav {
     background: linear-gradient(90deg, var(--black), var(--black));
 }
 
-.education-card:hover {
+.education-card:hover{
+    background: #5200ff;
     transform: none;
     box-shadow: none;
-    border-color: var(--black);
+}
+
+.education-card:hover,
+.education-card:hover .education-icon,
+.education-card:hover h3,
+.education-card:hover .education-date,
+.education-card:hover .education-period,
+.education-card:hover p {
+    color: var(--black);
 }
 
 .education-icon {
@@ -714,24 +767,24 @@ nav {
 
 .education-card h3 {
     margin-bottom: 0.5rem;
-    color: var(--green);
+    color: var(--white);
     font-weight: 400;
 }
 
 .education-date {
     font-weight: 400;
-    color: var(--green);
+    color: var(--white);
     margin-bottom: 0.25rem;
 }
 
 .education-period {
-    color: var(--green);
+    color: var(--white);
     margin-bottom: 1rem;
     font-weight: 300;
 }
 
 .education-card p {
-    color: var(--green);
+    color: var(--white);
     font-weight: 300;
 }
 
@@ -750,6 +803,15 @@ nav {
     border-radius: 0;
     box-shadow: none;
     position: relative;
+}
+
+.skill-category:hover {
+    background: var(--green);
+}
+
+.skill-category:hover h3,
+.skill-category:hover h3 i {
+    color: var(--black);
 }
 
 .skill-category::before {
@@ -813,12 +875,17 @@ nav {
     background: var(--black);
 }
 
+.showcase-media img {
+    cursor: zoom-in;
+}
+
 .showcase-media img,
 .showcase-media video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;   
     display: block;
+    background: transparent;
 }
 
 .showcase-overlay {
@@ -827,7 +894,13 @@ nav {
     right: 0;
     bottom: 0;
     padding: 1rem 1.5rem;
-    background: rgba(0, 0, 0, 0.0);
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 0%,
+        rgb(0, 0, 0) 40%,
+        rgb(0, 0, 0) 75%,
+        rgba(0, 0, 0, 0) 100%
+    );
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(6px);
     color: var(--white);
@@ -839,6 +912,7 @@ nav {
     font-weight: 400;
     margin-bottom: 0.3rem;
     font-size: 1.1rem;
+    text-shadow: 0 10px 10px rgba(0, 0, 0, 1), 0 1px 3px rgba(0, 0, 0, 1);
 }
 
 .showcase-overlay p {
@@ -848,6 +922,7 @@ nav {
     margin-bottom: 2rem;
     max-width: 800px;
     font-size: 0.9rem;
+    text-shadow: 0 10px 10px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 1);
 }
 
 /* Horizontal recycler nav */
@@ -1342,6 +1417,72 @@ footer p {
 
 
     /* Hobby Card Stack */
+.image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    cursor: zoom-out;
+}
+
+.image-lightbox.active {
+    display: flex;
+}
+
+.image-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-lightbox.active .image-lightbox-backdrop {
+    opacity: 1;
+}
+
+.image-lightbox-img {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: default;
+}
+
+.image-lightbox.active .image-lightbox-img {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.image-lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.image-lightbox-close:hover {
+    color: var(--green);
+}
+
 .hobby-card {
     position: relative;
     cursor: pointer;
