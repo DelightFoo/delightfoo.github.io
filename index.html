@@ -86,10 +86,33 @@
                 <div class="drawer-panel drawer-panel-top">
                     <div class="drawer-panel-inner">
                         <div class="drawer-image">
-                            <img src="profile.jpg" >
+                            <img src="Profile.png" >
                         </div>
                         <div class="drawer-bio">
-                            <p>A quick glimpse — photo and a short line about who I am.</p>
+                            <div class="profile-field">
+                                <span class="profile-label">Name : </span>
+                                <span class="profile-value">Foo Chen Xuan</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="profile-label">Age : </span>
+                                <span class="profile-value">23</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="profile-label">Sex : </span>
+                                <span class="profile-value">Male</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="profile-label">Tel No : </span>
+                                <span class="profile-value">+60 1126149019</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="profile-label">Location : </span>
+                                <span class="profile-value">Johor, Malaysia</span>
+                            </div>
+                            <div class="profile-field">
+                                <span class="profile-label">Language : </span>
+                                <span class="profile-value">Fluent in English, Chinese, Bahasa Melayu</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,24 +122,31 @@
                     <span class="corner-mark corner-bl"></span>
                     <span class="corner-mark corner-br"></span>
                     <p>
-                        I am a passionate Software Engineer with hands-on experience in software support and development. 
-                        With 6 months of internship experience in software support and 3 months of probation period in the same field, 
-                        I have developed strong problem-solving skills and a deep understanding of software lifecycle management.
-                    </p>
+                        I am a passionate Software Engineer with hands-on experience in software support and development.
+                    </p>    
                     <p>
-                        My technical expertise spans across multiple programming languages and frameworks including ASP.NET & C#, 
-                        Java, Kotlin for Android development, MSSQL, Azure cloud services, CUDA/OpenCV for computer vision, 
-                        and Flutter for cross-platform mobile development. I am eager to leverage my skills to build innovative 
-                        and efficient software solutions.
+                        In additional,I have developed strong problem-solving skills and built couple of application to resolve the pain points within my daily regulation and workflow. 
+                    </p>    
+                    <p>
+                        I am eager to leverage my skills to build innovative and efficient software solutions.
                     </p>
                 </div>
                 <div class="drawer-panel drawer-panel-bottom">
                     <div class="drawer-panel-inner">
                         <h4>Working Experience</h4>
+                        <h3>Property 213 (April - August)</h3>
                         <p>
-                            6-month internship in software support, followed by a 3-month probation period in the same role.
-                            Gained hands-on exposure to real-world software lifecycle management, cross-team collaboration,
-                            and troubleshooting production issues under time pressure.
+                            3-month in software support.
+                        </p>
+                        <p>
+                            Ticketing system, client communication, issue resolution.
+                        </p>
+                        <h3>Greenstem Business Software (2025 - 2026)</h3>
+                        <p>
+                            6-month internship in software support.
+                        </p>
+                        <p>
+                            Data Migration, Crystal Report Custimisation, E-Invoice Integration, Maintenance.
                         </p>
                     </div>
                 </div>
@@ -136,7 +166,7 @@
                         <div class="education-icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
-                        <h3>Bachelor's Degree in Computer Science</h3>
+                        <h3>Bachelor's Degree in Software Engineering</h3>
                         <p class="education-date">[TARUMT]</p>
                         <p class="education-period">[2026]</p>
                         <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
@@ -263,7 +293,7 @@
                         <span class="corner-mark corner-br"></span>
                         <i class="fas fa-book"></i>
                         <h3>Reading</h3>
-                        <p>Dystopian fiction, Speculative fiction, Sci-fi fiction, and Psychology books</p>
+                        <p>Dystopian Fiction, Speculative Fiction, Sci-Fi Fiction, and Psychology Books</p>
                         <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
                     </div>
                     <div class="hobby-card" data-hobby="drawing">
@@ -283,7 +313,17 @@
                         <span class="corner-mark corner-br"></span>
                         <i class="fas fa-gamepad"></i>
                         <h3>Gaming</h3>
-                        <p>Strategy games, Problem-solving puzzles, Card games, Souls-like games, and Board games</p>
+                        <p>Strategy Games, Problem-Solving Puzzles, Souls-Like Games, and Board Games</p>
+                        <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
+                    </div>
+                    <div class="hobby-card" data-hobby="poetry">
+                        <span class="corner-mark corner-tl"></span>
+                        <span class="corner-mark corner-tr"></span>
+                        <span class="corner-mark corner-bl"></span>
+                        <span class="corner-mark corner-br"></span>
+                        <i class="fas fa-scroll"></i>
+                        <h3>Poetry</h3>
+                        <p>Chinese Poem</p>
                         <span class="hobby-view-tag">[ VIEW <span class="material-symbols--arrow-outward"></span> ]</span>
                     </div>
                 </div>
@@ -377,6 +417,11 @@
                 <p class="book-desc-text" id="bookDescText"></p>
             </div>
         </div>
+    </div>
+    <div class="image-lightbox" id="imageLightbox">
+    <div class="image-lightbox-backdrop" id="imageLightboxBackdrop"></div>
+    <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close">&times;</button>
+    <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="">
     </div>
     <script>
         // Green block slide animation for navigation on page load
@@ -498,26 +543,22 @@
         {
             title: "Desktop Music Player",
             desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
-            tags: ["YouTube", "Music Player", "Desktop App"],
             image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Desktop+Music+Player"
         },
         {
             title: "Mobile Music Player",
             desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
-            tags: ["Google Drive", "YouTube", "Mobile App", "Offline Player"],
-            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Mobile+Music+Player"
+            image: "MobileMP.png"
         },
         {
             title: "Overlay Textbox",
-            desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling.",
-            tags: ["Screen Recording", "Hotkeys", "Desktop Tool"],
-            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Overlay+Textbox"
+            desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling. Can be used as sticky note as well.",
+            image: "TextOverlay.png"
         },
         {
             title: "Mine Sweeper",
-            desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid. Running Time, flags quantity, and mines quantity stated. Local leaderboard for ranking.",
-            tags: ["Game", "Minesweeper", "Leaderboard"],
-            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Mine+Sweeper"
+            desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid, running time, flags quantity, and mines quantity stated. Local leaderboard for ranking. You can't ask for better activity for same niche",
+            image: "VacuumCleaner.png"
         }
     ];
 
@@ -684,6 +725,10 @@
     const bookDescTitle = document.getElementById('bookDescTitle');
     const bookDescText = document.getElementById('bookDescText');
     const bookDescClose = document.getElementById('bookDescClose');
+    const imageLightbox = document.getElementById('imageLightbox');
+    const imageLightboxImg = document.getElementById('imageLightboxImg');
+    const imageLightboxBackdrop = document.getElementById('imageLightboxBackdrop');
+    const imageLightboxClose = document.getElementById('imageLightboxClose');
 
     function openBookDescription(index) {
     const book = hobbiesData.reading.images[index];
@@ -911,6 +956,31 @@ function closeHobbyOverlay() {
         hobbyPrevBtn.addEventListener('click', () => scrollHobbyQueue(-1));
         hobbyNextBtn.addEventListener('click', () => scrollHobbyQueue(1));
     }
+    function openImageLightbox(src, alt) {
+    imageLightboxImg.src = src;
+    imageLightboxImg.alt = alt || '';
+    imageLightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageLightbox() {
+        imageLightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('showcaseImg').addEventListener('click', () => {
+        const img = document.getElementById('showcaseImg');
+        openImageLightbox(img.src, img.alt);
+    });
+
+    imageLightboxBackdrop.addEventListener('click', closeImageLightbox);
+    imageLightboxClose.addEventListener('click', closeImageLightbox);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
+            closeImageLightbox();
+        }
+    });
 
     
         </script>
