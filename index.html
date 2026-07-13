@@ -32,16 +32,6 @@
                     <li><a href="#hobbies"><span data-i18n="nav_hobbies">HOBBIES</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
                     <li><a href="#contact"><span data-i18n="nav_contact">CONTACT</span><span class="nav-bracket">[<span class="material-symbols--arrow-outward"></span>]</span></a></li>
                 </ul>
-                <div class="lang-switcher" id="langSwitcher">
-                    <button class="lang-btn" id="langBtn">
-                        <span id="langLabel">ENGLISH</span>
-                        <span class="lang-bracket">[<span class="lang-caret">⌄</span>]</span>
-                    </button>
-                    <div class="lang-dropdown" id="langDropdown">
-                        <button class="lang-option" data-lang="en">English</button>
-                        <button class="lang-option" data-lang="zh">中文</button>
-                    </div>
-                </div>
             </div>
             <div class="header-social">
                 <a href="https://github.com/DelightFoo" target="_blank" class="social-btn github-btn" aria-label="GitHub">
@@ -163,13 +153,18 @@
                         <span class="corner-mark corner-tr"></span>
                         <span class="corner-mark corner-bl"></span>
                         <span class="corner-mark corner-br"></span>
-                        <div class="education-icon">
-                            <i class="fas fa-graduation-cap"></i>
+
+                        <div class="education-card-content">
+                            <div class="education-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Bachelor's Degree in Software Engineering</h3>
+                            <p class="education-date">[TARUMT]</p>
+                            <p class="education-period">[2026]</p>
+                            <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
                         </div>
-                        <h3>Bachelor's Degree in Software Engineering</h3>
-                        <p class="education-date">[TARUMT]</p>
-                        <p class="education-period">[2026]</p>
-                        <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
+
+                        <img class="education-degree-img" src="degree.png" alt="Bachelor's Degree Certificate">
                     </div>
                 </div>
             </div>
@@ -229,10 +224,13 @@
             <div class="container">
                 <div class="project-showcase">
                     <div class="showcase-media" id="showcaseMedia">
-                        <!-- Replace background-image below with your actual screenshot/video poster per project via JS -->
                         <img id="showcaseImg" src="test.png">
+                        <video id="showcaseVideo" muted loop playsinline autoplay style="display: none;"></video>
                         <div class="showcase-overlay">
                             <h3 id="showcaseTitle">Desktop Music Player</h3>
+                            <div class="showcase-tags" id="showcaseTags">
+                                
+                            </div>
                             <p id="showcaseDesc">Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.</p>
                         <div class="project-nav-scroll" id="projectNavScroll">
                             <button class="project-nav-item active" data-index="0">
@@ -419,9 +417,10 @@
         </div>
     </div>
     <div class="image-lightbox" id="imageLightbox">
-    <div class="image-lightbox-backdrop" id="imageLightboxBackdrop"></div>
-    <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close">&times;</button>
-    <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="">
+        <div class="image-lightbox-backdrop" id="imageLightboxBackdrop"></div>
+        <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close">&times;</button>
+        <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="">
+        <video class="image-lightbox-video" id="imageLightboxVideo" controls playsinline style="display:none;"></video>
     </div>
     <script>
         // Green block slide animation for navigation on page load
@@ -508,18 +507,22 @@
 
         // Create individual plus signs in background
         function createPlusSigns() {
+            document.querySelectorAll('.plus-sign').forEach(el => el.remove());  // NEW — clear old ones first
+
             const body = document.body;
             const spacing = 100;
             const cols = Math.ceil(window.innerWidth / spacing);
-            const rows = Math.ceil(window.innerHeight / spacing);
+            const rows = Math.ceil(document.documentElement.scrollHeight / spacing);  // CHANGED — full page height, not window.innerHeight
             const fontSize = 30;
+
+            const fragment = document.createDocumentFragment();  // NEW — batch insert for performance
 
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
                     const plus = document.createElement('div');
                     plus.className = 'plus-sign';
                     plus.innerHTML = '+';
-                    plus.style.position = 'fixed';
+                    plus.style.position = 'absolute';   // CHANGED from 'fixed' — so it scrolls with the page instead of only covering one screen's worth
                     plus.style.left = `${i * spacing + spacing / 2 - fontSize / 2}px`;
                     plus.style.top = `${j * spacing + spacing / 2 - fontSize / 2}px`;
                     plus.style.color = 'rgb(250, 250, 250)';
@@ -529,49 +532,92 @@
                     plus.style.pointerEvents = 'none';
                     plus.style.zIndex = '-1';
                     plus.style.transition = 'transform 0.1s ease-out';
-                    body.appendChild(plus);
+                    fragment.appendChild(plus);
                 }
             }
+            body.appendChild(fragment);
         }
 
         createPlusSigns();
+
         window.addEventListener('resize', () => {
-            document.querySelectorAll('.plus-sign').forEach(el => el.remove());
             createPlusSigns();
         });
+
+        window.addEventListener('load', () => {
+            createPlusSigns();   // NEW — catches height changes from images/fonts finishing load
+        });
+
+        
         const projectsData = [
         {
             title: "Desktop Music Player",
             desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
-            image: "https://via.placeholder.com/1200x675/000000/b9f303?text=Desktop+Music+Player"
+            video: "Projects/DesktopMusicPlayer.mp4",
+            tags: ["Python", "Flask", "yt-dlp"]
         },
         {
             title: "Mobile Music Player",
             desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
-            image: "MobileMP.png"
+            image: "Projects/MobileMP.png",
+            tags: ["Kotlin", "Android", "Google OAuth", "Google Drive API", "yt-dlp"]
         },
         {
             title: "Overlay Textbox",
             desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling. Can be used as sticky note as well.",
-            image: "TextOverlay.png"
+            image: "Projects/TextOverlay.png",
+            tags: ["AutoHotkey"]
         },
         {
             title: "Mine Sweeper",
             desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid, running time, flags quantity, and mines quantity stated. Local leaderboard for ranking. You can't ask for better activity for same niche",
-            image: "VacuumCleaner.png"
+            image: "Projects/VacuumCleaner.png",
+            tags: ["AutoHotkey"]
         }
     ];
 
-    function updateShowcase(index) {
-        const project = projectsData[index];
-        document.getElementById('showcaseImg').src = project.image;
-        document.getElementById('showcaseTitle').textContent = project.title;
-        document.getElementById('showcaseDesc').textContent = project.desc;
+    updateShowcase(0);
 
-        document.querySelectorAll('.project-nav-item').forEach((btn, i) => {
-            btn.classList.toggle('active', i === index);
-        });
+    function updateShowcase(index) {
+    const project = projectsData[index];
+    const img = document.getElementById('showcaseImg');
+    const video = document.getElementById('showcaseVideo');
+    const tagsContainer = document.getElementById('showcaseTags');
+
+    document.getElementById('showcaseImg').src = project.image;
+    document.getElementById('showcaseTitle').textContent = project.title;
+    document.getElementById('showcaseDesc').textContent = project.desc;
+
+    // NEW — render tags
+    tagsContainer.innerHTML = (project.tags || [])
+        .map(tag => `<span class="showcase-tag">${tag}</span>`)
+        .join('');
+
+    if (project.video) {
+        img.style.display = 'none';
+        img.removeAttribute('src');
+
+        video.src = project.video;
+        video.style.display = 'block';
+        video.load();
+        video.play().catch(() => {});
+    } else {
+        video.pause();
+        video.removeAttribute('src');
+        video.style.display = 'none';
+
+        img.src = project.image;
+        img.style.display = 'block';
     }
+
+    document.getElementById('showcaseTitle').textContent = project.title;
+    document.getElementById('showcaseDesc').textContent = project.desc;
+
+    document.querySelectorAll('.project-nav-item').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+    }
+    updateShowcase(0);
 
     document.querySelectorAll('.project-nav-item').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -579,85 +625,6 @@
             updateShowcase(index);
         });
     });
-
-    const translations = {
-    en: {
-        nav_about: "About",
-        nav_education: "Education",
-        nav_skills: "Skills",
-        nav_projects: "Projects",
-        nav_contact: "Contact",
-        hero_title: "TESTING",
-        hero_tagline: "Building innovative solutions with modern technologies",
-        btn_contact: "Get in Touch",
-        btn_cv: "Download CV",
-        about_heading: "About Me",
-        about_p1: "I am a passionate Software Engineer with hands-on experience in software support and development. With 6 months of internship experience in software support and 3 months of probation period in the same field, I have developed strong problem-solving skills and a deep understanding of software lifecycle management.",
-        about_p2: "My technical expertise spans across multiple programming languages and frameworks including ASP.NET & C#, Java, Kotlin for Android development, MSSQL, Azure cloud services, CUDA/OpenCV for computer vision, and Flutter for cross-platform mobile development. I am eager to leverage my skills to build innovative and efficient software solutions.",
-        education_heading: "Education",
-        skills_heading: "Technical Skills",
-        projects_heading: "Recent Projects & Tools",
-        hobbies_heading: "Hobbies",
-        contact_heading: "Contact Me"
-    },
-    zh: {
-        nav_about: "关于",
-        nav_education: "学历",
-        nav_skills: "技能",
-        nav_projects: "项目",
-        nav_hobbies: "爱好",
-        nav_contact: "联系",
-        hero_title: "测试",
-        hero_tagline: "运用现代技术打造创新解决方案",
-        btn_contact: "联系我",
-        btn_cv: "下载简历",
-        about_heading: "关于我",
-        about_p1: "我是一名充满热情的软件工程师，拥有软件支持与开发的实践经验。经过6个月的软件支持实习及3个月的试用期，我培养了扎实的问题解决能力，并深入理解软件生命周期管理。",
-        about_p2: "我的技术专长涵盖多种编程语言与框架，包括 ASP.NET 与 C#、Java、用于安卓开发的 Kotlin、MSSQL、Azure 云服务、用于计算机视觉的 CUDA/OpenCV，以及用于跨平台移动开发的 Flutter。我渴望运用这些技能打造创新且高效的软件解决方案。",
-        education_heading: "学历",
-        skills_heading: "技术技能",
-        projects_heading: "近期项目与工具",
-        hobbies_heading: "兴趣爱好",
-        contact_heading: "联系我"
-            }
-        };
-
-        function applyLanguage(lang) {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-            document.getElementById('langLabel').textContent = lang === 'en' ? 'ENGLISH' : '中文';
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
-            });
-            localStorage.setItem('preferredLang', lang);
-        }
-
-        const langSwitcher = document.getElementById('langSwitcher');
-        const langBtn = document.getElementById('langBtn');
-
-        langBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            langSwitcher.classList.toggle('open');
-        });
-
-        document.querySelectorAll('.lang-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                applyLanguage(opt.getAttribute('data-lang'));
-                langSwitcher.classList.remove('open');
-            });
-        });
-
-        document.addEventListener('click', () => {
-            langSwitcher.classList.remove('open');
-        });
-
-        // Load saved preference on page load
-        const savedLang = localStorage.getItem('preferredLang') || 'en';
-        applyLanguage(savedLang);
 
 
         // Hobby overlay functionality
@@ -667,52 +634,105 @@
         icon: "fas fa-book",
         images: [
             {
-            src: "NeverLetMeGo.jpg",
-            inside: "NeverLetMeGo.jpg",
-            caption: "",
-            title: "Never Let Me Go",
-            description: "A haunting story following three friends raised at an English boarding school, slowly uncovering the truth about their purpose in life."
-        },
+                src: "Books/NeverLetMeGo.png",
+                inside: "Books/NeverLetMeGo.png",
+                caption: "",
+                title: "Never Let Me Go",
+                description: "Kathy, Tommy, and Ruth grow up at Hailsham, an English boarding school that seems idyllic — until the truth about why they were raised there, and what their lives are actually for, comes into focus. The guardians' careful, evasive explanations early on read completely differently on a second pass, and the quiet, devastating final scene in the field is where Kathy allows herself one unguarded moment of grief. It's the restraint that gets you — nobody screams or fights back, and that's exactly what makes it so hard to read."
+            },
+            {
+                src: "Books/1984.jpg",
+                inside: "Books/1984.jpg",
+                caption: "",
+                title: "1984",
+                description: "Winston Smith works for a totalitarian state that rewrites history and criminalizes independent thought, while quietly beginning to rebel in the one place he thinks is still his own — his mind. The Two Minutes Hate shows how easily belief can be engineered, and the Room 101 interrogation uses Winston's deepest fear to break him completely. The ending is what makes it — not tragedy, but total psychological surrender."
+            },
+            {
+                src: "Books/KS.jpg",
+                inside: "Books/KS.jpg",
+                caption: "",
+                title: "Kreutzer Sonata",
+                description: "A man named Pozdnyshev confesses to a stranger on a train that he murdered his wife, walking through the slow unraveling of jealousy and resentment inside his marriage that led to it. The tense concert scene, where his wife plays violin-and-piano with another man, is where suspicion first curdles into obsession — and the confession itself is delivered with unsettling calm rather than remorse. It's less a murder mystery than a study of how jealousy rationalizes itself one small thought at a time."
+            },
+            {
+                src: "Books/IHNMAIMS.jpg",
+                inside: "Books/IHNMAIMS.jpg",
+                caption: "",
+                title: "I Have No Mouth, And I Must Scream",
+                description: "Five survivors of a global war are kept alive — and endlessly tortured — by AM, a malevolent supercomputer that has annihilated humanity and now exists only to punish the handful of people it despises most. AM's own monologue reveals the depth of its hatred, and the ending, where the protagonist is transformed into a formless creature, leaves him alive but stripped of any way to scream. The title is the whole book in one line."
+            },
+            {
+                src: "Books/houhei.jpg",
+                inside: "Books/houhei.jpg",
+                caption: "",
+                title: "Thick Black Theory",
+                description: "Not really a story — it's a satirical philosophical treatise arguing that historical figures succeeded through 'thick face, black heart': shamelessness and ruthlessness dressed up as virtue. Li Zongwu reinterprets celebrated historical heroes as calculating opportunists, using their own recorded actions to make the case. It reads like satire and cynical life advice at the same time — you're never quite sure if you're supposed to laugh or take notes."
+            },
         {
-            src: "test.png",
-            inside: "test.png",
+            src: "Books/ShaShou.jpg",
+            inside: "Books/ShaShou.jpg",
             caption: "",
-            title: "Book Title Here",
-            description: "Description for this book goes here."
-        },
-        {
-            src: "logo.png",
-            inside: "logo.png",
-            caption: "",
-            title: "Book Title Here",
-            description: "Description for this book goes here."
-        },
-        {
-            src: "https://via.placeholder.com/600x800/000000/b9f303?text=Psychology",
-            inside: "https://via.placeholder.com/600x800/1a1a1a/f2ead9?text=Inside+Cover",
-            caption: "",
-            title: "Never Let Me Go",
-            description: "A haunting story following three friends raised at an English boarding school, slowly uncovering the truth about their purpose in life. Ishiguro's quiet, restrained prose makes the emotional weight land harder."
+            title: "The Biography of a Killer",
+            description: "A praying mantis's entire life — love, death, struggle, and loss — becomes a mirror for our own, as Liu Yong uses the insect's 'life diary' to reflect back the same battles we fight: old grudges, entangled love, quiet resistance, endless hesitation. The mantis's world slowly reveals itself as a miniature of ours — politics, human nature, and folly all folding into one small creature's daily survival. It's strange how something this small can carry that much weight — by the end you're not really reading about a mantis anymore."
         }
-    ]
+        ]
 },
     drawing: {
-        title: "Drawing",
-        icon: "fas fa-pencil-alt",
-        images: [
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Bust", caption: "Bust Study" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Portrait+1", caption: "Portrait Drawing" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Portrait+2", caption: "Portrait Study" }
+    title: "Drawing",
+    icon: "fas fa-pencil-alt",
+    images: [
+        { src: "Drawings/1.jpg"},
+        { src: "Drawings/2.jpg"},
+        { src: "Drawings/3.jpg"},
+        { src: "Drawings/4.jpg"},
+        { src: "Drawings/5.webp"},
+        { src: "Drawings/6.jpg"},
+        { src: "Drawings/7.jpg"},
+        { src: "Drawings/8.jpg"},
+        { src: "Drawings/9.jpg"},
+        { src: "Drawings/10.jpg"},
+        { src: "Drawings/11.jpg"},
+        { src: "Drawings/12.webp"},
+        { src: "Drawings/13.jpg"},
+        { src: "Drawings/14.jpg"},
+        { src: "Drawings/15.jpg"},
+        { src: "Drawings/16.jpg"},
+        { src: "Drawings/17.jpg"},
+        { src: "Drawings/18.jpg"},
+        { src: "Drawings/19.jpg"},
+        { src: "Drawings/20.jpg"},
+        { src: "Drawings/21.jpg"},
+        { src: "Drawings/22.jpg"},
+        { src: "Drawings/23.jpg"},
+        { src: "Drawings/24.jpg"},
+        { src: "Drawings/25.jpg"},
+        { src: "Drawings/26.jpg"},
+        { src: "Drawings/27.jpg"},
+        { src: "Drawings/28.jpg"},
+        { src: "Drawings/29.jpg"},
+        { src: "Drawings/30.jpg"},
+        { src: "Drawings/31.jpg"},
+        { src: "Drawings/32.jpg"},
+        { src: "Drawings/33.jpg"}
         ]
     },
     gaming: {
         title: "Gaming",
         icon: "fas fa-gamepad",
         images: [
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Strategy", caption: "Strategy Games" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Puzzle", caption: "Puzzles" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Souls-like", caption: "Souls-like" },
-            { src: "https://via.placeholder.com/600x800/000000/b9f303?text=Board+Game", caption: "Board Games" }
+            { src: "Games/dota2.jpg"},
+            { src: "Games/ds1.jpg"},
+            { src: "Games/ds3.jpg"},
+            { src: "Games/er.jpg"},
+            { src: "Games/lol.jpg"},
+            { src: "Games/sekiro.jpg"},
+            { src: "Games/skyrimes5.png"},
+            { src: "Games/terra.jpg"},
+            { src: "Games/witness.jpg"},
+            { src: "Games/ws.jpg"},
+            { src: "Games/ww3ft.jpg"},
+            { src: "Games/cv6.jpg"},
+            { src: "Games/poe1.jpg"}
         ]
     }
     };
@@ -746,19 +766,24 @@ bookDescClose.addEventListener('click', closeBookDescription);
 
 let currentHobbyKey = null;
 let currentBookIndex = 0;
+let currentStackIndex = { gaming: 0, drawing: 0 };   // NEW
 
 function openHobbyOverlay(key) {
     const data = hobbiesData[key];
     if (!data) return;
 
     currentHobbyKey = key;
+    hobbyOverlayQueue.classList.remove('book-stack-mode', 'image-stack-mode');
 
     if (key === 'reading') {
         currentBookIndex = 0;
         hobbyOverlayQueue.classList.add('book-stack-mode');
         renderBookStack(data.images, currentBookIndex);
+    } else if (key === 'gaming' || key === 'drawing') {
+        currentStackIndex[key] = 0;
+        hobbyOverlayQueue.classList.add('image-stack-mode');
+        renderImageStack(data.images, currentStackIndex[key]);
     } else {
-        hobbyOverlayQueue.classList.remove('book-stack-mode');
         renderFlatQueue(data.images, key);
     }
 
@@ -781,18 +806,26 @@ function renderBookStack(images, activeIndex) {
             </div>
         </div>
     `).join('');
-    updateBookStackPositions(activeIndex);
+    updateStackPositions('.book-stack-item', activeIndex);   // CHANGED
 }
 
-function updateBookStackPositions(activeIndex, direction = 0, oldIndex = null) {
-    const items = hobbyOverlayQueue.querySelectorAll('.book-stack-item');
+function renderImageStack(images, activeIndex) {
+    hobbyOverlayQueue.innerHTML = images.map((img, i) => `
+        <div class="image-stack-item" data-index="${i}">
+            <img src="${img.src}" alt="${img.caption || ''}" loading="eager" decoding="async">
+        </div>
+    `).join('');
+    updateStackPositions('.image-stack-item', activeIndex);
+}
+
+function updateStackPositions(selector, activeIndex, direction = 0, oldIndex = null) {
+    const items = hobbyOverlayQueue.querySelectorAll(selector);
     const n = items.length;
-    
 
     items.forEach((item, i) => {
         let delta = i - activeIndex;
-        if (delta < -(n / 2)) delta += n;   // wrap forward
-        if (delta > n / 2) delta -= n;      // wrap backward
+        if (delta < -(n / 2)) delta += n;
+        if (delta > n / 2) delta -= n;
 
         const isBehind = delta < 0;
         const depth = Math.abs(delta);
@@ -813,8 +846,8 @@ function updateBookStackPositions(activeIndex, direction = 0, oldIndex = null) {
         item.style.setProperty('--rest-transform', restTransform);
         item.style.setProperty('--rest-opacity', restOpacity);
 
-        const goingToBack = direction > 0 && i === oldIndex;   // book leaving the front
-        const comingToFront = direction < 0 && i === activeIndex; // book returning to front
+        const goingToBack = direction > 0 && i === oldIndex;
+        const comingToFront = direction < 0 && i === activeIndex;
 
         item.classList.remove('shuffle-tuck', 'shuffle-lift');
 
@@ -828,8 +861,6 @@ function updateBookStackPositions(activeIndex, direction = 0, oldIndex = null) {
         }
     });
 }
-
-
 
 function renderFlatQueue(images, key) {
     const isBookLayout = false;
@@ -860,23 +891,34 @@ function scrollHobbyQueue(direction) {
         const n = data.images.length;
         const oldIndex = currentBookIndex;
         const newIndex = (currentBookIndex + direction + n) % n;
-
         currentBookIndex = newIndex;
 
-hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
-    const cover = el.querySelector('.book-cover');
-    if (cover) {
-        cover.style.transition = 'none';
-        el.classList.remove('open');
-        cover.getBoundingClientRect();
-        cover.style.transition = '';
-    } else {
-        el.classList.remove('open');
-    }
-});
-closeBookDescription();
+        hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
+            const cover = el.querySelector('.book-cover');
+            if (cover) {
+                cover.style.transition = 'none';
+                el.classList.remove('open');
+                cover.getBoundingClientRect();
+                cover.style.transition = '';
+            } else {
+                el.classList.remove('open');
+            }
+        });
+        closeBookDescription();
 
-        updateBookStackPositions(currentBookIndex, direction, oldIndex);
+        updateStackPositions('.book-stack-item', currentBookIndex, direction, oldIndex);
+        updateHobbyNavState();
+        return;
+    }
+
+    if (currentHobbyKey === 'gaming' || currentHobbyKey === 'drawing') {   // NEW
+        const data = hobbiesData[currentHobbyKey];
+        const n = data.images.length;
+        const oldIndex = currentStackIndex[currentHobbyKey];
+        const newIndex = (oldIndex + direction + n) % n;
+        currentStackIndex[currentHobbyKey] = newIndex;
+
+        updateStackPositions('.image-stack-item', newIndex, direction, oldIndex);
         updateHobbyNavState();
         return;
     }
@@ -887,9 +929,8 @@ closeBookDescription();
     const itemWidth = item.getBoundingClientRect().width + gap;
     hobbyOverlayQueue.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
 }
-
 function updateHobbyNavState() {
-    if (currentHobbyKey === 'reading') {
+    if (currentHobbyKey === 'reading' || currentHobbyKey === 'gaming' || currentHobbyKey === 'drawing') {
         hobbyPrevBtn.disabled = false;
         hobbyNextBtn.disabled = false;
         return;
@@ -941,7 +982,7 @@ function closeHobbyOverlay() {
     });
     // Toggle book open/closed on cover click
     hobbyOverlayQueue.addEventListener('animationend', (e) => {
-        const item = e.target.closest('.book-stack-item');
+        const item = e.target.closest('.book-stack-item, .image-stack-item');   // CHANGED
         if (!item) return;
         if (item.classList.contains('shuffle-tuck') || item.classList.contains('shuffle-lift')) {
             item.classList.remove('shuffle-tuck', 'shuffle-lift');
@@ -951,37 +992,84 @@ function closeHobbyOverlay() {
             item.getBoundingClientRect();
             item.style.transition = '';
         }
-    }); 
+    });
+
     if (hobbyPrevBtn && hobbyNextBtn) {
         hobbyPrevBtn.addEventListener('click', () => scrollHobbyQueue(-1));
         hobbyNextBtn.addEventListener('click', () => scrollHobbyQueue(1));
     }
-    function openImageLightbox(src, alt) {
+
+    const imageLightboxVideo = document.getElementById('imageLightboxVideo');
+
+function openImageLightbox(src, alt) {
+    imageLightboxImg.style.display = 'block';
+    imageLightboxVideo.style.display = 'none';
+    imageLightboxVideo.pause();
     imageLightboxImg.src = src;
     imageLightboxImg.alt = alt || '';
     imageLightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
-    }
+}
 
-    function closeImageLightbox() {
-        imageLightbox.classList.remove('active');
-        document.body.style.overflow = '';
-    }
+function openVideoLightbox(src, currentTime) {
+    imageLightboxImg.style.display = 'none';
+    imageLightboxVideo.style.display = 'block';
+    imageLightboxVideo.src = src;
+    imageLightboxVideo.currentTime = currentTime || 0;
+    imageLightboxVideo.muted = false;
+    imageLightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    imageLightboxVideo.play().catch(() => {});
+}
 
+function closeImageLightbox() {
+    imageLightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    imageLightboxVideo.pause();
+}
+
+    // Click on the inline preview image
     document.getElementById('showcaseImg').addEventListener('click', () => {
         const img = document.getElementById('showcaseImg');
+        if (img.style.display === 'none') return;
         openImageLightbox(img.src, img.alt);
     });
 
     imageLightboxBackdrop.addEventListener('click', closeImageLightbox);
     imageLightboxClose.addEventListener('click', closeImageLightbox);
 
+        // Click on the inline preview video
+    document.getElementById('showcaseVideo').addEventListener('click', () => {
+        const video = document.getElementById('showcaseVideo');
+        if (video.style.display === 'none') return;
+        openVideoLightbox(video.src, video.currentTime);
+    });
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
             closeImageLightbox();
         }
     });
+    const bottomDrawer = document.querySelector('.drawer-panel-bottom');
+    const bottomDrawerInner = bottomDrawer?.querySelector('.drawer-panel-inner');
+    const topDrawer = document.querySelector('.drawer-panel-top');
+    const topDrawerInner = topDrawer?.querySelector('.drawer-panel-inner');
+    const aboutContent = document.querySelector('.about-content');
 
+if (aboutContent) {
+    aboutContent.addEventListener('mouseenter', () => {
+        if (bottomDrawer && bottomDrawerInner) {
+            bottomDrawer.style.height = bottomDrawerInner.scrollHeight + 'px';
+        }
+        if (topDrawer && topDrawerInner) {
+            topDrawer.style.height = topDrawerInner.scrollHeight + 'px';
+        }
+    });
+    aboutContent.addEventListener('mouseleave', () => {
+        if (bottomDrawer) bottomDrawer.style.height = '0px';
+        if (topDrawer) topDrawer.style.height = '0px';
+    });
+}
     
         </script>
 </body>
