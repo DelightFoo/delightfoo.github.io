@@ -44,6 +44,7 @@
         </nav>
     </header>
 
+
     <main>
         <!-- Hero Section -->
         <section id="hero" class="hero">
@@ -68,6 +69,7 @@
                 </div>
             </div>
         </section>
+
 
         <!-- About Section -->
         <section id="about" class="section">
@@ -115,7 +117,7 @@
                         I am a passionate Software Engineer with hands-on experience in software support and development.
                     </p>    
                     <p>
-                        In additional,I have developed strong problem-solving skills and built couple of application to resolve the pain points within my daily regulation and workflow. 
+                        In additional,I have developed strong problem-solving skills and built couple of application to resolve the pain points within my daily regulation and workflow.
                     </p>    
                     <p>
                         I am eager to leverage my skills to build innovative and efficient software solutions.
@@ -144,6 +146,7 @@
             </div>
         </section>
 
+
         <!-- Education Section -->
         <section id="education" class="section alternate-bg">
             <div class="container">
@@ -153,6 +156,7 @@
                         <span class="corner-mark corner-tr"></span>
                         <span class="corner-mark corner-bl"></span>
                         <span class="corner-mark corner-br"></span>
+
 
                         <div class="education-card-content">
                             <div class="education-icon">
@@ -164,11 +168,13 @@
                             <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
                         </div>
 
+
                         <img class="education-degree-img" src="degree.png" alt="Bachelor's Degree Certificate">
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Skills Section -->
         <section id="skills" class="section">
@@ -219,6 +225,7 @@
             </div>
         </section>
 
+
         <!-- Projects Section -->
         <section id="projects" class="section alternate-bg">
             <div class="container">
@@ -229,7 +236,7 @@
                         <div class="showcase-overlay">
                             <h3 id="showcaseTitle">Desktop Music Player</h3>
                             <div class="showcase-tags" id="showcaseTags">
-                                
+                               
                             </div>
                             <p id="showcaseDesc">Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.</p>
                         <div class="project-nav-scroll" id="projectNavScroll">
@@ -280,6 +287,7 @@
             </div>
         </section>  
 
+
         <!-- Hobbies Section -->
         <section id="hobbies" class="section">
             <div class="container">
@@ -328,6 +336,7 @@
             </div>
         </section>
 
+
         <!-- Contact Section -->
         <section id="contact" class="section alternate-bg">
             <div class="container">
@@ -374,6 +383,7 @@
         </section>
     </main>
 
+
     <footer>
     <div class="container">
         <p>&copy; 2024 Software Engineer Portfolio. Built with HTML, CSS, and GitHub Pages.</p>
@@ -406,7 +416,7 @@
             </div>
         </div>
         <div class="hobby-overlay-queue" id="hobbyOverlayQueue"></div>
-        
+       
     </div>
     <div class="book-desc-overlay" id="bookDescOverlay">
             <div class="book-desc-panel" id="bookDescPanel">
@@ -431,15 +441,18 @@
             }
         });
 
+
         // Hamburger menu toggle for mobile
         const hamburger = document.getElementById('hamburger');
         const navContent = document.getElementById('navContent');
+
 
         if (hamburger && navContent) {
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navContent.classList.toggle('active');
             });
+
 
             // Close menu when clicking on a navigation link
             document.querySelectorAll('.nav-links a').forEach(link => {
@@ -449,6 +462,7 @@
                 });
             });
 
+
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!hamburger.contains(e.target) && !navContent.contains(e.target)) {
@@ -457,6 +471,7 @@
                 }
             });
         }
+
 
         // Smooth scrolling for navigation links with improved easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -469,6 +484,7 @@
                     const elementPosition = target.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
+
                     window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
@@ -476,6 +492,7 @@
                 }
             });
         });
+
 
         // Add scroll effect to header
         window.addEventListener('scroll', () => {
@@ -486,6 +503,7 @@
                 header.classList.remove('scrolled');
             }
 
+
             // Rotate individual plus signs on scroll
             const rotation = window.scrollY * 0.5;
             const plusSigns = document.querySelectorAll('.plus-sign');
@@ -493,6 +511,7 @@
                 plus.style.transform = `rotate(${rotation}deg)`;
             });
         });
+
 
         // Project navigation active state handling
         const projectNavItems = document.querySelectorAll('.project-nav-item');
@@ -505,9 +524,11 @@
             });
         });
 
+
         // Create individual plus signs in background
         function createPlusSigns() {
             document.querySelectorAll('.plus-sign').forEach(el => el.remove());  // NEW — clear old ones first
+
 
             const body = document.body;
             const spacing = 100;
@@ -515,7 +536,9 @@
             const rows = Math.ceil(document.documentElement.scrollHeight / spacing);  // CHANGED — full page height, not window.innerHeight
             const fontSize = 30;
 
+
             const fragment = document.createDocumentFragment();  // NEW — batch insert for performance
+
 
             for (let i = 0; i < cols; i++) {
                 for (let j = 0; j < rows; j++) {
@@ -538,17 +561,21 @@
             body.appendChild(fragment);
         }
 
+
         createPlusSigns();
+
 
         window.addEventListener('resize', () => {
             createPlusSigns();
         });
 
+
         window.addEventListener('load', () => {
             createPlusSigns();   // NEW — catches height changes from images/fonts finishing load
         });
 
-        
+
+       
         const projectsData = [
         {
             title: "Desktop Music Player",
@@ -576,7 +603,9 @@
         }
     ];
 
+
     updateShowcase(0);
+
 
     function updateShowcase(index) {
     const project = projectsData[index];
@@ -584,18 +613,22 @@
     const video = document.getElementById('showcaseVideo');
     const tagsContainer = document.getElementById('showcaseTags');
 
+
     document.getElementById('showcaseImg').src = project.image;
     document.getElementById('showcaseTitle').textContent = project.title;
     document.getElementById('showcaseDesc').textContent = project.desc;
+
 
     // NEW — render tags
     tagsContainer.innerHTML = (project.tags || [])
         .map(tag => `<span class="showcase-tag">${tag}</span>`)
         .join('');
 
+
     if (project.video) {
         img.style.display = 'none';
         img.removeAttribute('src');
+
 
         video.src = project.video;
         video.style.display = 'block';
@@ -606,12 +639,15 @@
         video.removeAttribute('src');
         video.style.display = 'none';
 
+
         img.src = project.image;
         img.style.display = 'block';
     }
 
+
     document.getElementById('showcaseTitle').textContent = project.title;
     document.getElementById('showcaseDesc').textContent = project.desc;
+
 
     document.querySelectorAll('.project-nav-item').forEach((btn, i) => {
         btn.classList.toggle('active', i === index);
@@ -619,12 +655,15 @@
     }
     updateShowcase(0);
 
+
     document.querySelectorAll('.project-nav-item').forEach(btn => {
         btn.addEventListener('click', () => {
             const index = parseInt(btn.getAttribute('data-index'));
             updateShowcase(index);
         });
     });
+
+
 
 
         // Hobby overlay functionality
@@ -737,6 +776,7 @@
     }
     };
 
+
     const hobbyOverlay = document.getElementById('hobbyOverlay');
     const hobbyOverlayQueue = document.getElementById('hobbyOverlayQueue');
     const hobbyPrevBtn = document.getElementById('hobbyPrevBtn');
@@ -750,6 +790,7 @@
     const imageLightboxBackdrop = document.getElementById('imageLightboxBackdrop');
     const imageLightboxClose = document.getElementById('imageLightboxClose');
 
+
     function openBookDescription(index) {
     const book = hobbiesData.reading.images[index];
     if (!book) return;
@@ -758,22 +799,28 @@
     bookDescOverlay.classList.add('active');
 }
 
+
 function closeBookDescription() {
     bookDescOverlay.classList.remove('active');
 }
 
+
 bookDescClose.addEventListener('click', closeBookDescription);
+
 
 let currentHobbyKey = null;
 let currentBookIndex = 0;
 let currentStackIndex = { gaming: 0, drawing: 0 };   // NEW
 
+
 function openHobbyOverlay(key) {
     const data = hobbiesData[key];
     if (!data) return;
 
+
     currentHobbyKey = key;
     hobbyOverlayQueue.classList.remove('book-stack-mode', 'image-stack-mode');
+
 
     if (key === 'reading') {
         currentBookIndex = 0;
@@ -787,10 +834,12 @@ function openHobbyOverlay(key) {
         renderFlatQueue(data.images, key);
     }
 
+
     hobbyOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(updateHobbyNavState);
 }
+
 
 function renderBookStack(images, activeIndex) {
     hobbyOverlayQueue.innerHTML = images.map((img, i) => `
@@ -809,6 +858,7 @@ function renderBookStack(images, activeIndex) {
     updateStackPositions('.book-stack-item', activeIndex);   // CHANGED
 }
 
+
 function renderImageStack(images, activeIndex) {
     hobbyOverlayQueue.innerHTML = images.map((img, i) => `
         <div class="image-stack-item" data-index="${i}">
@@ -818,17 +868,21 @@ function renderImageStack(images, activeIndex) {
     updateStackPositions('.image-stack-item', activeIndex);
 }
 
+
 function updateStackPositions(selector, activeIndex, direction = 0, oldIndex = null) {
     const items = hobbyOverlayQueue.querySelectorAll(selector);
     const n = items.length;
+
 
     items.forEach((item, i) => {
         let delta = i - activeIndex;
         if (delta < -(n / 2)) delta += n;
         if (delta > n / 2) delta -= n;
 
+
         const isBehind = delta < 0;
         const depth = Math.abs(delta);
+
 
         let restTransform, restOpacity, restZ;
         if (isBehind) {
@@ -841,15 +895,19 @@ function updateStackPositions(selector, activeIndex, direction = 0, oldIndex = n
             restZ = String(n - depth);
         }
 
+
         item.style.zIndex = restZ;
         item.style.pointerEvents = (!isBehind && depth === 0) ? 'auto' : 'none';
         item.style.setProperty('--rest-transform', restTransform);
         item.style.setProperty('--rest-opacity', restOpacity);
 
+
         const goingToBack = direction > 0 && i === oldIndex;
         const comingToFront = direction < 0 && i === activeIndex;
 
+
         item.classList.remove('shuffle-tuck', 'shuffle-lift');
+
 
         if (goingToBack) {
             item.classList.add('shuffle-tuck');
@@ -862,6 +920,7 @@ function updateStackPositions(selector, activeIndex, direction = 0, oldIndex = n
     });
 }
 
+
 function renderFlatQueue(images, key) {
     const isBookLayout = false;
     const baseHeight = 340;
@@ -870,11 +929,13 @@ function renderFlatQueue(images, key) {
     const center = (n - 1) / 2;
     const maxDist = Math.max(center, 1);
 
+
     hobbyOverlayQueue.innerHTML = images.map((img, i) => {
         const dist = Math.abs(i - center);
         const scale = 1 - (dist / maxDist) * (1 - minScale);
         const height = Math.round(baseHeight * scale);
         const zIndex = Math.round((maxDist - dist) * 10) + 1;
+
 
         return `
             <div class="hobby-queue-item" style="height: ${height}px; z-index: ${zIndex};">
@@ -885,6 +946,7 @@ function renderFlatQueue(images, key) {
     }).join('');
 }
 
+
 function scrollHobbyQueue(direction) {
     if (currentHobbyKey === 'reading') {
         const data = hobbiesData.reading;
@@ -892,6 +954,7 @@ function scrollHobbyQueue(direction) {
         const oldIndex = currentBookIndex;
         const newIndex = (currentBookIndex + direction + n) % n;
         currentBookIndex = newIndex;
+
 
         hobbyOverlayQueue.querySelectorAll('.book-stack-item.open').forEach(el => {
             const cover = el.querySelector('.book-cover');
@@ -906,10 +969,12 @@ function scrollHobbyQueue(direction) {
         });
         closeBookDescription();
 
+
         updateStackPositions('.book-stack-item', currentBookIndex, direction, oldIndex);
         updateHobbyNavState();
         return;
     }
+
 
     if (currentHobbyKey === 'gaming' || currentHobbyKey === 'drawing') {   // NEW
         const data = hobbiesData[currentHobbyKey];
@@ -918,10 +983,12 @@ function scrollHobbyQueue(direction) {
         const newIndex = (oldIndex + direction + n) % n;
         currentStackIndex[currentHobbyKey] = newIndex;
 
+
         updateStackPositions('.image-stack-item', newIndex, direction, oldIndex);
         updateHobbyNavState();
         return;
     }
+
 
     const item = hobbyOverlayQueue.querySelector('.hobby-queue-item');
     if (!item) return;
@@ -936,10 +1003,12 @@ function updateHobbyNavState() {
         return;
     }
 
+
     const maxScroll = hobbyOverlayQueue.scrollWidth - hobbyOverlayQueue.clientWidth;
     hobbyPrevBtn.disabled = hobbyOverlayQueue.scrollLeft <= 2;
     hobbyNextBtn.disabled = hobbyOverlayQueue.scrollLeft >= maxScroll - 2;
 }
+
 
 function closeHobbyOverlay() {
     hobbyOverlay.classList.remove('active');
@@ -948,19 +1017,23 @@ function closeHobbyOverlay() {
     closeBookDescription();
 }
 
+
     document.querySelectorAll('.hobby-card').forEach(card => {
         card.addEventListener('click', () => openHobbyOverlay(card.dataset.hobby));
     });
+
 
     document.getElementById('hobbyOverlayBackdrop').addEventListener('click', closeHobbyOverlay);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeHobbyOverlay();
     });
 
+
     hobbyOverlayQueue.addEventListener('click', (e) => {
     const cover = e.target.closest('.book-cover');
     if (!cover) return;
     const item = cover.closest('.book-stack-item');
+
 
     const inside = cover.querySelector('.book-cover-inside');
     if (inside && !inside.querySelector('img')) {
@@ -971,8 +1044,10 @@ function closeHobbyOverlay() {
         inside.appendChild(img);
     }
 
+
     const willOpen = !item.classList.contains('open');
     item.classList.toggle('open');
+
 
     if (willOpen) {
         openBookDescription(parseInt(item.dataset.index, 10));
@@ -994,12 +1069,15 @@ function closeHobbyOverlay() {
         }
     });
 
+
     if (hobbyPrevBtn && hobbyNextBtn) {
         hobbyPrevBtn.addEventListener('click', () => scrollHobbyQueue(-1));
         hobbyNextBtn.addEventListener('click', () => scrollHobbyQueue(1));
     }
 
+
     const imageLightboxVideo = document.getElementById('imageLightboxVideo');
+
 
 function openImageLightbox(src, alt) {
     imageLightboxImg.style.display = 'block';
@@ -1010,6 +1088,7 @@ function openImageLightbox(src, alt) {
     imageLightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
+
 
 function openVideoLightbox(src, currentTime) {
     imageLightboxImg.style.display = 'none';
@@ -1022,11 +1101,13 @@ function openVideoLightbox(src, currentTime) {
     imageLightboxVideo.play().catch(() => {});
 }
 
+
 function closeImageLightbox() {
     imageLightbox.classList.remove('active');
     document.body.style.overflow = '';
     imageLightboxVideo.pause();
 }
+
 
     // Click on the inline preview image
     document.getElementById('showcaseImg').addEventListener('click', () => {
@@ -1035,8 +1116,10 @@ function closeImageLightbox() {
         openImageLightbox(img.src, img.alt);
     });
 
+
     imageLightboxBackdrop.addEventListener('click', closeImageLightbox);
     imageLightboxClose.addEventListener('click', closeImageLightbox);
+
 
         // Click on the inline preview video
     document.getElementById('showcaseVideo').addEventListener('click', () => {
@@ -1044,6 +1127,7 @@ function closeImageLightbox() {
         if (video.style.display === 'none') return;
         openVideoLightbox(video.src, video.currentTime);
     });
+
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
@@ -1055,6 +1139,7 @@ function closeImageLightbox() {
     const topDrawer = document.querySelector('.drawer-panel-top');
     const topDrawerInner = topDrawer?.querySelector('.drawer-panel-inner');
     const aboutContent = document.querySelector('.about-content');
+
 
 if (aboutContent) {
     aboutContent.addEventListener('mouseenter', () => {
@@ -1070,7 +1155,10 @@ if (aboutContent) {
         if (topDrawer) topDrawer.style.height = '0px';
     });
 }
-    
+   
         </script>
 </body>
 </html>
+
+
+
