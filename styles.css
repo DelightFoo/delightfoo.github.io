@@ -592,14 +592,16 @@ nav {
 /* About Section */
 .about-content {
     background-color: rgb(49, 49, 49);
-    --drawer-height: 200px;
-    --drawer-height-bottom: 320px;   /* was 250px */
+    --drawer-height: 150px;
+    --drawer-height-bottom: 260px;   
     position: relative;
     max-width: 800px;
     margin: 0 auto;
+    cursor: pointer;
     transition: transform 0.45s ease;
     transform-origin: center;
 }
+
 .about-content .about-text {
     position: relative;
     z-index: 2;
@@ -607,9 +609,23 @@ nav {
     backdrop-filter: blur(var(--card-blur));
     -webkit-backdrop-filter: blur(var(--card-blur));
     padding: 2.5rem;
-    transition: box-shadow 0.3s ease;
+    max-height: 400px;
+    overflow: visible;
+    opacity: 1;
+    transition: box-shadow 0.3s ease,
+                max-height 0.4s ease,
+                padding 0.4s ease,
+                opacity 0.3s ease;
 }
-.about-content:hover {
+
+.about-content.active .about-text {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+}
+
+.about-content.active {
     transform: scale(0.82);
 }
 
@@ -673,6 +689,7 @@ nav {
 .drawer-image img {
     width: auto;
     height: 100%;
+    max-height: 160px;
     object-fit: cover;
     display: block;
 }
@@ -741,8 +758,8 @@ nav {
 }
 
 
-.about-content:hover .drawer-panel-top,
-.about-content:hover .drawer-panel-bottom {
+.about-content.active .drawer-panel-top,
+.about-content.active .drawer-panel-bottom {
     z-index: -2;
 }
 
@@ -787,6 +804,10 @@ nav {
 .about-text:hover .corner-bl { transform: translate(-51%, 51.75%) rotate(90deg); }
 .about-text:hover .corner-br { transform: translate(51.5%, 51.75%) rotate(-90deg); }
 
+.about-text.active .corner-tl { transform: translate(-51%, -51.75%) rotate(-180deg); }
+.about-text.active .corner-tr { transform: translate(51.5%, -51.75%) rotate(180deg); }
+.about-text.active .corner-bl { transform: translate(-51%, 51.75%) rotate(180deg); }
+.about-text.active .corner-br { transform: translate(51.5%, 51.75%) rotate(-180deg); }
 
 .education-card,
 .skill-category,
@@ -803,31 +824,30 @@ nav {
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
-
 .education-card:hover .corner-tl,
 .skill-category:hover .corner-tl,
 .hobby-card:hover .corner-tl,
 .contact-cv:hover .corner-tl { transform: translate(-51%, -51.75%) rotate(-90deg); }
-
 
 .education-card:hover .corner-tr,
 .skill-category:hover .corner-tr,
 .hobby-card:hover .corner-tr,
 .contact-cv:hover .corner-tr { transform: translate(51.5%, -51.75%) rotate(90deg); }
 
-
 .education-card:hover .corner-bl,
 .skill-category:hover .corner-bl,  
 .hobby-card:hover .corner-bl,
 .contact-cv:hover .corner-bl { transform: translate(-51%, 50.75%) rotate(90deg); }
-
 
 .education-card:hover .corner-br,
 .skill-category:hover .corner-br,  
 .hobby-card:hover .corner-br,
 .contact-cv:hover .corner-br { transform: translate(51.5%, 50.75%) rotate(-90deg); }
 
-
+.education-card.shrink .corner-tl { transform: translate(-51%, -51.75%) rotate(-180deg); }
+.education-card.shrink .corner-tr { transform: translate(51.5%, -51.75%) rotate(180deg); }
+.education-card.shrink .corner-bl { transform: translate(-51%, 50.75%) rotate(180deg); }
+.education-card.shrink .corner-br { transform: translate(51.5%, 50.75%) rotate(-180deg); }
 
 
 /* Education Section */
@@ -841,15 +861,35 @@ nav {
 
 
 .education-card {
+    cursor: pointer;
     background: rgb(49, 49, 49);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    overflow: hidden;
+    overflow: visible;
     padding: 2rem;
     border-radius: 0;
     box-shadow: none;
-    transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
+    width: 100%;
+    transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background 0.3s ease;
+}
+
+/* Stage 1 — shrink horizontally, height untouched */
+.education-card.shrink {
+    width: 340px;
+    margin: 0 auto;
+}
+
+.education-card:not(.shrink):hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Stage 2 — only after shrink completes, grow vertically + swap color */
+.education-card.expand {
+    background: #5200ff;
+    padding: 0;
+    scale: 0.9;
 }
 
 
@@ -863,22 +903,27 @@ nav {
 }
 
 
-.education-card:hover {
-    background: #5200ff;
-    transform: none;
-    box-shadow: none;
-    aspect-ratio: 210 / 297;
-    max-width: 340px;
-    margin: 0 auto;
-    padding: 0;
+.education-card-inner {
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    transition: height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+.education-card.expand .education-card-inner {
+    height: 480px;   /* 340px width × A4 ratio (297/210) ≈ 480px tall */
+}
 
 .education-card-content {
     position: relative;
     z-index: 2;
-    transition: opacity 0.3s ease;
     opacity: 1;
+    transition: opacity 0.25s ease;
+}
+
+.education-card.expand .education-card-content {
+    opacity: 0;
+    pointer-events: none;
 }
 
 
@@ -889,32 +934,23 @@ nav {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 0.4s ease 0.1s;  
+    transition: opacity 0.35s ease;
     z-index: 1;
     pointer-events: none;
 }
 
-
-.education-card:hover .education-degree-img {
+.education-card.expand .education-degree-img {
     opacity: 1;
 }
 
-
-.education-card:hover .education-card-content {
-    opacity: 0;
-    pointer-events: none;
-}
-
-
-.education-card:hover,
-.education-card:hover .education-icon,
-.education-card:hover h3,
-.education-card:hover .education-date,
-.education-card:hover .education-period,
-.education-card:hover p {
+.education-card.expand,
+.education-card.expand .education-icon,
+.education-card.expand h3,
+.education-card.expand .education-date,
+.education-card.expand .education-period,
+.education-card.expand p {
     color: var(--black);
 }
-
 
 .education-icon {
     font-size: 2.5rem;
@@ -2430,6 +2466,3 @@ footer p {
 html {
     scroll-behavior: smooth;
 }
-
-
-
