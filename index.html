@@ -157,19 +157,19 @@
                         <span class="corner-mark corner-bl"></span>
                         <span class="corner-mark corner-br"></span>
 
-
-                        <div class="education-card-content">
-                            <div class="education-icon">
-                                <i class="fas fa-graduation-cap"></i>
+                        <div class="education-card-inner">
+                            <div class="education-card-content">
+                                <div class="education-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <h3>Bachelor's Degree in Software Engineering</h3>
+                                <p class="education-date">[TARUMT]</p>
+                                <p class="education-period">[2026]</p>
+                                <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
                             </div>
-                            <h3>Bachelor's Degree in Software Engineering</h3>
-                            <p class="education-date">[TARUMT]</p>
-                            <p class="education-period">[2026]</p>
-                            <p>Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Cloud Computing</p>
+
+                            <img class="education-degree-img" src="degree.png" alt="Bachelor's Degree Certificate">
                         </div>
-
-
-                        <img class="education-degree-img" src="degree.png" alt="Bachelor's Degree Certificate">
                     </div>
                 </div>
             </div>
@@ -1140,21 +1140,75 @@ function closeImageLightbox() {
     const topDrawerInner = topDrawer?.querySelector('.drawer-panel-inner');
     const aboutContent = document.querySelector('.about-content');
 
+    
+let aboutActive = false;
 
 if (aboutContent) {
-    aboutContent.addEventListener('mouseenter', () => {
-        if (bottomDrawer && bottomDrawerInner) {
-            bottomDrawer.style.height = bottomDrawerInner.scrollHeight + 'px';
-        }
-        if (topDrawer && topDrawerInner) {
-            topDrawer.style.height = topDrawerInner.scrollHeight + 'px';
+    aboutContent.addEventListener('click', () => {
+        aboutActive = !aboutActive;
+        aboutContent.classList.toggle('active', aboutActive);
+
+        if (aboutActive) {
+            if (bottomDrawer && bottomDrawerInner) {
+                bottomDrawer.style.height = bottomDrawerInner.scrollHeight + 'px';
+            }
+            if (topDrawer && topDrawerInner) {
+                topDrawer.style.height = topDrawerInner.scrollHeight + 'px';
+            }
+        } else {
+            if (bottomDrawer) bottomDrawer.style.height = '0px';
+            if (topDrawer) topDrawer.style.height = '0px';
         }
     });
-    aboutContent.addEventListener('mouseleave', () => {
-        if (bottomDrawer) bottomDrawer.style.height = '0px';
-        if (topDrawer) topDrawer.style.height = '0px';
+
+    // Optional: click outside closes it
+    document.addEventListener('click', (e) => {
+        if (aboutActive && !aboutContent.contains(e.target)) {
+            aboutActive = false;
+            aboutContent.classList.remove('active');
+            if (bottomDrawer) bottomDrawer.style.height = '0px';
+            if (topDrawer) topDrawer.style.height = '0px';
+        }
     });
 }
+
+const educationCard = document.querySelector('.education-card');
+let educationTimer;
+let educationExpanded = false;
+
+if (educationCard) {
+    educationCard.addEventListener('click', () => {
+        clearTimeout(educationTimer);
+
+        if (!educationExpanded) {
+            // Opening: shrink first, then expand
+            educationExpanded = true;
+            educationCard.classList.add('shrink');
+            educationTimer = setTimeout(() => {
+                educationCard.classList.add('expand');
+            }, 350);
+        } else {
+            // Closing: collapse first, then widen back out
+            educationExpanded = false;
+            educationCard.classList.remove('expand');
+            educationTimer = setTimeout(() => {
+                educationCard.classList.remove('shrink');
+            }, 350);
+        }
+    });
+
+    // Optional: click outside the card closes it
+    document.addEventListener('click', (e) => {
+        if (educationExpanded && !educationCard.contains(e.target)) {
+            educationExpanded = false;
+            clearTimeout(educationTimer);
+            educationCard.classList.remove('expand');
+            educationTimer = setTimeout(() => {
+                educationCard.classList.remove('shrink');
+            }, 350);
+            }
+        });
+    }
    
         </script>
 </body>
