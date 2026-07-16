@@ -755,25 +755,25 @@
         { src: "Drawings/33.jpg"}
         ]
     },
-    gaming: {
-        title: "Gaming",
-        icon: "fas fa-gamepad",
-        images: [
-            { src: "Games/dota2.jpg"},
-            { src: "Games/ds1.jpg"},
-            { src: "Games/ds3.jpg"},
-            { src: "Games/er.jpg"},
-            { src: "Games/lol.jpg"},
-            { src: "Games/sekiro.jpg"},
-            { src: "Games/skyrimes5.png"},
-            { src: "Games/terra.jpg"},
-            { src: "Games/witness.jpg"},
-            { src: "Games/ws.jpg"},
-            { src: "Games/ww3ft.jpg"},
-            { src: "Games/cv6.jpg"},
-            { src: "Games/poe1.jpg"}
-        ]
-    }
+        gaming: {
+            title: "Gaming",
+            icon: "fas fa-gamepad",
+            images: [
+                { src: "Games/dota2.jpg", title: "Dota 2", description: "Add your description here." },
+                { src: "Games/ds1.jpg", title: "Dark Souls", description: "Add your description here." },
+                { src: "Games/ds3.jpg", title: "Dark Souls III", description: "Add your description here." },
+                { src: "Games/er.jpg", title: "Elden Ring", description: "Add your description here." },
+                { src: "Games/lol.jpg", title: "League of Legends", description: "Add your description here." },
+                { src: "Games/sekiro.jpg", title: "Sekiro", description: "Add your description here." },
+                { src: "Games/skyrimes5.png", title: "Skyrim Elder Scroll V", description: "Add your description here." },
+                { src: "Games/terra.jpg", title: "Terraforming Mars", description: "Add your description here." },
+                { src: "Games/witness.jpg", title: "The Witness", description: "Add your description here." },
+                { src: "Games/ws.jpg", title: "Wingspan", description: "Add your description here." },
+                { src: "Games/ww3ft.jpg", title: "World of Warcraft III Frozen Throne", description: "Add your description here." },
+                { src: "Games/cv6.jpg", title: "Civilization VI", description: "Add your description here." },
+                { src: "Games/poe1.jpg", title: "Path of Exile", description: "Add your description here." }
+            ]
+        }
     };
 
 
@@ -817,16 +817,24 @@ function openHobbyOverlay(key) {
     const data = hobbiesData[key];
     if (!data) return;
 
-
     currentHobbyKey = key;
-    hobbyOverlayQueue.classList.remove('book-stack-mode', 'image-stack-mode');
+    hobbyOverlayQueue.classList.remove('book-stack-mode', 'image-stack-mode', 'psp-mode');
 
+    // NEW — toggle wide panel + hide prev/next arrows for gaming
+    const panel = document.querySelector('.hobby-overlay-panel');
+    const navControls = document.querySelector('.hobby-overlay-nav');
+    panel.classList.toggle('psp-panel', key === 'gaming');
+    navControls.classList.toggle('hidden', key === 'gaming');
 
     if (key === 'reading') {
         currentBookIndex = 0;
         hobbyOverlayQueue.classList.add('book-stack-mode');
         renderBookStack(data.images, currentBookIndex);
-    } else if (key === 'gaming' || key === 'drawing') {
+    } else if (key === 'gaming') {
+        currentGameIndex = 0;
+        hobbyOverlayQueue.classList.add('psp-mode');
+        renderPSPShowcase(data.images, currentGameIndex);
+    } else if (key === 'drawing') {
         currentStackIndex[key] = 0;
         hobbyOverlayQueue.classList.add('image-stack-mode');
         renderImageStack(data.images, currentStackIndex[key]);
@@ -834,13 +842,10 @@ function openHobbyOverlay(key) {
         renderFlatQueue(data.images, key);
     }
 
-
     hobbyOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(updateHobbyNavState);
 }
-
-
 function renderBookStack(images, activeIndex) {
     hobbyOverlayQueue.innerHTML = images.map((img, i) => `
         <div class="book-stack-item" data-index="${i}">
@@ -976,26 +981,32 @@ function scrollHobbyQueue(direction) {
     }
 
 
-    if (currentHobbyKey === 'gaming' || currentHobbyKey === 'drawing') {   // NEW
-        const data = hobbiesData[currentHobbyKey];
+    if (currentHobbyKey === 'gaming') {
+        const data = hobbiesData.gaming;
         const n = data.images.length;
-        const oldIndex = currentStackIndex[currentHobbyKey];
-        const newIndex = (oldIndex + direction + n) % n;
-        currentStackIndex[currentHobbyKey] = newIndex;
-
-
-        updateStackPositions('.image-stack-item', newIndex, direction, oldIndex);
+        const newIndex = ((currentGameIndex + direction) % n + n) % n;
+        setActiveGame(data.images, newIndex);
         updateHobbyNavState();
         return;
     }
 
-
+    if (currentHobbyKey === 'drawing') {
+        const data = hobbiesData.drawing;
+        const n = data.images.length;
+        const oldIndex = currentStackIndex.drawing;
+        const newIndex = (oldIndex + direction + n) % n;
+        currentStackIndex.drawing = newIndex;
+        updateStackPositions('.image-stack-item', newIndex, direction, oldIndex);
+        updateHobbyNavState();
+        return;
+    }
     const item = hobbyOverlayQueue.querySelector('.hobby-queue-item');
     if (!item) return;
     const gap = parseFloat(getComputedStyle(hobbyOverlayQueue).gap) || 16;
     const itemWidth = item.getBoundingClientRect().width + gap;
     hobbyOverlayQueue.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
 }
+
 function updateHobbyNavState() {
     if (currentHobbyKey === 'reading' || currentHobbyKey === 'gaming' || currentHobbyKey === 'drawing') {
         hobbyPrevBtn.disabled = false;
@@ -1140,7 +1151,7 @@ function closeImageLightbox() {
     const topDrawerInner = topDrawer?.querySelector('.drawer-panel-inner');
     const aboutContent = document.querySelector('.about-content');
 
-    
+
 let aboutActive = false;
 
 if (aboutContent) {
@@ -1209,7 +1220,213 @@ if (educationCard) {
             }
         });
     }
-   
+
+const RECYCLER_WINDOW = 7; 
+
+function renderPSPShowcase(games, activeIndex) {
+    hobbyOverlayQueue.innerHTML = `
+        <div class="psp-recycler-viewport">
+            <div class="psp-recycler-track" id="pspRecyclerTrack"></div>
+        </div>
+        <div class="psp-main-frame">
+            <div class="psp-main-media" id="pspMainMedia"></div>
+            <div class="psp-main-info">
+                <div class="psp-main-thumb">
+                    <img id="pspThumbImg" src="${games[activeIndex].src}" alt="">
+                </div>
+                <div class="psp-main-text">
+                    <h3 id="pspTitle">${games[activeIndex].title || ''}</h3>
+                    <p id="pspDesc">${games[activeIndex].description || ''}</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    updatePSPMedia(games[activeIndex]);
+    renderRecyclerWindow(games, activeIndex);
+}
+
+function renderRecyclerWindow(games, activeIndex) {
+    const track = document.getElementById('pspRecyclerTrack');
+    if (!track) return;
+
+    const n = games.length;
+    const half = Math.floor(RECYCLER_WINDOW / 2);
+
+    const windowIndices = [];
+    for (let offset = -half; offset <= half; offset++) {
+        const realIndex = ((activeIndex + offset) % n + n) % n;
+        windowIndices.push(realIndex);
+    }
+
+    let items = track.querySelectorAll('.psp-recycler-item');
+
+    if (items.length !== RECYCLER_WINDOW) {
+        // First render only — build all slots fresh
+        track.innerHTML = windowIndices.map((realIdx, slot) => `
+            <div class="psp-recycler-item${realIdx === activeIndex ? ' active' : ''}" data-real-index="${realIdx}">
+                <img src="${games[realIdx].src}" alt="${games[realIdx].title || ''}" loading="eager" decoding="async">
+            </div>
+        `).join('');
+        items = track.querySelectorAll('.psp-recycler-item');
+    } else {
+        // NEW — update existing nodes in place instead of rebuilding,
+        // so CSS transitions on .active (scale/shadow/opacity) actually animate
+        items.forEach((item, slot) => {
+            const realIdx = windowIndices[slot];
+            const game = games[realIdx];
+            const img = item.querySelector('img');
+
+            if (!img.src.endsWith(game.src)) {
+                img.src = game.src;
+                img.alt = game.title || '';
+            }
+            item.dataset.realIndex = realIdx;
+            item.classList.toggle('active', realIdx === activeIndex);
+        });
+    }
+
+    track.querySelectorAll('.psp-recycler-item').forEach(item => {
+        item.onclick = () => {
+            setActiveGame(games, parseInt(item.dataset.realIndex, 10));
+        };
+    });
+
+    positionTrack(2);
+}
+
+function positionTrack(activeSlotIndex) {
+    const track = document.getElementById('pspRecyclerTrack');
+    if (!track) return;
+
+    const item = track.children[0];
+    if (!item) return;
+
+    const itemWidth = item.getBoundingClientRect().width;
+    const gap = parseFloat(getComputedStyle(track).gap) || 12;
+    const step = itemWidth + gap;
+
+    // Shift track left so the desired slot sits at the viewport's start
+    const offset = -(activeSlotIndex * step);
+    track.style.transform = `translateX(${offset}px)`;
+}
+
+
+function updatePSPMedia(game) {
+    const mediaContainer = document.getElementById('pspMainMedia');
+    if (!mediaContainer) return;
+    mediaContainer.innerHTML = game.video
+        ? `<video src="${game.video}" autoplay muted loop playsinline></video>`
+        : `<img src="${game.src}" alt="${game.title || ''}">`;
+}
+
+let suppressLoopCheck = false;
+
+let currentGameIndex = 0;
+let isSliding = false;
+
+function setActiveGame(games, idx) {
+    if (isSliding) return;
+
+    const delta = getShortestSlotDelta(currentGameIndex, idx, games.length);
+    slideRecycler(games, idx, delta);
+
+    currentGameIndex = idx;
+    const game = games[idx];
+
+    const mediaEl = document.getElementById('pspMainMedia');
+    const infoEl = document.querySelector('.psp-main-info');
+
+    mediaEl.classList.add('psp-fade-out');
+    infoEl.classList.add('psp-fade-out');
+
+    setTimeout(() => {
+        document.getElementById('pspThumbImg').src = game.src;
+        document.getElementById('pspTitle').textContent = game.title || '';
+        document.getElementById('pspDesc').textContent = game.description || '';
+        updatePSPMedia(game);
+
+        mediaEl.classList.remove('psp-fade-out');
+        infoEl.classList.remove('psp-fade-out');
+    }, 200);
+}
+
+// Returns the signed number of slots between oldIdx and newIdx,
+// picking the shorter direction around the wrap.
+function getShortestSlotDelta(oldIdx, newIdx, n) {
+    let delta = newIdx - oldIdx;
+    if (delta > n / 2) delta -= n;
+    if (delta < -n / 2) delta += n;
+    return delta;
+}
+
+function slideRecycler(games, newActiveIndex, delta) {
+    const track = document.getElementById('pspRecyclerTrack');
+    if (!track || delta === 0) {
+        renderRecyclerWindow(games, newActiveIndex);
+        return;
+    }
+
+    isSliding = true;
+    const n = games.length;
+    const half = Math.floor(RECYCLER_WINDOW / 2);
+    const dir = Math.sign(delta);
+    const steps = Math.abs(delta);
+
+    // Old window (currently on screen)
+    const oldIndices = [];
+    for (let offset = -half; offset <= half; offset++) {
+        oldIndices.push(((currentGameIndex + offset) % n + n) % n);
+    }
+
+    // Extra tiles revealed by the slide, in the direction of travel
+    const extra = [];
+    for (let s = 1; s <= steps; s++) {
+        extra.push(((currentGameIndex + dir * (half + s)) % n + n) % n);
+    }
+
+    const extended = dir > 0 ? [...oldIndices, ...extra] : [...extra.reverse(), ...oldIndices];
+    const prepended = dir < 0 ? extra.length : 0;
+
+    track.innerHTML = extended.map(realIdx => `
+        <div class="psp-recycler-item${realIdx === newActiveIndex ? ' active' : ''}" data-real-index="${realIdx}">
+            <img src="${games[realIdx].src}" alt="${games[realIdx].title || ''}" loading="eager" decoding="async">
+        </div>
+    `).join('');
+
+    track.querySelectorAll('.psp-recycler-item').forEach(item => {
+        item.onclick = () => setActiveGame(games, parseInt(item.dataset.realIndex, 10));
+    });
+
+    const firstItem = track.children[0];
+    const gap = parseFloat(getComputedStyle(track).gap) || 12;
+    const step = firstItem.getBoundingClientRect().width + gap;
+
+    const startSlot = 2 + prepended;
+    const endSlot = startSlot + delta;
+
+    // Snap to start position instantly, then animate to end position
+    track.style.transition = 'none';
+    track.style.transform = `translateX(${-(startSlot * step)}px)`;
+    track.getBoundingClientRect(); // force reflow so the jump isn't animated
+
+    track.style.transition = '';
+    requestAnimationFrame(() => {
+        track.style.transform = `translateX(${-(endSlot * step)}px)`;
+    });
+
+    const onEnd = () => {
+        track.removeEventListener('transitionend', onEnd);
+        // Recenter instantly to a clean, minimal window — invisible since it's the same view
+        track.style.transition = 'none';
+        renderRecyclerWindow(games, newActiveIndex);
+        track.getBoundingClientRect();
+        track.style.transition = '';
+        isSliding = false;
+    };
+    track.addEventListener('transitionend', onEnd, { once: true });
+}
+
         </script>
 </body>
 </html>
