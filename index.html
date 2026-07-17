@@ -13,6 +13,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="boot-overlay" id="bootOverlay">
+    <div class="boot-text" id="bootText"></div>
+    <div class="boot-door boot-door-left">
+        <img src="line.png" alt="" class="boot-door-edge boot-door-edge-left">
+    </div>
+    <div class="boot-door boot-door-right">
+        <img src="line.png" alt="" class="boot-door-edge boot-door-edge-right">
+    </div>
+</div>
     <header>
         <nav>
             <a href="#hero" class="logo">
@@ -472,7 +481,49 @@
             });
         }
 
+        window.addEventListener('DOMContentLoaded', () => {
+            const bootOverlay = document.getElementById('bootOverlay');
+            const bootText = document.getElementById('bootText');
 
+            const lines = [
+                '> initializing profile...',
+                '> loading resume.exe',
+                '> access granted'
+            ];
+
+            let lineIndex = 0;
+            let charIndex = 0;
+            let displayed = '';
+
+            function typeNextChar() {
+                if (lineIndex >= lines.length) {
+                    setTimeout(() => {
+                        bootOverlay.classList.add('open');
+                        setTimeout(() => {
+                            bootOverlay.classList.add('hidden');
+                            document.body.style.overflow = '';
+                        }, 950); // matches door transition duration
+                    }, 300);
+                    return;
+                }
+
+                const currentLine = lines[lineIndex];
+                if (charIndex < currentLine.length) {
+                    displayed += currentLine[charIndex];
+                    bootText.textContent = displayed;
+                    charIndex++;
+                    setTimeout(typeNextChar, 25);
+                } else {
+                    displayed += '\n';
+                    lineIndex++;
+                    charIndex = 0;
+                    setTimeout(typeNextChar, 150);
+                }
+            }
+
+            document.body.style.overflow = 'hidden';
+            typeNextChar();
+        });
         // Smooth scrolling for navigation links with improved easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1184,6 +1235,8 @@ if (aboutContent) {
 }
 
 const educationCard = document.querySelector('.education-card');
+const educationInner = educationCard?.querySelector('.education-card-inner');   // NEW
+const naturalHeight = educationInner?.scrollHeight;                              // NEW
 let educationTimer;
 let educationExpanded = false;
 
@@ -1192,18 +1245,21 @@ if (educationCard) {
         clearTimeout(educationTimer);
 
         if (!educationExpanded) {
-            // Opening: shrink first, then expand
             educationExpanded = true;
+            educationInner.style.height = naturalHeight + 'px';
+            educationInner.getBoundingClientRect();
             educationCard.classList.add('shrink');
             educationTimer = setTimeout(() => {
                 educationCard.classList.add('expand');
+                educationInner.style.height = '480px';
             }, 350);
         } else {
-            // Closing: collapse first, then widen back out
             educationExpanded = false;
             educationCard.classList.remove('expand');
+            educationInner.style.height = naturalHeight + 'px';
             educationTimer = setTimeout(() => {
                 educationCard.classList.remove('shrink');
+                educationInner.style.height = '';
             }, 350);
         }
     });
