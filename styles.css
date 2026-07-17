@@ -65,6 +65,92 @@ body {
     position: relative;
 }
 
+.boot-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.boot-door {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background: var(--black);
+    border-top: none;
+    z-index: 9999;
+    transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.boot-door-left {
+    left: 0;
+    border-right: 1px solid var(--green);
+    transform: translateX(0);
+}
+
+.boot-door-right {
+    right: 0;
+    border-left: 1px solid var(--green);
+    transform: translateX(0);
+}
+.boot-door-edge {
+    position: absolute;
+    top: 50%;
+    left: 50%;                 /* anchor to the door's own inner edge */
+    width: 400px;               /* this becomes the graphic's LENGTH once rotated */
+    height: auto;              /* this becomes the graphic's THICKNESS once rotated */
+    object-fit: contain;
+    opacity: 0.9;
+    pointer-events: none;
+    transform-origin: center center;
+}
+
+/* Left door — sits on its right edge (against the seam), rotated 90deg to run vertically */
+.boot-door-edge-left {
+    right: 0;
+    left: auto;
+    transform: translate(46%, -50%) rotate(90deg);
+}
+
+/* Right door — sits on its left edge (against the seam), rotated 180deg (mirrored) */
+.boot-door-edge-right {
+    left: 0;
+    transform: translate(-46%, -50%) rotate(-90deg);
+}
+
+.boot-overlay.open .boot-door-left {
+    transform: translateX(-100%);
+}
+
+.boot-overlay.open .boot-door-right {
+    transform: translateX(100%);
+}
+
+.boot-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    white-space: pre;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.boot-overlay.open .boot-text {
+    opacity: 0;
+}
+
+.boot-overlay.hidden {
+    display: none;
+}
+
 
 .container {
     max-width: 1200px;
@@ -926,6 +1012,12 @@ nav {
     pointer-events: none;
 }
 
+.education-card {
+    transform-origin: center center;
+    transition: width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                scale 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
 
 .education-degree-img {
     position: absolute;
@@ -1609,12 +1701,13 @@ nav {
     opacity: 0;
 }
 
-.psp-main-media {
+.psp-main-media img,
+.psp-main-media video {
     width: 100%;
-    height: 320px;
-    aspect-ratio: 16 / 9;
-    background: var(--black);
-    overflow: hidden;
+    height: 100%;
+    object-fit: cover;  
+    object-position: center;
+    display: block;
 }
 
 .psp-main-media img,
@@ -1634,7 +1727,10 @@ nav {
 
 .psp-main-thumb {
     flex: 0 0 100px;
+    width: 100px; 
     height: 100px;
+    min-width: 0; 
+    min-height: 0;
     overflow: hidden;
     border: 1px solid var(--green);
 }
