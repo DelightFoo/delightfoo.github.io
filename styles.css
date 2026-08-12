@@ -1326,6 +1326,16 @@ position: relative;
     pointer-events: none;
 }
 
+.spine-left img {
+    width: 36 !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
 .page-grid {
     width: 100%;
     height: 100%;

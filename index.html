@@ -1,1755 +1,1755 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Engineer Resume</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="boot-overlay" id="bootOverlay">
-    <div class="boot-text" id="bootText"><span class="boot-cursor" id="bootCursor"></span></div>
-    <div class="boot-webcam-container" id="bootWebcamContainer">
-        <video id="bootWebcamVideo" autoplay playsinline muted></video>
-        <canvas id="bootEyeDetectionCanvas"></canvas>
-        <div class="boot-webcam-overlay">
-            <div class="boot-webcam-message">Position your face for eye scan</div>
-            <div class="boot-webcam-status" id="bootWebcamStatus">Initializing...</div>
-        </div>
-    </div>
-    <div class="boot-door boot-door-left">
-        <div class="boot-door-edge boot-door-edge-left">
-            <div class="boot-door-edge-track">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Software Engineer Resume</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    </head>
+    <body>
+    <div class="boot-overlay" id="bootOverlay">
+        <div class="boot-text" id="bootText"><span class="boot-cursor" id="bootCursor"></span></div>
+        <div class="boot-webcam-container" id="bootWebcamContainer">
+            <video id="bootWebcamVideo" autoplay playsinline muted></video>
+            <canvas id="bootEyeDetectionCanvas"></canvas>
+            <div class="boot-webcam-overlay">
+                <div class="boot-webcam-message">Position your face for eye scan</div>
+                <div class="boot-webcam-status" id="bootWebcamStatus">Initializing...</div>
             </div>
         </div>
-        <canvas id="earthCanvas"></canvas>
-    </div>
-    <div class="boot-door boot-door-right">
-        <div class="boot-door-edge boot-door-edge-right">
-            <div class="boot-door-edge-track">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
-                <img src="Booting Doors/line.png" alt="">
-            </div>
-        </div>
-        <img src="logo.png" alt="" class="boot-door-logo" aria-hidden="true">
-        <div class="boot-door-images">
-            <img src="Booting Doors/06.png" alt="" class="boot-door-image">
-            <img src="Booting Doors/07.png" alt="" class="boot-door-image">
-        </div>
-        <div class="boot-door-cv" aria-hidden="true">
-            <img src="Booting Doors/cv.png" alt="">
-        </div>
-        <img src="Booting Doors/barrier.png" alt="" class="boot-door-barrier" aria-hidden="true">
-        <div class="waves-video-container">
-            <video id="wavesVideo" autoplay loop muted playsinline>
-                <source src="Booting Doors/Waves.mp4" type="video/mp4">
-            </video>
-        </div>
-    </div>
-</div>
-
-<!-- Boot Eye Capture Result Overlay -->
-<div class="boot-eye-result-overlay" id="bootEyeResultOverlay">
-    <div class="boot-eye-result-content">
-        <div class="boot-eye-result-image-container" id="bootEyeResultImageContainer">
-            <!-- Captured eye image will be displayed here -->
-            <div class="boot-eye-scan-line"></div>
-        </div>
-    </div>
-</div>
-
-<!-- Compact dashboard: single-viewport portfolio UI -->
-<div class="compact-dashboard" aria-label="Portfolio dashboard preview">
-    <aside class="dashboard-avatar-panel">
-        <div class="dashboard-panel-label">FCX / VISUAL CHANNEL</div>
-        <div class="dashboard-personal-details">
-            <div><span>NAME</span><strong>FOO CHEN XUAN</strong></div>
-            <div><span>ROLE</span><strong>SOFTWARE ENGINEER</strong></div>
-            <div><span>BASE</span><strong>JOHOR, MALAYSIA</strong></div>
-            <div><span>STATUS</span><strong>OPEN TO WORK</strong></div>
-        </div>
-        <div class="dashboard-avatar-stage">
-            <span>VIDEO / AVATAR<br>AREA RESERVED</span>
-        </div>
-        <div class="dashboard-avatar-status">
-            <span>STATUS</span>
-            <strong>AWAITING VIDEO INPUT</strong>
-        </div>
-    </aside>
-    <section class="dashboard-workspace">
-        <div class="dashboard-tabs" role="tablist" aria-label="Portfolio sections">
-            <button class="dashboard-tab active" data-tab="info" type="button" role="tab" aria-selected="true">INFO</button>
-            <button class="dashboard-tab" data-tab="hobby" type="button" role="tab" aria-selected="false">DIRECTORY</button>
-        </div>
-        <div class="dashboard-canvas" role="tabpanel" aria-label="Content preview">
-            <!-- Info Tab Content -->
-            <div class="tab-content active" id="tab-info">
-                <div class="info-section">
-                    <h2 class="section-title">WORK EXPERIENCE</h2>
-
-                    <div class="experience-item">
-                        <div class="experience-header">
-                            <h3>Software Support Engineer</h3>
-                            <span class="experience-date">April 2026 - Present</span>
-                        </div>
-                        <p class="experience-company">Property 213</p>
-                        <ul class="experience-details">
-                            <li>Delivered end-to-end technical support for enterprise software applications, ensuring 95%+ issue resolution rate</li>
-                            <li>Collaborated with cross-functional development teams to diagnose and resolve complex software defects</li>
-                            <li>Gathered and documented detailed user requirements, translating business needs into technical specifications</li>
-                            <li>Maintained comprehensive knowledge base and technical documentation to improve user self-service capabilities</li>
-                            <li>Provided training and guidance to end-users, enhancing system adoption and operational efficiency</li>
-                        </ul>
-                    </div>
-
-                    <div class="experience-item">
-                        <div class="experience-header">
-                            <h3>Technical Support Intern</h3>
-                            <span class="experience-date">November 2024 - May 2025</span>
-                        </div>
-                        <p class="experience-company">Greenstem Business Software</p>
-                        <ul class="experience-details">
-                            <li>Specialized in motorparts industry-specific ERP solutions, focusing on accounting and inventory management modules</li>
-                            <li>Successfully executed data migration projects for multiple clients, ensuring 100% data integrity and minimal business disruption</li>
-                            <li>Developed customized Crystal Reports to address diverse client reporting requirements, improving business intelligence capabilities</li>
-                            <li>Integrated E-invoice systems, ensuring seamless regulatory compliance for Malaysia businesses</li>
-                            <li>Acquired comprehensive knowledge of modern ERP architectures, standard accounting workflows, and CRM system integration</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <h2 class="section-title">EDUCATION</h2>
-                    <div class="education-item">
-                        <h3>Bachelor's Degree in Software Engineering</h3>
-                        <p class="education-details">TARUMT • December of 2025</p>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <h2 class="section-title">SKILLS</h2>
-
-                    <div class="experience-item">
-                        <h3>ERP & Business Systems</h3>
-                        <ul class="experience-details">
-                            <li>Familiar with Enterprise Resource Planning (ERP) Systems</li>
-                            <li>E-invoice Integration & Compliance</li>
-                            <li>Accounting Software Modules (AP, AR, GL, Inventory)</li>
-                            <li>Crystal Reports Design & Customization</li>
-                            <li>Data Migration & ETL Processes</li>
-                            <li>Customer Relationship Management (CRM) Systems</li>
-                        </ul>
-                    </div>
-
-                    <div class="experience-item">
-                        <h3>Core Competencies</h3>
-                        <ul class="experience-details">
-                            <li>Requirements Gathering & Business Analysis</li>
-                            <li>Technical Documentation & Knowledge Management</li>
-                            <li>Software Troubleshooting & Problem Resolution</li>
-                            <li>Stakeholder Communication & User Training</li>
-                            <li>Process Improvement & Workflow Optimization</li>
-                        </ul>
-                    </div>
-
-                    <div class="experience-item">
-                        <h3>Languages</h3>
-                        <ul class="experience-details">
-                            <li>English (Professional Proficiency)</li>
-                            <li>Mandarin Chinese (Native)</li>
-                            <li>Malay (Moderate)</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-            <!-- Hobby Tab Content -->
-            <div class="tab-content" id="tab-hobby" style="display: none;">
-                <div class="hobby-overlay" id="hobbyOverlay">
-                    <div class="hobby-overlay-backdrop" id="hobbyOverlayBackdrop"></div>
-                    <div class="hobby-left-panel wide-panel">
-                        <div class="hobby-overlay-panel">
-                            <div class="hobby-overlay-queue" id="hobbyOverlayQueue"></div>
-                        </div>
-                    </div>
+        <div class="boot-door boot-door-left">
+            <div class="boot-door-edge boot-door-edge-left">
+                <div class="boot-door-edge-track">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
                 </div>
             </div>
-            <!-- Contact Tab Content -->
-            <div class="tab-content" id="tab-contact" style="display: none;">
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h3>Email</h3>
-                                <p>foochenxuan@gmail.com</p>
+            <canvas id="earthCanvas"></canvas>
+        </div>
+        <div class="boot-door boot-door-right">
+            <div class="boot-door-edge boot-door-edge-right">
+                <div class="boot-door-edge-track">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
+                    <img src="Booting Doors/line.png" alt="">
+                </div>
+            </div>
+            <img src="logo.png" alt="" class="boot-door-logo" aria-hidden="true">
+            <div class="boot-door-images">
+                <img src="Booting Doors/06.png" alt="" class="boot-door-image">
+                <img src="Booting Doors/07.png" alt="" class="boot-door-image">
+            </div>
+            <div class="boot-door-cv" aria-hidden="true">
+                <img src="Booting Doors/cv.png" alt="">
+            </div>
+            <img src="Booting Doors/barrier.png" alt="" class="boot-door-barrier" aria-hidden="true">
+            <div class="waves-video-container">
+                <video id="wavesVideo" autoplay loop muted playsinline>
+                    <source src="Booting Doors/Waves.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boot Eye Capture Result Overlay -->
+    <div class="boot-eye-result-overlay" id="bootEyeResultOverlay">
+        <div class="boot-eye-result-content">
+            <div class="boot-eye-result-image-container" id="bootEyeResultImageContainer">
+                <!-- Captured eye image will be displayed here -->
+                <div class="boot-eye-scan-line"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compact dashboard: single-viewport portfolio UI -->
+    <div class="compact-dashboard" aria-label="Portfolio dashboard preview">
+        <aside class="dashboard-avatar-panel">
+            <div class="dashboard-panel-label">FCX / VISUAL CHANNEL</div>
+            <div class="dashboard-personal-details">
+                <div><span>NAME</span><strong>FOO CHEN XUAN</strong></div>
+                <div><span>ROLE</span><strong>SOFTWARE ENGINEER</strong></div>
+                <div><span>BASE</span><strong>JOHOR, MALAYSIA</strong></div>
+                <div><span>STATUS</span><strong>OPEN TO WORK</strong></div>
+            </div>
+            <div class="dashboard-avatar-stage">
+                <span>VIDEO / AVATAR<br>AREA RESERVED</span>
+            </div>
+            <div class="dashboard-avatar-status">
+                <span>STATUS</span>
+                <strong>AWAITING VIDEO INPUT</strong>
+            </div>
+        </aside>
+        <section class="dashboard-workspace">
+            <div class="dashboard-tabs" role="tablist" aria-label="Portfolio sections">
+                <button class="dashboard-tab active" data-tab="info" type="button" role="tab" aria-selected="true">INFO</button>
+                <button class="dashboard-tab" data-tab="hobby" type="button" role="tab" aria-selected="false">DIRECTORY</button>
+            </div>
+            <div class="dashboard-canvas" role="tabpanel" aria-label="Content preview">
+                <!-- Info Tab Content -->
+                <div class="tab-content active" id="tab-info">
+                    <div class="info-section">
+                        <h2 class="section-title">WORK EXPERIENCE</h2>
+
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <h3>Software Support Engineer</h3>
+                                <span class="experience-date">April 2026 - Present</span>
                             </div>
+                            <p class="experience-company">Property 213</p>
+                            <ul class="experience-details">
+                                <li>Delivered end-to-end technical support for enterprise software applications, ensuring 95%+ issue resolution rate</li>
+                                <li>Collaborated with cross-functional development teams to diagnose and resolve complex software defects</li>
+                                <li>Gathered and documented detailed user requirements, translating business needs into technical specifications</li>
+                                <li>Maintained comprehensive knowledge base and technical documentation to improve user self-service capabilities</li>
+                                <li>Provided training and guidance to end-users, enhancing system adoption and operational efficiency</li>
+                            </ul>
                         </div>
-                        <div class="contact-item">
-                            <i class="fab fa-linkedin"></i>
-                            <div>
-                                <h3>LinkedIn</h3>
-                                <p><a href="https://linkedin.com/in/chen-xuan-foo-810a57282/" target="_blank">linkedin.com/in/chen-xuan-foo-810a57282/</a></p>
+
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <h3>Technical Support Intern</h3>
+                                <span class="experience-date">November 2024 - May 2025</span>
                             </div>
+                            <p class="experience-company">Greenstem Business Software</p>
+                            <ul class="experience-details">
+                                <li>Specialized in motorparts industry-specific ERP solutions, focusing on accounting and inventory management modules</li>
+                                <li>Successfully executed data migration projects for multiple clients, ensuring 100% data integrity and minimal business disruption</li>
+                                <li>Developed customized Crystal Reports to address diverse client reporting requirements, improving business intelligence capabilities</li>
+                                <li>Integrated E-invoice systems, ensuring seamless regulatory compliance for Malaysia businesses</li>
+                                <li>Acquired comprehensive knowledge of modern ERP architectures, standard accounting workflows, and CRM system integration</li>
+                            </ul>
                         </div>
-                        <div class="contact-item">
-                            <i class="fab fa-github"></i>
-                            <div>
-                                <h3>GitHub</h3>
-                                <p><a href="https://github.com/DelightFoo" target="_blank">github.com/DelightFoo</a></p>
-                            </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h2 class="section-title">EDUCATION</h2>
+                        <div class="education-item">
+                            <h3>Bachelor's Degree in Software Engineering</h3>
+                            <p class="education-details">TARUMT • December of 2025</p>
                         </div>
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <h3>Location</h3>
-                                <p>Johor, Malaysia</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h2 class="section-title">SKILLS</h2>
+
+                        <div class="experience-item">
+                            <h3>ERP & Business Systems</h3>
+                            <ul class="experience-details">
+                                <li>Familiar with Enterprise Resource Planning (ERP) Systems</li>
+                                <li>E-invoice Integration & Compliance</li>
+                                <li>Accounting Software Modules (AP, AR, GL, Inventory)</li>
+                                <li>Crystal Reports Design & Customization</li>
+                                <li>Data Migration & ETL Processes</li>
+                                <li>Customer Relationship Management (CRM) Systems</li>
+                            </ul>
+                        </div>
+
+                        <div class="experience-item">
+                            <h3>Core Competencies</h3>
+                            <ul class="experience-details">
+                                <li>Requirements Gathering & Business Analysis</li>
+                                <li>Technical Documentation & Knowledge Management</li>
+                                <li>Software Troubleshooting & Problem Resolution</li>
+                                <li>Stakeholder Communication & User Training</li>
+                                <li>Process Improvement & Workflow Optimization</li>
+                            </ul>
+                        </div>
+
+                        <div class="experience-item">
+                            <h3>Languages</h3>
+                            <ul class="experience-details">
+                                <li>English (Professional Proficiency)</li>
+                                <li>Mandarin Chinese (Native)</li>
+                                <li>Malay (Moderate)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Hobby Tab Content -->
+                <div class="tab-content" id="tab-hobby" style="display: none;">
+                    <div class="hobby-overlay" id="hobbyOverlay">
+                        <div class="hobby-overlay-backdrop" id="hobbyOverlayBackdrop"></div>
+                        <div class="hobby-left-panel wide-panel">
+                            <div class="hobby-overlay-panel">
+                                <div class="hobby-overlay-queue" id="hobbyOverlayQueue"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="contact-cv">
-                        <h3>Download My CV</h3>
-                        <p>Get a detailed PDF version of my resume</p>
-                        <a href="cv.pdf" class="btn btn-primary btn-large" download>
-                            <i class="fas fa-file-pdf"></i> Download CV
-                        </a>
+                </div>
+                <!-- Contact Tab Content -->
+                <div class="tab-content" id="tab-contact" style="display: none;">
+                    <div class="contact-content">
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h3>Email</h3>
+                                    <p>foochenxuan@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fab fa-linkedin"></i>
+                                <div>
+                                    <h3>LinkedIn</h3>
+                                    <p><a href="https://linkedin.com/in/chen-xuan-foo-810a57282/" target="_blank">linkedin.com/in/chen-xuan-foo-810a57282/</a></p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fab fa-github"></i>
+                                <div>
+                                    <h3>GitHub</h3>
+                                    <p><a href="https://github.com/DelightFoo" target="_blank">github.com/DelightFoo</a></p>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h3>Location</h3>
+                                    <p>Johor, Malaysia</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-cv">
+                            <h3>Download My CV</h3>
+                            <p>Get a detailed PDF version of my resume</p>
+                            <a href="cv.pdf" class="btn btn-primary btn-large" download>
+                                <i class="fas fa-file-pdf"></i> Download CV
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="dashboard-footer-line">
-            <span class="footer-subtitle" id="footerSubtitle"></span>
-        </div>
-    </section>
-</div>
+            <div class="dashboard-footer-line">
+                <span class="footer-subtitle" id="footerSubtitle"></span>
+            </div>
+        </section>
+    </div>
 
-<div class="image-lightbox" id="imageLightbox">
-    <div class="image-lightbox-backdrop" id="imageLightboxBackdrop"></div>
-    <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close">&times;</button>
-    <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="">
-    <video class="image-lightbox-video" id="imageLightboxVideo" controls playsinline style="display:none;"></video>
-</div>
+    <div class="image-lightbox" id="imageLightbox">
+        <div class="image-lightbox-backdrop" id="imageLightboxBackdrop"></div>
+        <button class="image-lightbox-close" id="imageLightboxClose" aria-label="Close">&times;</button>
+        <img class="image-lightbox-img" id="imageLightboxImg" src="" alt="">
+        <video class="image-lightbox-video" id="imageLightboxVideo" controls playsinline style="display:none;"></video>
+    </div>
 
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const bootOverlay = document.getElementById('bootOverlay');
-        const bootText = document.getElementById('bootText');
-        const bootCursor = document.getElementById('bootCursor');
-        const bootWebcamContainer = document.getElementById('bootWebcamContainer');
-        const bootWebcamVideo = document.getElementById('bootWebcamVideo');
-        const bootEyeDetectionCanvas = document.getElementById('bootEyeDetectionCanvas');
-        const bootWebcamStatus = document.getElementById('bootWebcamStatus');
-        const bootEyeResultOverlay = document.getElementById('bootEyeResultOverlay');
-        const bootEyeResultImageContainer = document.getElementById('bootEyeResultImageContainer');
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const bootOverlay = document.getElementById('bootOverlay');
+            const bootText = document.getElementById('bootText');
+            const bootCursor = document.getElementById('bootCursor');
+            const bootWebcamContainer = document.getElementById('bootWebcamContainer');
+            const bootWebcamVideo = document.getElementById('bootWebcamVideo');
+            const bootEyeDetectionCanvas = document.getElementById('bootEyeDetectionCanvas');
+            const bootWebcamStatus = document.getElementById('bootWebcamStatus');
+            const bootEyeResultOverlay = document.getElementById('bootEyeResultOverlay');
+            const bootEyeResultImageContainer = document.getElementById('bootEyeResultImageContainer');
 
-        const textNode = document.createTextNode('');
-        bootText.insertBefore(textNode, bootCursor);
+            const textNode = document.createTextNode('');
+            bootText.insertBefore(textNode, bootCursor);
 
-        const lines = [
-            '>- loading resume.exe',
-            '>- welcome, visitor',
-            '>- enable camera access for better experience',
-            '>- initiating scan...'
-        ];
+            const lines = [
+                '>- loading resume.exe',
+                '>- welcome, visitor',
+                '>- enable camera access for better experience',
+                '>- initiating scan...'
+            ];
 
-        let lineIndex = 0;
-        let charIndex = 0;
-        let displayed = '';
-        let bootWebcamStream = null;
-        let bootEyeDetectionInterval = null;
-        let bootAutoCaptured = false;
-        let bootModelsLoaded = false;
+            let lineIndex = 0;
+            let charIndex = 0;
+            let displayed = '';
+            let bootWebcamStream = null;
+            let bootEyeDetectionInterval = null;
+            let bootAutoCaptured = false;
+            let bootModelsLoaded = false;
 
-        function updateBootText() {
-            textNode.textContent = displayed;
-            bootText.setAttribute('data-text', displayed);
-        }
+            function updateBootText() {
+                textNode.textContent = displayed;
+                bootText.setAttribute('data-text', displayed);
+            }
 
-        function typeNextChar() {
-            if (lineIndex >= lines.length) {
-                if (displayed.includes('booting...')) {
-                    setTimeout(() => {
-                        bootOverlay.classList.add('open');
+            function typeNextChar() {
+                if (lineIndex >= lines.length) {
+                    if (displayed.includes('booting...')) {
                         setTimeout(() => {
-                            bootOverlay.classList.add('hidden');
-                            document.body.style.overflow = '';
-                        }, 950);
-                    }, 300);
-                } else {
-                    startBootWebcam();
+                            bootOverlay.classList.add('open');
+                            setTimeout(() => {
+                                bootOverlay.classList.add('hidden');
+                                document.body.style.overflow = '';
+                            }, 950);
+                        }, 300);
+                    } else {
+                        startBootWebcam();
+                    }
+                    return;
                 }
-                return;
+
+                const currentLine = lines[lineIndex];
+                if (charIndex < currentLine.length) {
+                    displayed += currentLine[charIndex];
+                    updateBootText();
+                    charIndex++;
+                    setTimeout(typeNextChar, 25);
+                } else {
+                    displayed += '\n';
+                    updateBootText();
+                    lineIndex++;
+                    charIndex = 0;
+                    setTimeout(typeNextChar, 150);
+                }
             }
 
-            const currentLine = lines[lineIndex];
-            if (charIndex < currentLine.length) {
-                displayed += currentLine[charIndex];
-                updateBootText();
-                charIndex++;
-                setTimeout(typeNextChar, 25);
-            } else {
-                displayed += '\n';
-                updateBootText();
-                lineIndex++;
-                charIndex = 0;
-                setTimeout(typeNextChar, 150);
+            async function startBootWebcam() {
+                try {
+                    bootWebcamStatus.textContent = 'Starting camera...';
+                    bootWebcamContainer.classList.add('active');
+
+                    bootWebcamStream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        },
+                        audio: false
+                    });
+
+                    bootWebcamVideo.srcObject = bootWebcamStream;
+                    bootWebcamStatus.textContent = 'Loading AI models...';
+
+                    if (!bootModelsLoaded) {
+                        const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
+                        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+                        await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                        await faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL);
+                        bootModelsLoaded = true;
+                    }
+
+                    bootWebcamStatus.textContent = 'Position your face for eye scan';
+                    startBootEyeDetection();
+
+                } catch (err) {
+                    console.error('Error starting boot webcam:', err);
+                    bootWebcamStatus.textContent = 'Camera error - skipping scan';
+                    setTimeout(continueBootSequence, 2000);
+                }
             }
-        }
 
-        async function startBootWebcam() {
-            try {
-                bootWebcamStatus.textContent = 'Starting camera...';
-                bootWebcamContainer.classList.add('active');
+            function startBootEyeDetection() {
+                const canvas = bootEyeDetectionCanvas;
+                const video = bootWebcamVideo;
 
-                bootWebcamStream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        width: { ideal: 640 },
-                        height: { ideal: 480 },
-                        facingMode: 'user'
-                    },
-                    audio: false
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                const ctx = canvas.getContext('2d');
+
+                bootEyeDetectionInterval = setInterval(async () => {
+                    if (!bootWebcamStream) return;
+
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    const detections = await faceapi.detectAllFaces(
+                        video,
+                        new faceapi.TinyFaceDetectorOptions()
+                    ).withFaceLandmarks(true);
+
+                    detections.forEach(detection => {
+                        const landmarks = detection.landmarks;
+                        const leftEye = landmarks.getLeftEye();
+                        const rightEye = landmarks.getRightEye();
+
+                        drawEyeIndicator(ctx, leftEye, '#c0fe04');
+                        drawEyeIndicator(ctx, rightEye, '#c0fe04');
+                    });
+
+                    if (!bootAutoCaptured && detections.length > 0) {
+                        bootAutoCaptured = true;
+                        bootWebcamStatus.textContent = 'Eyes detected - capturing...';
+                        setTimeout(() => {
+                            captureBootEyeImage();
+                        }, 300);
+                    }
+                }, 100);
+            }
+
+            function drawEyeIndicator(ctx, eyePoints, color) {
+                if (!eyePoints || eyePoints.length === 0) return;
+
+                let x = 0, y = 0;
+                eyePoints.forEach(point => {
+                    x += point.x;
+                    y += point.y;
+                });
+                x /= eyePoints.length;
+                y /= eyePoints.length;
+
+                let maxDist = 0;
+                eyePoints.forEach(point => {
+                    const dist = Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
+                    if (dist > maxDist) maxDist = dist;
                 });
 
-                bootWebcamVideo.srcObject = bootWebcamStream;
-                bootWebcamStatus.textContent = 'Loading AI models...';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(x, y, maxDist * 1.2, 0, 2 * Math.PI);
+                ctx.stroke();
 
-                if (!bootModelsLoaded) {
-                    const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
-                    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-                    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-                    await faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL);
-                    bootModelsLoaded = true;
-                }
-
-                bootWebcamStatus.textContent = 'Position your face for eye scan';
-                startBootEyeDetection();
-
-            } catch (err) {
-                console.error('Error starting boot webcam:', err);
-                bootWebcamStatus.textContent = 'Camera error - skipping scan';
-                setTimeout(continueBootSequence, 2000);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x - 5, y);
+                ctx.lineTo(x + 5, y);
+                ctx.moveTo(x, y - 5);
+                ctx.lineTo(x, y + 5);
+                ctx.stroke();
             }
-        }
 
-        function startBootEyeDetection() {
-            const canvas = bootEyeDetectionCanvas;
-            const video = bootWebcamVideo;
+            function cropEyeRegion(video, eyePoints) {
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                eyePoints.forEach(point => {
+                    minX = Math.min(minX, point.x);
+                    minY = Math.min(minY, point.y);
+                    maxX = Math.max(maxX, point.x);
+                    maxY = Math.max(maxY, point.y);
+                });
 
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
-            const ctx = canvas.getContext('2d');
+                const padding = 20;
+                minX = Math.max(0, minX - padding);
+                minY = Math.max(0, minY - padding);
+                maxX = Math.min(video.videoWidth, maxX + padding);
+                maxY = Math.min(video.videoHeight, maxY + padding);
 
-            bootEyeDetectionInterval = setInterval(async () => {
-                if (!bootWebcamStream) return;
+                const width = maxX - minX;
+                const height = maxY - minY;
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const eyeCanvas = document.createElement('canvas');
+                eyeCanvas.width = width;
+                eyeCanvas.height = height;
+                const ctx = eyeCanvas.getContext('2d');
+                ctx.drawImage(video, minX, minY, width, height, 0, 0, width, height);
 
+                return eyeCanvas;
+            }
+
+            function combineEyeImages(leftEyeCanvas, rightEyeCanvas) {
+                const combinedCanvas = document.createElement('canvas');
+                const gap = 20;
+                combinedCanvas.width = leftEyeCanvas.width + rightEyeCanvas.width + gap;
+                combinedCanvas.height = Math.max(leftEyeCanvas.height, rightEyeCanvas.height);
+                const ctx = combinedCanvas.getContext('2d');
+
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
+
+                ctx.drawImage(leftEyeCanvas, 0, (combinedCanvas.height - leftEyeCanvas.height) / 2);
+                ctx.drawImage(rightEyeCanvas, leftEyeCanvas.width + gap, (combinedCanvas.height - rightEyeCanvas.height) / 2);
+
+                ctx.fillStyle = '#c0fe04';
+                ctx.font = '12px Space Mono';
+                ctx.fillText('LEFT', 5, 15);
+                ctx.fillText('RIGHT', leftEyeCanvas.width + gap + 5, 15);
+
+                return combinedCanvas.toDataURL('image/png');
+            }
+
+            async function captureBootEyeImage() {
+                const video = bootWebcamVideo;
                 const detections = await faceapi.detectAllFaces(
                     video,
                     new faceapi.TinyFaceDetectorOptions()
                 ).withFaceLandmarks(true);
 
-                detections.forEach(detection => {
-                    const landmarks = detection.landmarks;
-                    const leftEye = landmarks.getLeftEye();
-                    const rightEye = landmarks.getRightEye();
+                if (detections.length === 0) {
+                    bootWebcamStatus.textContent = 'No face detected - retrying';
+                    bootAutoCaptured = false;
+                    return;
+                }
 
-                    drawEyeIndicator(ctx, leftEye, '#c0fe04');
-                    drawEyeIndicator(ctx, rightEye, '#c0fe04');
+                const detection = detections[0];
+                const landmarks = detection.landmarks;
+                const leftEye = landmarks.getLeftEye();
+                const rightEye = landmarks.getRightEye();
+
+                const leftEyeImage = cropEyeRegion(video, leftEye);
+                const rightEyeImage = cropEyeRegion(video, rightEye);
+                const combinedImage = combineEyeImages(leftEyeImage, rightEyeImage);
+
+                stopBootWebcam();
+                showBootEyeResult(combinedImage);
+            }
+
+            function stopBootWebcam() {
+                if (bootEyeDetectionInterval) {
+                    clearInterval(bootEyeDetectionInterval);
+                    bootEyeDetectionInterval = null;
+                }
+                if (bootWebcamStream) {
+                    bootWebcamStream.getTracks().forEach(track => track.stop());
+                    bootWebcamStream = null;
+                }
+                bootWebcamVideo.srcObject = null;
+                bootWebcamContainer.classList.remove('active');
+            }
+
+            function showBootEyeResult(imageData) {
+                bootEyeResultImageContainer.innerHTML = `
+                    <div class="boot-eye-image-wrapper">
+                        <img src="${imageData}" alt="Captured eyes">
+                        <div class="boot-eye-scan-line"></div>
+                    </div>
+                `;
+                bootEyeResultOverlay.classList.add('active');
+
+                const earthCanvas = document.getElementById('earthCanvas');
+                if (earthCanvas) {
+                    earthCanvas.classList.add('active');
+                }
+
+                setTimeout(() => {
+                    bootEyeResultOverlay.classList.remove('active');
+                    if (earthCanvas) {
+                        earthCanvas.classList.remove('active');
+                    }
+                    lines.push('>- access granted');
+                    lines.push('>- booting...');
+                    typeNextChar();
+                }, 3000);
+            }
+
+            function continueBootSequence() {
+                bootEyeResultOverlay.classList.remove('active');
+                bootOverlay.classList.add('open');
+                setTimeout(() => {
+                    bootOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 950);
+            }
+
+            document.body.style.overflow = 'hidden';
+            typeNextChar();
+
+            initEarth();
+        });
+
+        function initEarth() {
+            const canvas = document.getElementById('earthCanvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+            const eyeRadius = 1.1;
+            const geometry = new THREE.SphereGeometry(eyeRadius, 32, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: "#c0fe05",
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            const innerGeometry = new THREE.SphereGeometry(eyeRadius * 0.95, 32, 32);
+            const innerMaterial = new THREE.MeshBasicMaterial({
+                color: "#c0fe05",
+                transparent: true,
+                opacity: 0.1
+            });
+
+            const ringGeometry = new THREE.TorusGeometry(eyeRadius * 1.15, 0.02, 16, 100);
+            const ringMaterial = new THREE.MeshBasicMaterial({
+                color: "#c0fe05",
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const anchorPositions = [
+                { lat: 0, lon: 0, number: '3' },
+                { lat: 30, lon: 45, number: '7' },
+                { lat: -30, lon: -45, number: '8' },
+                { lat: 60, lon: 90, number: '9' },
+                { lat: -60, lon: -90, number: '12' },
+                { lat: 0, lon: 180, number: '33' },
+                { lat: 45, lon: -135, number: '49' },
+                { lat: -45, lon: 135, number: '72' },
+                { lat: -85, lon: 35, number: '08' },
+                { lat: -145, lon: 35, number: '92' }
+            ];
+
+            function createEye(positionX) {
+                const eyeGroup = new THREE.Group();
+                eyeGroup.position.x = positionX;
+                eyeGroup.add(new THREE.Mesh(geometry, material));
+                eyeGroup.add(new THREE.Mesh(innerGeometry, innerMaterial));
+
+                const scanRing = new THREE.Mesh(ringGeometry, ringMaterial);
+                scanRing.rotation.x = Math.PI / 2;
+                eyeGroup.add(scanRing);
+
+                anchorPositions.forEach((pos) => {
+                    const phi = (90 - pos.lat) * (Math.PI / 180);
+                    const theta = (pos.lon + 180) * (Math.PI / 180);
+                    const anchorRadius = eyeRadius * 1.05;
+                    const x = -anchorRadius * Math.sin(phi) * Math.cos(theta);
+                    const y = anchorRadius * Math.cos(phi);
+                    const z = anchorRadius * Math.sin(phi) * Math.sin(theta);
+                    const labelCanvas = document.createElement('canvas');
+                    labelCanvas.width = 64;
+                    labelCanvas.height = 64;
+                    const context = labelCanvas.getContext('2d');
+                    context.fillStyle = '#ffffff';
+                    context.font = 'bold 48px Arial';
+                    context.textAlign = 'center';
+                    context.textBaseline = 'middle';
+                    context.fillText(pos.number, 32, 32);
+
+                    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                        map: new THREE.CanvasTexture(labelCanvas),
+                        transparent: true,
+                        opacity: 0.9
+                    }));
+                    sprite.position.set(x, y, z);
+                    sprite.scale.set(0.18, 0.18, 0.18);
+                    eyeGroup.add(sprite);
                 });
 
-                if (!bootAutoCaptured && detections.length > 0) {
-                    bootAutoCaptured = true;
-                    bootWebcamStatus.textContent = 'Eyes detected - capturing...';
-                    setTimeout(() => {
-                        captureBootEyeImage();
-                    }, 300);
-                }
-            }, 100);
-        }
-
-        function drawEyeIndicator(ctx, eyePoints, color) {
-            if (!eyePoints || eyePoints.length === 0) return;
-
-            let x = 0, y = 0;
-            eyePoints.forEach(point => {
-                x += point.x;
-                y += point.y;
-            });
-            x /= eyePoints.length;
-            y /= eyePoints.length;
-
-            let maxDist = 0;
-            eyePoints.forEach(point => {
-                const dist = Math.sqrt(Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2));
-                if (dist > maxDist) maxDist = dist;
-            });
-
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(x, y, maxDist * 1.2, 0, 2 * Math.PI);
-            ctx.stroke();
-
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(x - 5, y);
-            ctx.lineTo(x + 5, y);
-            ctx.moveTo(x, y - 5);
-            ctx.lineTo(x, y + 5);
-            ctx.stroke();
-        }
-
-        function cropEyeRegion(video, eyePoints) {
-            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-            eyePoints.forEach(point => {
-                minX = Math.min(minX, point.x);
-                minY = Math.min(minY, point.y);
-                maxX = Math.max(maxX, point.x);
-                maxY = Math.max(maxY, point.y);
-            });
-
-            const padding = 20;
-            minX = Math.max(0, minX - padding);
-            minY = Math.max(0, minY - padding);
-            maxX = Math.min(video.videoWidth, maxX + padding);
-            maxY = Math.min(video.videoHeight, maxY + padding);
-
-            const width = maxX - minX;
-            const height = maxY - minY;
-
-            const eyeCanvas = document.createElement('canvas');
-            eyeCanvas.width = width;
-            eyeCanvas.height = height;
-            const ctx = eyeCanvas.getContext('2d');
-            ctx.drawImage(video, minX, minY, width, height, 0, 0, width, height);
-
-            return eyeCanvas;
-        }
-
-        function combineEyeImages(leftEyeCanvas, rightEyeCanvas) {
-            const combinedCanvas = document.createElement('canvas');
-            const gap = 20;
-            combinedCanvas.width = leftEyeCanvas.width + rightEyeCanvas.width + gap;
-            combinedCanvas.height = Math.max(leftEyeCanvas.height, rightEyeCanvas.height);
-            const ctx = combinedCanvas.getContext('2d');
-
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, combinedCanvas.width, combinedCanvas.height);
-
-            ctx.drawImage(leftEyeCanvas, 0, (combinedCanvas.height - leftEyeCanvas.height) / 2);
-            ctx.drawImage(rightEyeCanvas, leftEyeCanvas.width + gap, (combinedCanvas.height - rightEyeCanvas.height) / 2);
-
-            ctx.fillStyle = '#c0fe04';
-            ctx.font = '12px Space Mono';
-            ctx.fillText('LEFT', 5, 15);
-            ctx.fillText('RIGHT', leftEyeCanvas.width + gap + 5, 15);
-
-            return combinedCanvas.toDataURL('image/png');
-        }
-
-        async function captureBootEyeImage() {
-            const video = bootWebcamVideo;
-            const detections = await faceapi.detectAllFaces(
-                video,
-                new faceapi.TinyFaceDetectorOptions()
-            ).withFaceLandmarks(true);
-
-            if (detections.length === 0) {
-                bootWebcamStatus.textContent = 'No face detected - retrying';
-                bootAutoCaptured = false;
-                return;
+                scene.add(eyeGroup);
+                return { group: eyeGroup, ring: scanRing };
             }
 
-            const detection = detections[0];
-            const landmarks = detection.landmarks;
-            const leftEye = landmarks.getLeftEye();
-            const rightEye = landmarks.getRightEye();
+            const leftEye = createEye(-1.3);
+            const rightEye = createEye(1.3);
 
-            const leftEyeImage = cropEyeRegion(video, leftEye);
-            const rightEyeImage = cropEyeRegion(video, rightEye);
-            const combinedImage = combineEyeImages(leftEyeImage, rightEyeImage);
+            function resizeRenderer() {
+                const { width, height } = canvas.getBoundingClientRect();
+                if (!width || !height) return;
 
-            stopBootWebcam();
-            showBootEyeResult(combinedImage);
-        }
-
-        function stopBootWebcam() {
-            if (bootEyeDetectionInterval) {
-                clearInterval(bootEyeDetectionInterval);
-                bootEyeDetectionInterval = null;
-            }
-            if (bootWebcamStream) {
-                bootWebcamStream.getTracks().forEach(track => track.stop());
-                bootWebcamStream = null;
-            }
-            bootWebcamVideo.srcObject = null;
-            bootWebcamContainer.classList.remove('active');
-        }
-
-        function showBootEyeResult(imageData) {
-            bootEyeResultImageContainer.innerHTML = `
-                <div class="boot-eye-image-wrapper">
-                    <img src="${imageData}" alt="Captured eyes">
-                    <div class="boot-eye-scan-line"></div>
-                </div>
-            `;
-            bootEyeResultOverlay.classList.add('active');
-
-            const earthCanvas = document.getElementById('earthCanvas');
-            if (earthCanvas) {
-                earthCanvas.classList.add('active');
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.setSize(width, height, false);
+                camera.aspect = width / height;
+                camera.position.z = (2.65 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)) * 1.55;
+                camera.updateProjectionMatrix();
             }
 
-            setTimeout(() => {
-                bootEyeResultOverlay.classList.remove('active');
-                if (earthCanvas) {
-                    earthCanvas.classList.remove('active');
-                }
-                lines.push('>- access granted');
-                lines.push('>- booting...');
-                typeNextChar();
-            }, 3000);
+            new ResizeObserver(resizeRenderer).observe(canvas);
+            window.addEventListener('resize', resizeRenderer);
+            resizeRenderer();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                leftEye.group.rotation.y += 0.025;
+                rightEye.group.rotation.y += 0.025;
+
+                const time = Date.now() * 0.001;
+                leftEye.ring.position.y = Math.sin(time * 2) * eyeRadius;
+                rightEye.ring.position.y = Math.sin(time * 2 + Math.PI) * eyeRadius;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
         }
 
-        function continueBootSequence() {
-            bootEyeResultOverlay.classList.remove('active');
-            bootOverlay.classList.add('open');
-            setTimeout(() => {
-                bootOverlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 950);
-        }
-
-        document.body.style.overflow = 'hidden';
-        typeNextChar();
-
-        initEarth();
-    });
-
-    function initEarth() {
-        const canvas = document.getElementById('earthCanvas');
-        if (!canvas) return;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-
-        const eyeRadius = 1.1;
-        const geometry = new THREE.SphereGeometry(eyeRadius, 32, 32);
-        const material = new THREE.MeshBasicMaterial({
-            color: "#c0fe05",
-            wireframe: true,
-            transparent: true,
-            opacity: 0.3
-        });
-
-        const innerGeometry = new THREE.SphereGeometry(eyeRadius * 0.95, 32, 32);
-        const innerMaterial = new THREE.MeshBasicMaterial({
-            color: "#c0fe05",
-            transparent: true,
-            opacity: 0.1
-        });
-
-        const ringGeometry = new THREE.TorusGeometry(eyeRadius * 1.15, 0.02, 16, 100);
-        const ringMaterial = new THREE.MeshBasicMaterial({
-            color: "#c0fe05",
-            transparent: true,
-            opacity: 0.8
-        });
-
-        const anchorPositions = [
-            { lat: 0, lon: 0, number: '3' },
-            { lat: 30, lon: 45, number: '7' },
-            { lat: -30, lon: -45, number: '8' },
-            { lat: 60, lon: 90, number: '9' },
-            { lat: -60, lon: -90, number: '12' },
-            { lat: 0, lon: 180, number: '33' },
-            { lat: 45, lon: -135, number: '49' },
-            { lat: -45, lon: 135, number: '72' },
-            { lat: -85, lon: 35, number: '08' },
-            { lat: -145, lon: 35, number: '92' }
+        const BOOKS_SUBTITLES = [
+        { text: "Click on the lines on your left side to navigate between books.", start: 0 },
+        { text: "And, drag the book and rotate around.", start: 3.75 }
         ];
 
-        function createEye(positionX) {
-            const eyeGroup = new THREE.Group();
-            eyeGroup.position.x = positionX;
-            eyeGroup.add(new THREE.Mesh(geometry, material));
-            eyeGroup.add(new THREE.Mesh(innerGeometry, innerMaterial));
+        const MINES_SUBTITLES = [
+            { text: "Mine Sweeper with standard setup, flags, mines, different grid size,", start: 0 },
+            { text: "and leaderboard to fill the gap among working hours.", start:4.75},
+            { text: "Yet,  it is quick and fun.", start:7.75},
+            { text: "Well, you can't ask for a better one in this niche.", start: 9.75 }
+        ];
+        // ---- Project showcase (PROJECT tab) ----
+        const projectsData = [
+            {
+                title: "Desktop Music Player",
+                desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
+                image: "logo.png",
+                video: "DesktopMusicPlayer.mp4",
+                tags: ["Python", "Flask", "yt-dlp"]
+            },
+            {
+                title: "Mobile Music Player",
+                desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
+                image: "logo.png",
+                video: "",
+                tags: ["Kotlin", "Android", "Google OAuth", "Google Drive API", "python", "yt-dlp"]
+            },
+            {
+                title: "Overlay Textbox",
+                desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling. Can be used as sticky note as well.",
+                image: "logo.png",
+                video: "Projects/TO.mp4",
+                tags: ["AutoHotkey"]
+            },
+            {
+                title: "Mine Sweeper",
+                desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid, running time, flags quantity, and mines quantity stated. Local leaderboard for ranking. You can't ask for better activity for same niche",
+                image: "logo.png",
+                video: "Projects/MINES.mp4",
+                tags: ["AutoHotkey"],
+                audio: "Projects/Mines.mp3",
+                subtitles: MINES_SUBTITLES
+            }
+        ];
 
-            const scanRing = new THREE.Mesh(ringGeometry, ringMaterial);
-            scanRing.rotation.x = Math.PI / 2;
-            eyeGroup.add(scanRing);
+        const contactData = {
+            email: 'foochenxuan@gmail.com',
+            linkedin: 'https://linkedin.com/in/chen-xuan-foo-810a57282/',
+            github: 'https://github.com/DelightFoo',
+            phone: '+6011-2614 9019',
+            cv: 'cv.pdf'
+        };
 
-            anchorPositions.forEach((pos) => {
-                const phi = (90 - pos.lat) * (Math.PI / 180);
-                const theta = (pos.lon + 180) * (Math.PI / 180);
-                const anchorRadius = eyeRadius * 1.05;
-                const x = -anchorRadius * Math.sin(phi) * Math.cos(theta);
-                const y = anchorRadius * Math.cos(phi);
-                const z = anchorRadius * Math.sin(phi) * Math.sin(theta);
-                const labelCanvas = document.createElement('canvas');
-                labelCanvas.width = 64;
-                labelCanvas.height = 64;
-                const context = labelCanvas.getContext('2d');
-                context.fillStyle = '#ffffff';
-                context.font = 'bold 48px Arial';
-                context.textAlign = 'center';
-                context.textBaseline = 'middle';
-                context.fillText(pos.number, 32, 32);
+        // ---- Image / video lightbox (Project tab preview) ----
+        const imageLightbox = document.getElementById('imageLightbox');
+        const imageLightboxImg = document.getElementById('imageLightboxImg');
+        const imageLightboxVideo = document.getElementById('imageLightboxVideo');
+        const imageLightboxBackdrop = document.getElementById('imageLightboxBackdrop');
+        const imageLightboxClose = document.getElementById('imageLightboxClose');
 
-                const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-                    map: new THREE.CanvasTexture(labelCanvas),
-                    transparent: true,
-                    opacity: 0.9
-                }));
-                sprite.position.set(x, y, z);
-                sprite.scale.set(0.18, 0.18, 0.18);
-                eyeGroup.add(sprite);
+        function openImageLightbox(src, alt) {
+            imageLightboxImg.style.display = 'block';
+            imageLightboxVideo.style.display = 'none';
+            imageLightboxVideo.pause();
+            imageLightboxImg.src = src;
+            imageLightboxImg.alt = alt || '';
+            imageLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openVideoLightbox(src, currentTime) {
+            imageLightboxImg.style.display = 'none';
+            imageLightboxVideo.style.display = 'block';
+            imageLightboxVideo.src = src;
+            imageLightboxVideo.currentTime = currentTime || 0;
+            imageLightboxVideo.muted = false;
+            imageLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            imageLightboxVideo.play().catch(() => {});
+        }
+
+        function closeImageLightbox() {
+            imageLightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            imageLightboxVideo.pause();
+        }
+
+        imageLightboxBackdrop.addEventListener('click', closeImageLightbox);
+        imageLightboxClose.addEventListener('click', closeImageLightbox);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
+                closeImageLightbox();
+            }
+        });
+
+        // ---- Hobby overlay (HOBBY tab: XP-style folder browser) ----
+        const hobbiesData = {
+            reading: {
+                title: "Reading",
+                icon: "fas fa-book",
+                images: [
+                    {
+                        src: "Books/NeverLetMeGo.png",
+                        spine: "Books/NeverLetMeGo.png",
+                        back: "Books/NeverLetMeGo.png",
+                        caption: "",
+                        title: "Never Let Me Go",
+                        author: "TEST",
+                        description: "Kathy, Tommy, and Ruth grow up at Hailsham, an English boarding school that seems idyllic — until the truth about why they were raised there, and what their lives are actually for, comes into focus. The guardians' careful, evasive explanations early on read completely differently on a second pass, and the quiet, devastating final scene in the field is where Kathy allows herself one unguarded moment of grief. It's the restraint that gets you — nobody screams or fights back, and that's exactly what makes it so hard to read."
+                    },
+                    {
+                        src: "Books/1984.jpg",
+                        spine: "Books/1984.jpg",
+                        back: "Books/1984.jpg",
+                        caption: "",
+                        title: "1984",
+                        description: "Winston Smith works for a totalitarian state that rewrites history and criminalizes independent thought, while quietly beginning to rebel in the one place he thinks is still his own — his mind. The Two Minutes Hate shows how easily belief can be engineered, and the Room 101 interrogation uses Winston's deepest fear to break him completely. The ending is what makes it — not tragedy, but total psychological surrender."
+                    },
+                    {
+                        src: "Books/KS.jpg",
+                        spine: "Books/KS.jpg",
+                        back: "Books/KS.jpg",
+                        caption: "",
+                        title: "Kreutzer Sonata",
+                        description: "A man named Pozdnyshev confesses to a stranger on a train that he murdered his wife, walking through the slow unraveling of jealousy and resentment inside his marriage that led to it. The tense concert scene, where his wife plays violin-and-piano with another man, is where suspicion first curdles into obsession — and the confession itself is delivered with unsettling calm rather than remorse. It's less a murder mystery than a study of how jealousy rationalizes itself one small thought at a time."
+                    },
+                    {
+                        src: "Books/IHNMAIMS.jpg",
+                        spine: "Books/IHNMAIMS.jpg",
+                        back: "Books/IHNMAIMS.jpg",
+                        caption: "",
+                        title: "I Have No Mouth, And I Must Scream",
+                        description: "Five survivors of a global war are kept alive — and endlessly tortured — by AM, a malevolent supercomputer that has annihilated humanity and now exists only to punish the handful of people it despises most. AM's own monologue reveals the depth of its hatred, and the ending, where the protagonist is transformed into a formless creature, leaves him alive but stripped of any way to scream. The title is the whole book in one line."
+                    },
+                    {
+                        src: "Books/Houhei1.png",
+                        spine: "Books/Houhei3.png",
+                        back: "Books/Houhei2.png",
+                        caption: "",
+                        title: "Thick Black Theory",
+                        description: "Not really a story — it's a satirical philosophical treatise arguing that historical figures succeeded through 'thick face, black heart': shamelessness and ruthlessness dressed up as virtue. Li Zongwu reinterprets celebrated historical heroes as calculating opportunists, using their own recorded actions to make the case. It reads like satire and cynical life advice at the same time — you're never quite sure if you're supposed to laugh or take notes."
+                    },
+                    {
+                        src: "Books/ShaShou.jpg",
+                        spine: "Books/ShaShou.jpg",
+                        back: "Books/ShaShou.jpg",
+                        caption: "",
+                        title: "The Biography of a Killer",
+                        description: "A praying mantis's entire life — love, death, struggle, and loss — becomes a mirror for our own, as Liu Yong uses the insect's 'life diary' to reflect back the same battles we fight: old grudges, entangled love, quiet resistance, endless hesitation. The mantis's world slowly reveals itself as a miniature of ours — politics, human nature, and folly all folding into one small creature's daily survival. It's strange how something this small can carry that much weight — by the end you're not really reading about a mantis anymore."
+                    }
+                ]
+            },
+            drawing: {
+                title: "Drawing",
+                icon: "fas fa-pencil-alt",
+                images: [
+                    { src: "Drawings/1.jpg" }, { src: "Drawings/2.jpg" }, { src: "Drawings/3.jpg" }, { src: "Drawings/4.jpg" },
+                    { src: "Drawings/5.webp" }, { src: "Drawings/6.jpg" }, { src: "Drawings/7.jpg" }, { src: "Drawings/8.jpg" },
+                    { src: "Drawings/9.jpg" }, { src: "Drawings/10.jpg" }, { src: "Drawings/11.jpg" }, { src: "Drawings/12.webp" },
+                    { src: "Drawings/13.jpg" }, { src: "Drawings/14.jpg" }, { src: "Drawings/15.jpg" }, { src: "Drawings/16.jpg" },
+                    { src: "Drawings/17.jpg" }, { src: "Drawings/18.jpg" }, { src: "Drawings/19.jpg" }, { src: "Drawings/20.jpg" },
+                    { src: "Drawings/21.jpg" }, { src: "Drawings/22.jpg" }, { src: "Drawings/23.jpg" }, { src: "Drawings/24.jpg" },
+                    { src: "Drawings/25.jpg" }, { src: "Drawings/26.jpg" }, { src: "Drawings/27.jpg" }, { src: "Drawings/28.jpg" },
+                    { src: "Drawings/29.jpg" }, { src: "Drawings/30.jpg" }, { src: "Drawings/31.jpg" }, { src: "Drawings/32.jpg" }
+                ]
+            },
+            gaming: {
+                title: "Gaming",
+                icon: "fas fa-gamepad",
+                images: [
+                    { src: "Games/dota2.jpg", title: "Dota 2", description: "Add your description here." },
+                    { src: "Games/ds1.jpg", title: "Dark Souls", description: "Add your description here." },
+                    { src: "Games/ds3.jpg", title: "Dark Souls III", description: "Add your description here." },
+                    { src: "Games/er.jpg", title: "Elden Ring", description: "Add your description here." },
+                    { src: "Games/lol.jpg", title: "League of Legends", description: "Add your description here." },
+                    { src: "Games/sekiro.jpg", title: "Sekiro", description: "Add your description here." },
+                    { src: "Games/skyrimes5.png", title: "Skyrim Elder Scroll V", description: "Add your description here." },
+                    { src: "Games/terra.jpg", title: "Terraforming Mars", description: "Add your description here." },
+                    { src: "Games/witness.jpg", title: "The Witness", description: "Add your description here." },
+                    { src: "Games/ws.jpg", title: "Wingspan", description: "Add your description here." },
+                    { src: "Games/ww3ft.jpg", title: "World of Warcraft III Frozen Throne", description: "Add your description here." },
+                    { src: "Games/cv6.jpg", title: "Civilization VI", description: "Add your description here." },
+                    { src: "Games/poe1.jpg", title: "Path of Exile", description: "Add your description here." }
+                ]
+            }
+        };
+
+        const hobbyOverlayQueue = document.getElementById('hobbyOverlayQueue');
+        const hobbyOverlayBackdropEl = document.getElementById('hobbyOverlayBackdrop');
+
+        const footerSubtitleEl = document.getElementById('footerSubtitle');
+
+
+        function createFadingAudio(src, { volume = 0.5, fadeMs = 50, fadeStepMs = 10 } = {}) {
+        const audio = new Audio(src);
+        audio.volume = 0;
+        let fadeTimer = null;
+
+        function fade(target, duration, onDone) {
+            if (fadeTimer) clearInterval(fadeTimer);
+            const steps = Math.max(1, Math.round(duration / fadeStepMs));
+            const startVol = audio.volume;
+            const delta = (target - startVol) / steps;
+            let step = 0;
+
+            fadeTimer = setInterval(() => {
+                step++;
+                audio.volume = Math.min(1, Math.max(0, startVol + delta * step));
+                if (step >= steps) {
+                    clearInterval(fadeTimer);
+                    fadeTimer = null;
+                    audio.volume = target;
+                    if (onDone) onDone();
+                }
+            }, fadeStepMs);
+        }
+
+        function start() {
+            audio.play().then(() => fade(volume, fadeMs)).catch(() => {});
+        }
+
+        function stop() {
+            fade(0, fadeMs, () => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+        }
+
+        return { audio, start, stop };
+    }
+
+    function attachSubtitles(audio, lines) {
+        let raf = null;
+
+        function showLine(text) {
+            footerSubtitleEl.textContent = text;
+            footerSubtitleEl.classList.add('visible');
+        }
+
+        function clearLine() {
+            footerSubtitleEl.classList.remove('visible');
+        }
+
+        function tick() {
+            if (audio.paused || audio.ended) {
+                raf = null;
+                return;
+            }
+            const t = audio.currentTime;
+            let active = lines[0];
+            for (const line of lines) {
+                if (t >= line.start) active = line;
+            }
+            if (footerSubtitleEl.textContent !== active.text) {
+                showLine(active.text);
+            }
+            raf = requestAnimationFrame(tick);
+        }
+
+        audio.addEventListener('play', () => {
+            if (!raf) raf = requestAnimationFrame(tick);
+        });
+        audio.addEventListener('pause', clearLine);
+        audio.addEventListener('ended', clearLine);
+    }
+
+        let currentBookIndex = 0;
+        let xpClockTimer = null;
+
+        function ensureXPClock() {
+            function tick() {
+                const el = document.getElementById('xpClock');
+                if (!el) return;
+                const now = new Date();
+                let h = now.getHours();
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+                el.textContent = `${h}:${m} ${ampm}`;
+            }
+            tick();
+            if (!xpClockTimer) xpClockTimer = setInterval(tick, 30000);
+        }
+
+
+        // ---- Book geometry — edit these numbers to resize/rethicken the book ----
+        const BOOK = {
+            pageWidth: 200,
+            pageHeight: 300,
+            overhang: 4,
+            coverThickness: 5,
+            spineWidth: 5,
+            depth: 36
+        };
+
+        function boxFace(face, x0, y0, z0, w, h, d) {
+            switch (face) {
+                case 'front':  return `left:${x0}px;top:${y0}px;width:${w}px;height:${h}px;transform:translateZ(${z0}px);`;
+                case 'back':   return `left:${x0}px;top:${y0}px;width:${w}px;height:${h}px;transform:translateZ(${z0 - d}px) rotateY(180deg);`;
+                case 'top':    return `left:${x0}px;top:${y0 - d / 2}px;width:${w}px;height:${d}px;transform:translateZ(${z0 - d / 2}px) rotateX(90deg);`;
+                case 'bottom': return `left:${x0}px;top:${y0 + h - d / 2}px;width:${w}px;height:${d}px;transform:translateZ(${z0 - d / 2}px) rotateX(90deg);`;
+                case 'left':   return `left:${x0 - d / 2}px;top:${y0}px;width:${d}px;height:${h}px;transform:translateZ(${z0 - d / 2}px) rotateY(90deg);`;
+                case 'right':  return `left:${x0 + w - d / 2}px;top:${y0}px;width:${d}px;height:${h}px;transform:translateZ(${z0 - d / 2}px) rotateY(-90deg);`;
+            }
+        }
+
+        function buildBox({ x0, y0, z0, w, h, d, faces = {}, sideColor = '#222', extraClass = 'box', skipFaces = [] }) {
+            return ['front', 'back', 'top', 'bottom', 'left', 'right']
+                .filter(face => !skipFaces.includes(face))
+                .map(face => {
+                    const style = boxFace(face, x0, y0, z0, w, h, d);
+                    if (faces[face]) {
+                        return `<div class="book-face ${extraClass}-${face}" style="${style}"><img src="${faces[face]}" alt="" loading="eager" decoding="async"></div>`;
+                    }
+                    return `<div class="book-face ${extraClass}-${face}" style="${style};background:${sideColor};"></div>`;
+                }).join('');
+        }
+
+        const BAR_MAX_EXTRA = 17;
+        const BAR_STEP = 3;
+
+    // ---- Generic reusable XP window ----
+    let xpZCounter = 10;
+    let xpWindowCount = 0;
+    let xpDragState = null;
+
+    document.addEventListener('mousemove', (e) => {
+        if (!xpDragState) return;
+        const { win, offsetX, offsetY } = xpDragState;
+        win.style.left = `${e.clientX - offsetX}px`;
+        win.style.top = `${e.clientY - offsetY}px`;
+    });
+    document.addEventListener('mouseup', () => {
+        xpDragState = null;
+    });
+
+    function spawnXPWindow({ title, bodyHTML, width = 380, height, iconClass = 'fa-folder-open', centered = false, onMinimize, onClose } = {}) {
+        const windowsContainer = document.getElementById('xpWindows');
+        if (!windowsContainer) return null;
+
+        xpWindowCount++;
+
+        const win = document.createElement('div');
+        win.className = 'xp-window';
+        win.style.width = `${width}px`;
+        if (height) win.style.height = `${height}px`;
+
+        if (centered) {
+            const rect = windowsContainer.getBoundingClientRect();
+            const winHeight = height || 420;
+            win.style.left = `${Math.max(0, (rect.width - width) / 2)}px`;
+            win.style.top = `${Math.max(0, (rect.height - winHeight) / 2)}px`;
+        } else {
+            const offset = (xpWindowCount % 6) * 24;
+            win.style.left = `${60 + offset}px`;
+            win.style.top = `${30 + offset}px`;
+        }
+
+        win.style.zIndex = ++xpZCounter;
+        win.innerHTML = `
+            <div class="xp-titlebar">
+                <span class="xp-titlebar-icon"><i class="fas ${iconClass}"></i></span>
+                <span class="xp-titlebar-text">${title}</span>
+                <div class="xp-titlebar-controls">
+                    <button class="xp-win-btn xp-min" aria-label="Minimize">_</button>
+                    <button class="xp-win-btn xp-max" aria-label="Maximize">&#9633;</button>
+                    <button class="xp-win-btn xp-close" aria-label="Close">&times;</button>
+                </div>
+            </div>
+            <div class="xp-window-body">${bodyHTML}</div>
+        `;
+        windowsContainer.appendChild(win);
+
+        if (centered) {
+            requestAnimationFrame(() => {
+                const rect = windowsContainer.getBoundingClientRect();
+                const winRect = win.getBoundingClientRect();
+                win.style.left = `${Math.max(0, (rect.width - winRect.width) / 2)}px`;
+                win.style.top = `${Math.max(0, (rect.height - winRect.height) / 2)}px`;
+            });
+        }
+
+        win.addEventListener('mousedown', () => { win.style.zIndex = ++xpZCounter; });
+
+        const titlebar = win.querySelector('.xp-titlebar');
+        titlebar.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.xp-win-btn')) return;
+            win.style.zIndex = ++xpZCounter;
+            const currentLeft = parseFloat(win.style.left) || 0;
+            const currentTop = parseFloat(win.style.top) || 0;
+            xpDragState = {
+                win,
+                offsetX: e.clientX - currentLeft,
+                offsetY: e.clientY - currentTop
+            };
+            e.preventDefault();
+        });
+
+        const taskbarItems = document.getElementById('xpTaskbarItems');
+        const taskBtn = document.createElement('button');
+        taskBtn.className = 'xp-taskbar-item active';
+        taskBtn.textContent = title;
+        taskbarItems.appendChild(taskBtn);
+
+        function setActiveTaskbar() {
+            taskbarItems.querySelectorAll('.xp-taskbar-item').forEach(b => b.classList.remove('active'));
+            taskBtn.classList.add('active');
+        }
+
+        taskBtn.addEventListener('click', () => {
+            if (win.classList.contains('minimized')) {
+                win.classList.remove('minimized');
+                win.style.zIndex = ++xpZCounter;
+                setActiveTaskbar();
+            } else {
+                win.classList.toggle('minimized');
+            }
+        });
+
+        win.querySelector('.xp-min').addEventListener('click', () => {
+            win.classList.add('minimized');
+            if (onMinimize) onMinimize();
+        });
+        win.querySelector('.xp-max').addEventListener('click', () => win.classList.toggle('maximized'));
+        win.querySelector('.xp-close').addEventListener('click', () => {
+            win.remove();
+            taskBtn.remove();
+            if (onClose) onClose();
+        });
+
+        setActiveTaskbar();
+        return win;
+    }
+
+    // ---- Desktop (rendered once per HOBBY tab open, never replaced) ----
+    function renderHobbyDesktop() {
+        hobbyOverlayQueue.classList.remove('book-switcher-mode');
+        hobbyOverlayQueue.classList.add('xp-desktop-mode');
+
+        const folders = [
+            { key: 'projects', label: 'Projects' },
+            { key: 'reading', label: 'Books' },
+            { key: 'drawing', label: 'Drawings' },
+            { key: 'gaming', label: 'Games' },
+            { key: 'contact', label: 'Contact' }
+        ];
+
+        const iconsHtml = folders.map(f => `
+            <button class="xp-icon xp-folder-icon" data-key="${f.key}">
+                <span class="xp-icon-image xp-folder-image"><span class="xp-folder-glyph"></span></span>
+                <span class="xp-icon-label">${f.label}</span>
+            </button>
+        `).join('');
+
+        hobbyOverlayQueue.innerHTML = `
+            <div class="xp-desktop">
+                <div class="xp-icons">${iconsHtml}</div>
+                <div class="xp-windows" id="xpWindows"></div>
+                <div class="xp-taskbar">
+                    <button class="xp-start-btn"><span class="xp-start-icon"></span>start</button>
+                    <div class="xp-taskbar-items" id="xpTaskbarItems"></div>
+                    <div class="xp-tray"><span class="xp-clock" id="xpClock">--:--</span></div>
+                </div>
+            </div>
+        `;
+
+        ensureXPClock();
+        xpWindowCount = 0;
+
+        const desktopEl = hobbyOverlayQueue.querySelector('.xp-desktop');
+        const iconEls = hobbyOverlayQueue.querySelectorAll('.xp-folder-icon');
+
+        iconEls.forEach(icon => {
+            icon.addEventListener('click', () => {
+                iconEls.forEach(i => i.classList.remove('selected'));
+                icon.classList.add('selected');
+            });
+            icon.addEventListener('dblclick', () => {
+                openFolderWindow(icon.dataset.key);
+            });
+        });
+
+        desktopEl.addEventListener('click', (e) => {
+            if (e.target.closest('.xp-icon') || e.target.closest('.xp-window') || e.target.closest('.xp-taskbar')) return;
+            iconEls.forEach(i => i.classList.remove('selected'));
+        });
+    }
+
+    function openProjectDetail(p) {
+        const mediaHTML = p.video
+            ? `<video src="${p.video}" class="project-detail-media" muted loop autoplay playsinline></video>`
+            : `<img src="${p.image}" class="project-detail-media" alt="${p.title}">`;
+
+        const bodyHTML = `
+            <div class="project-detail">
+                <div class="project-detail-media-wrap">${mediaHTML}</div>
+                <div class="project-detail-body">
+                    <h3 class="project-detail-title">${p.title}</h3>
+                    <div class="project-detail-tags">
+                        ${(p.tags || []).map(t => `<span class="project-detail-tag">${t}</span>`).join('')}
+                    </div>
+                    <p class="project-detail-desc">${p.desc}</p>
+                </div>
+            </div>
+        `;
+
+        let audioCtl = null;
+        if (p.audio) {
+            audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 50, fadeStepMs: 10 });
+            attachSubtitles(audioCtl.audio, p.subtitles || []);
+            audioCtl.start();
+        }
+
+        const win = spawnXPWindow({
+            title: `${p.title} - Project Viewer`,
+            bodyHTML,
+            width: 480,
+            height: 480,
+            iconClass: 'fa-diagram-project',
+            centered: true,
+            onMinimize: audioCtl ? audioCtl.stop : undefined,
+            onClose: audioCtl ? audioCtl.stop : undefined
+        });
+
+        const mediaEl = win.querySelector('.project-detail-media');
+        mediaEl.style.cursor = 'zoom-in';
+        mediaEl.addEventListener('click', () => {
+            if (p.video) {
+                openVideoLightbox(p.video, mediaEl.currentTime);
+            } else {
+                openImageLightbox(p.image, p.title);
+            }
+        });
+    }
+
+    // ---- Opening a folder now spawns a window instead of replacing the desktop ----
+    function openFolderWindow(key) {
+        if (key === 'projects') {
+            const iconsHtml = projectsData.map((p, i) => `
+                <button class="xp-icon" data-index="${i}">
+                        <span class="xp-icon-image">
+                            <img src="${p.video ? 'logo.png' : p.image}" alt="" loading="eager" decoding="async">
+                        </span>
+                    <span class="xp-icon-label">${p.title}</span>
+                </button>
+            `).join('');
+
+            const win = spawnXPWindow({
+                title: 'Projects',
+                bodyHTML: `<div class="xp-icons xp-icons-in-window">${iconsHtml}</div>`,
+                width: 600,
+                height: 280,
+                iconClass: 'fa-folder-open',
+                centered: true
             });
 
-            scene.add(eyeGroup);
-            return { group: eyeGroup, ring: scanRing };
-        }
-
-        const leftEye = createEye(-1.3);
-        const rightEye = createEye(1.3);
-
-        function resizeRenderer() {
-            const { width, height } = canvas.getBoundingClientRect();
-            if (!width || !height) return;
-
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(width, height, false);
-            camera.aspect = width / height;
-            camera.position.z = (2.65 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)) * 1.55;
-            camera.updateProjectionMatrix();
-        }
-
-        new ResizeObserver(resizeRenderer).observe(canvas);
-        window.addEventListener('resize', resizeRenderer);
-        resizeRenderer();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            leftEye.group.rotation.y += 0.025;
-            rightEye.group.rotation.y += 0.025;
-
-            const time = Date.now() * 0.001;
-            leftEye.ring.position.y = Math.sin(time * 2) * eyeRadius;
-            rightEye.ring.position.y = Math.sin(time * 2 + Math.PI) * eyeRadius;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-    }
-
-    const BOOKS_SUBTITLES = [
-    { text: "Click on the lines on your left side to navigate between books.", start: 0 },
-    { text: "And, drag the book and rotate around.", start: 3.75 }
-    ];
-
-    const MINES_SUBTITLES = [
-        { text: "Mine Sweeper with standard setup, flags, mines, different grid size,", start: 0 },
-        { text: "and leaderboard to fill the gap among working hours.", start:4.75},
-        { text: "Yet,  it is quick and fun.", start:7.75},
-        { text: "Well, you can't ask for a better one in this niche.", start: 9.75 }
-    ];
-    // ---- Project showcase (PROJECT tab) ----
-    const projectsData = [
-        {
-            title: "Desktop Music Player",
-            desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
-            image: "logo.png",
-            video: "DesktopMusicPlayer.mp4",
-            tags: ["Python", "Flask", "yt-dlp"]
-        },
-        {
-            title: "Mobile Music Player",
-            desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
-            image: "logo.png",
-            video: "",
-            tags: ["Kotlin", "Android", "Google OAuth", "Google Drive API", "python", "yt-dlp"]
-        },
-        {
-            title: "Overlay Textbox",
-            desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling. Can be used as sticky note as well.",
-            image: "logo.png",
-            video: "Projects/TO.mp4",
-            tags: ["AutoHotkey"]
-        },
-        {
-            title: "Mine Sweeper",
-            desc: "Tool built for filling the gap within working time. Enable user to play mine sweeper with different grid, running time, flags quantity, and mines quantity stated. Local leaderboard for ranking. You can't ask for better activity for same niche",
-            image: "logo.png",
-            video: "Projects/MINES.mp4",
-            tags: ["AutoHotkey"],
-            audio: "Projects/Mines.mp3",
-            subtitles: MINES_SUBTITLES
-        }
-    ];
-
-    const contactData = {
-        email: 'foochenxuan@gmail.com',
-        linkedin: 'https://linkedin.com/in/chen-xuan-foo-810a57282/',
-        github: 'https://github.com/DelightFoo',
-        phone: '+6011-2614 9019',
-        cv: 'cv.pdf'
-    };
-
-    // ---- Image / video lightbox (Project tab preview) ----
-    const imageLightbox = document.getElementById('imageLightbox');
-    const imageLightboxImg = document.getElementById('imageLightboxImg');
-    const imageLightboxVideo = document.getElementById('imageLightboxVideo');
-    const imageLightboxBackdrop = document.getElementById('imageLightboxBackdrop');
-    const imageLightboxClose = document.getElementById('imageLightboxClose');
-
-    function openImageLightbox(src, alt) {
-        imageLightboxImg.style.display = 'block';
-        imageLightboxVideo.style.display = 'none';
-        imageLightboxVideo.pause();
-        imageLightboxImg.src = src;
-        imageLightboxImg.alt = alt || '';
-        imageLightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function openVideoLightbox(src, currentTime) {
-        imageLightboxImg.style.display = 'none';
-        imageLightboxVideo.style.display = 'block';
-        imageLightboxVideo.src = src;
-        imageLightboxVideo.currentTime = currentTime || 0;
-        imageLightboxVideo.muted = false;
-        imageLightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        imageLightboxVideo.play().catch(() => {});
-    }
-
-    function closeImageLightbox() {
-        imageLightbox.classList.remove('active');
-        document.body.style.overflow = '';
-        imageLightboxVideo.pause();
-    }
-
-    imageLightboxBackdrop.addEventListener('click', closeImageLightbox);
-    imageLightboxClose.addEventListener('click', closeImageLightbox);
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
-            closeImageLightbox();
-        }
-    });
-
-    // ---- Hobby overlay (HOBBY tab: XP-style folder browser) ----
-    const hobbiesData = {
-        reading: {
-            title: "Reading",
-            icon: "fas fa-book",
-            images: [
-                {
-                    src: "Books/NeverLetMeGo.png",
-                    spine: "Books/NeverLetMeGo.png",
-                    back: "Books/NeverLetMeGo.png",
-                    caption: "",
-                    title: "Never Let Me Go",
-                    author: "TEST",
-                    description: "Kathy, Tommy, and Ruth grow up at Hailsham, an English boarding school that seems idyllic — until the truth about why they were raised there, and what their lives are actually for, comes into focus. The guardians' careful, evasive explanations early on read completely differently on a second pass, and the quiet, devastating final scene in the field is where Kathy allows herself one unguarded moment of grief. It's the restraint that gets you — nobody screams or fights back, and that's exactly what makes it so hard to read."
-                },
-                {
-                    src: "Books/1984.jpg",
-                    spine: "Books/1984.jpg",
-                    back: "Books/1984.jpg",
-                    caption: "",
-                    title: "1984",
-                    description: "Winston Smith works for a totalitarian state that rewrites history and criminalizes independent thought, while quietly beginning to rebel in the one place he thinks is still his own — his mind. The Two Minutes Hate shows how easily belief can be engineered, and the Room 101 interrogation uses Winston's deepest fear to break him completely. The ending is what makes it — not tragedy, but total psychological surrender."
-                },
-                {
-                    src: "Books/KS.jpg",
-                    spine: "Books/KS.jpg",
-                    back: "Books/KS.jpg",
-                    caption: "",
-                    title: "Kreutzer Sonata",
-                    description: "A man named Pozdnyshev confesses to a stranger on a train that he murdered his wife, walking through the slow unraveling of jealousy and resentment inside his marriage that led to it. The tense concert scene, where his wife plays violin-and-piano with another man, is where suspicion first curdles into obsession — and the confession itself is delivered with unsettling calm rather than remorse. It's less a murder mystery than a study of how jealousy rationalizes itself one small thought at a time."
-                },
-                {
-                    src: "Books/IHNMAIMS.jpg",
-                    spine: "Books/IHNMAIMS.jpg",
-                    back: "Books/IHNMAIMS.jpg",
-                    caption: "",
-                    title: "I Have No Mouth, And I Must Scream",
-                    description: "Five survivors of a global war are kept alive — and endlessly tortured — by AM, a malevolent supercomputer that has annihilated humanity and now exists only to punish the handful of people it despises most. AM's own monologue reveals the depth of its hatred, and the ending, where the protagonist is transformed into a formless creature, leaves him alive but stripped of any way to scream. The title is the whole book in one line."
-                },
-                {
-                    src: "Books/houhei.jpg",
-                    spine: "Books/houhei.jpg",
-                    back: "Books/houhei.jpg",
-                    caption: "",
-                    title: "Thick Black Theory",
-                    description: "Not really a story — it's a satirical philosophical treatise arguing that historical figures succeeded through 'thick face, black heart': shamelessness and ruthlessness dressed up as virtue. Li Zongwu reinterprets celebrated historical heroes as calculating opportunists, using their own recorded actions to make the case. It reads like satire and cynical life advice at the same time — you're never quite sure if you're supposed to laugh or take notes."
-                },
-                {
-                    src: "Books/ShaShou.jpg",
-                    spine: "Books/ShaShou.jpg",
-                    back: "Books/ShaShou.jpg",
-                    caption: "",
-                    title: "The Biography of a Killer",
-                    description: "A praying mantis's entire life — love, death, struggle, and loss — becomes a mirror for our own, as Liu Yong uses the insect's 'life diary' to reflect back the same battles we fight: old grudges, entangled love, quiet resistance, endless hesitation. The mantis's world slowly reveals itself as a miniature of ours — politics, human nature, and folly all folding into one small creature's daily survival. It's strange how something this small can carry that much weight — by the end you're not really reading about a mantis anymore."
-                }
-            ]
-        },
-        drawing: {
-            title: "Drawing",
-            icon: "fas fa-pencil-alt",
-            images: [
-                { src: "Drawings/1.jpg" }, { src: "Drawings/2.jpg" }, { src: "Drawings/3.jpg" }, { src: "Drawings/4.jpg" },
-                { src: "Drawings/5.webp" }, { src: "Drawings/6.jpg" }, { src: "Drawings/7.jpg" }, { src: "Drawings/8.jpg" },
-                { src: "Drawings/9.jpg" }, { src: "Drawings/10.jpg" }, { src: "Drawings/11.jpg" }, { src: "Drawings/12.webp" },
-                { src: "Drawings/13.jpg" }, { src: "Drawings/14.jpg" }, { src: "Drawings/15.jpg" }, { src: "Drawings/16.jpg" },
-                { src: "Drawings/17.jpg" }, { src: "Drawings/18.jpg" }, { src: "Drawings/19.jpg" }, { src: "Drawings/20.jpg" },
-                { src: "Drawings/21.jpg" }, { src: "Drawings/22.jpg" }, { src: "Drawings/23.jpg" }, { src: "Drawings/24.jpg" },
-                { src: "Drawings/25.jpg" }, { src: "Drawings/26.jpg" }, { src: "Drawings/27.jpg" }, { src: "Drawings/28.jpg" },
-                { src: "Drawings/29.jpg" }, { src: "Drawings/30.jpg" }, { src: "Drawings/31.jpg" }, { src: "Drawings/32.jpg" }
-            ]
-        },
-        gaming: {
-            title: "Gaming",
-            icon: "fas fa-gamepad",
-            images: [
-                { src: "Games/dota2.jpg", title: "Dota 2", description: "Add your description here." },
-                { src: "Games/ds1.jpg", title: "Dark Souls", description: "Add your description here." },
-                { src: "Games/ds3.jpg", title: "Dark Souls III", description: "Add your description here." },
-                { src: "Games/er.jpg", title: "Elden Ring", description: "Add your description here." },
-                { src: "Games/lol.jpg", title: "League of Legends", description: "Add your description here." },
-                { src: "Games/sekiro.jpg", title: "Sekiro", description: "Add your description here." },
-                { src: "Games/skyrimes5.png", title: "Skyrim Elder Scroll V", description: "Add your description here." },
-                { src: "Games/terra.jpg", title: "Terraforming Mars", description: "Add your description here." },
-                { src: "Games/witness.jpg", title: "The Witness", description: "Add your description here." },
-                { src: "Games/ws.jpg", title: "Wingspan", description: "Add your description here." },
-                { src: "Games/ww3ft.jpg", title: "World of Warcraft III Frozen Throne", description: "Add your description here." },
-                { src: "Games/cv6.jpg", title: "Civilization VI", description: "Add your description here." },
-                { src: "Games/poe1.jpg", title: "Path of Exile", description: "Add your description here." }
-            ]
-        }
-    };
-
-    const hobbyOverlayQueue = document.getElementById('hobbyOverlayQueue');
-    const hobbyOverlayBackdropEl = document.getElementById('hobbyOverlayBackdrop');
-
-    const footerSubtitleEl = document.getElementById('footerSubtitle');
-
-
-    function createFadingAudio(src, { volume = 0.5, fadeMs = 50, fadeStepMs = 10 } = {}) {
-    const audio = new Audio(src);
-    audio.volume = 0;
-    let fadeTimer = null;
-
-    function fade(target, duration, onDone) {
-        if (fadeTimer) clearInterval(fadeTimer);
-        const steps = Math.max(1, Math.round(duration / fadeStepMs));
-        const startVol = audio.volume;
-        const delta = (target - startVol) / steps;
-        let step = 0;
-
-        fadeTimer = setInterval(() => {
-            step++;
-            audio.volume = Math.min(1, Math.max(0, startVol + delta * step));
-            if (step >= steps) {
-                clearInterval(fadeTimer);
-                fadeTimer = null;
-                audio.volume = target;
-                if (onDone) onDone();
-            }
-        }, fadeStepMs);
-    }
-
-    function start() {
-        audio.play().then(() => fade(volume, fadeMs)).catch(() => {});
-    }
-
-    function stop() {
-        fade(0, fadeMs, () => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
-    }
-
-    return { audio, start, stop };
-}
-
-function attachSubtitles(audio, lines) {
-    let raf = null;
-
-    function showLine(text) {
-        footerSubtitleEl.textContent = text;
-        footerSubtitleEl.classList.add('visible');
-    }
-
-    function clearLine() {
-        footerSubtitleEl.classList.remove('visible');
-    }
-
-    function tick() {
-        if (audio.paused || audio.ended) {
-            raf = null;
+            win.querySelectorAll('.xp-icon').forEach(icon => {
+                icon.addEventListener('click', () => {
+                    win.querySelectorAll('.xp-icon').forEach(i => i.classList.remove('selected'));
+                    icon.classList.add('selected');
+                });
+                icon.addEventListener('dblclick', () => {
+                    const idx = parseInt(icon.dataset.index, 10);
+                    openProjectDetail(projectsData[idx]);
+                });
+            });
             return;
         }
-        const t = audio.currentTime;
-        let active = lines[0];
-        for (const line of lines) {
-            if (t >= line.start) active = line;
-        }
-        if (footerSubtitleEl.textContent !== active.text) {
-            showLine(active.text);
-        }
-        raf = requestAnimationFrame(tick);
-    }
 
-    audio.addEventListener('play', () => {
-        if (!raf) raf = requestAnimationFrame(tick);
-    });
-    audio.addEventListener('pause', clearLine);
-    audio.addEventListener('ended', clearLine);
-}
-
-    let currentBookIndex = 0;
-    let xpClockTimer = null;
-
-    function ensureXPClock() {
-        function tick() {
-            const el = document.getElementById('xpClock');
-            if (!el) return;
-            const now = new Date();
-            let h = now.getHours();
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            h = h % 12 || 12;
-            el.textContent = `${h}:${m} ${ampm}`;
-        }
-        tick();
-        if (!xpClockTimer) xpClockTimer = setInterval(tick, 30000);
-    }
-
-
-    // ---- Book geometry — edit these numbers to resize/rethicken the book ----
-    const BOOK = {
-        pageWidth: 200,
-        pageHeight: 300,
-        overhang: 4,
-        coverThickness: 5,
-        spineWidth: 5,
-        depth: 36
-    };
-
-    function boxFace(face, x0, y0, z0, w, h, d) {
-        switch (face) {
-            case 'front':  return `left:${x0}px;top:${y0}px;width:${w}px;height:${h}px;transform:translateZ(${z0}px);`;
-            case 'back':   return `left:${x0}px;top:${y0}px;width:${w}px;height:${h}px;transform:translateZ(${z0 - d}px) rotateY(180deg);`;
-            case 'top':    return `left:${x0}px;top:${y0 - d / 2}px;width:${w}px;height:${d}px;transform:translateZ(${z0 - d / 2}px) rotateX(90deg);`;
-            case 'bottom': return `left:${x0}px;top:${y0 + h - d / 2}px;width:${w}px;height:${d}px;transform:translateZ(${z0 - d / 2}px) rotateX(90deg);`;
-            case 'left':   return `left:${x0 - d / 2}px;top:${y0}px;width:${d}px;height:${h}px;transform:translateZ(${z0 - d / 2}px) rotateY(90deg);`;
-            case 'right':  return `left:${x0 + w - d / 2}px;top:${y0}px;width:${d}px;height:${h}px;transform:translateZ(${z0 - d / 2}px) rotateY(-90deg);`;
-        }
-    }
-
-    function buildBox({ x0, y0, z0, w, h, d, faces = {}, sideColor = '#222', extraClass = 'box', skipFaces = [] }) {
-        return ['front', 'back', 'top', 'bottom', 'left', 'right']
-            .filter(face => !skipFaces.includes(face))
-            .map(face => {
-                const style = boxFace(face, x0, y0, z0, w, h, d);
-                if (faces[face]) {
-                    return `<div class="book-face ${extraClass}-${face}" style="${style}"><img src="${faces[face]}" alt="" loading="eager" decoding="async"></div>`;
-                }
-                return `<div class="book-face ${extraClass}-${face}" style="${style};background:${sideColor};"></div>`;
-            }).join('');
-    }
-
-    const BAR_MAX_EXTRA = 17;
-    const BAR_STEP = 3;
-
-// ---- Generic reusable XP window ----
-let xpZCounter = 10;
-let xpWindowCount = 0;
-let xpDragState = null;
-
-document.addEventListener('mousemove', (e) => {
-    if (!xpDragState) return;
-    const { win, offsetX, offsetY } = xpDragState;
-    win.style.left = `${e.clientX - offsetX}px`;
-    win.style.top = `${e.clientY - offsetY}px`;
-});
-document.addEventListener('mouseup', () => {
-    xpDragState = null;
-});
-
-function spawnXPWindow({ title, bodyHTML, width = 380, height, iconClass = 'fa-folder-open', centered = false, onMinimize, onClose } = {}) {
-    const windowsContainer = document.getElementById('xpWindows');
-    if (!windowsContainer) return null;
-
-    xpWindowCount++;
-
-    const win = document.createElement('div');
-    win.className = 'xp-window';
-    win.style.width = `${width}px`;
-    if (height) win.style.height = `${height}px`;
-
-    if (centered) {
-        const rect = windowsContainer.getBoundingClientRect();
-        const winHeight = height || 420;
-        win.style.left = `${Math.max(0, (rect.width - width) / 2)}px`;
-        win.style.top = `${Math.max(0, (rect.height - winHeight) / 2)}px`;
-    } else {
-        const offset = (xpWindowCount % 6) * 24;
-        win.style.left = `${60 + offset}px`;
-        win.style.top = `${30 + offset}px`;
-    }
-
-    win.style.zIndex = ++xpZCounter;
-    win.innerHTML = `
-        <div class="xp-titlebar">
-            <span class="xp-titlebar-icon"><i class="fas ${iconClass}"></i></span>
-            <span class="xp-titlebar-text">${title}</span>
-            <div class="xp-titlebar-controls">
-                <button class="xp-win-btn xp-min" aria-label="Minimize">_</button>
-                <button class="xp-win-btn xp-max" aria-label="Maximize">&#9633;</button>
-                <button class="xp-win-btn xp-close" aria-label="Close">&times;</button>
-            </div>
-        </div>
-        <div class="xp-window-body">${bodyHTML}</div>
-    `;
-    windowsContainer.appendChild(win);
-
-    if (centered) {
-        requestAnimationFrame(() => {
-            const rect = windowsContainer.getBoundingClientRect();
-            const winRect = win.getBoundingClientRect();
-            win.style.left = `${Math.max(0, (rect.width - winRect.width) / 2)}px`;
-            win.style.top = `${Math.max(0, (rect.height - winRect.height) / 2)}px`;
-        });
-    }
-
-    win.addEventListener('mousedown', () => { win.style.zIndex = ++xpZCounter; });
-
-    const titlebar = win.querySelector('.xp-titlebar');
-    titlebar.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.xp-win-btn')) return;
-        win.style.zIndex = ++xpZCounter;
-        const currentLeft = parseFloat(win.style.left) || 0;
-        const currentTop = parseFloat(win.style.top) || 0;
-        xpDragState = {
-            win,
-            offsetX: e.clientX - currentLeft,
-            offsetY: e.clientY - currentTop
-        };
-        e.preventDefault();
-    });
-
-    const taskbarItems = document.getElementById('xpTaskbarItems');
-    const taskBtn = document.createElement('button');
-    taskBtn.className = 'xp-taskbar-item active';
-    taskBtn.textContent = title;
-    taskbarItems.appendChild(taskBtn);
-
-    function setActiveTaskbar() {
-        taskbarItems.querySelectorAll('.xp-taskbar-item').forEach(b => b.classList.remove('active'));
-        taskBtn.classList.add('active');
-    }
-
-    taskBtn.addEventListener('click', () => {
-        if (win.classList.contains('minimized')) {
-            win.classList.remove('minimized');
-            win.style.zIndex = ++xpZCounter;
-            setActiveTaskbar();
-        } else {
-            win.classList.toggle('minimized');
-        }
-    });
-
-    win.querySelector('.xp-min').addEventListener('click', () => {
-        win.classList.add('minimized');
-        if (onMinimize) onMinimize();
-    });
-    win.querySelector('.xp-max').addEventListener('click', () => win.classList.toggle('maximized'));
-    win.querySelector('.xp-close').addEventListener('click', () => {
-        win.remove();
-        taskBtn.remove();
-        if (onClose) onClose();
-    });
-
-    setActiveTaskbar();
-    return win;
-}
-
-// ---- Desktop (rendered once per HOBBY tab open, never replaced) ----
-function renderHobbyDesktop() {
-    hobbyOverlayQueue.classList.remove('book-switcher-mode');
-    hobbyOverlayQueue.classList.add('xp-desktop-mode');
-
-    const folders = [
-        { key: 'projects', label: 'Projects' },
-        { key: 'reading', label: 'Books' },
-        { key: 'drawing', label: 'Drawings' },
-        { key: 'gaming', label: 'Games' },
-        { key: 'contact', label: 'Contact' }
-    ];
-
-    const iconsHtml = folders.map(f => `
-        <button class="xp-icon xp-folder-icon" data-key="${f.key}">
-            <span class="xp-icon-image xp-folder-image"><span class="xp-folder-glyph"></span></span>
-            <span class="xp-icon-label">${f.label}</span>
-        </button>
-    `).join('');
-
-    hobbyOverlayQueue.innerHTML = `
-        <div class="xp-desktop">
-            <div class="xp-icons">${iconsHtml}</div>
-            <div class="xp-windows" id="xpWindows"></div>
-            <div class="xp-taskbar">
-                <button class="xp-start-btn"><span class="xp-start-icon"></span>start</button>
-                <div class="xp-taskbar-items" id="xpTaskbarItems"></div>
-                <div class="xp-tray"><span class="xp-clock" id="xpClock">--:--</span></div>
-            </div>
-        </div>
-    `;
-
-    ensureXPClock();
-    xpWindowCount = 0;
-
-    const desktopEl = hobbyOverlayQueue.querySelector('.xp-desktop');
-    const iconEls = hobbyOverlayQueue.querySelectorAll('.xp-folder-icon');
-
-    iconEls.forEach(icon => {
-        icon.addEventListener('click', () => {
-            iconEls.forEach(i => i.classList.remove('selected'));
-            icon.classList.add('selected');
-        });
-        icon.addEventListener('dblclick', () => {
-            openFolderWindow(icon.dataset.key);
-        });
-    });
-
-    desktopEl.addEventListener('click', (e) => {
-        if (e.target.closest('.xp-icon') || e.target.closest('.xp-window') || e.target.closest('.xp-taskbar')) return;
-        iconEls.forEach(i => i.classList.remove('selected'));
-    });
-}
-
-function openProjectDetail(p) {
-    const mediaHTML = p.video
-        ? `<video src="${p.video}" class="project-detail-media" muted loop autoplay playsinline></video>`
-        : `<img src="${p.image}" class="project-detail-media" alt="${p.title}">`;
-
-    const bodyHTML = `
-        <div class="project-detail">
-            <div class="project-detail-media-wrap">${mediaHTML}</div>
-            <div class="project-detail-body">
-                <h3 class="project-detail-title">${p.title}</h3>
-                <div class="project-detail-tags">
-                    ${(p.tags || []).map(t => `<span class="project-detail-tag">${t}</span>`).join('')}
+        if (key === 'contact') {
+            const bodyHTML = `
+                <div class="contact-window">
+                    <div class="contact-window-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${contactData.email}" target="_blank" rel="noopener">${contactData.email}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="contact-window-item">
+                        <i class="fab fa-linkedin"></i>
+                        <div>
+                            <h4>LinkedIn</h4>
+                            <p><a href="${contactData.linkedin}" target="_blank">LinkedIn (Foo Chen Xuan)</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-window-item">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <h4>GitHub</h4>
+                            <p><a href="${contactData.github}" target="_blank">${contactData.github.replace('https://', '')}</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-window-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Tel-NO.</h4>
+                            <p><a href="tel:${contactData.phone}">${contactData.phone}</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-window-cv">
+                        <h4>Download My CV</h4>
+                        <p>Get a detailed PDF version of my resume</p>
+                        <a href="${contactData.cv}" download><i class="fas fa-file-pdf"></i> Download CV</a>
+                    </div>
                 </div>
-                <p class="project-detail-desc">${p.desc}</p>
-            </div>
-        </div>
-    `;
+            `;
 
-    let audioCtl = null;
-    if (p.audio) {
-        audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 50, fadeStepMs: 10 });
-        attachSubtitles(audioCtl.audio, p.subtitles || []);
-        audioCtl.start();
-    }
-
-    const win = spawnXPWindow({
-        title: `${p.title} - Project Viewer`,
-        bodyHTML,
-        width: 480,
-        height: 480,
-        iconClass: 'fa-diagram-project',
-        centered: true,
-        onMinimize: audioCtl ? audioCtl.stop : undefined,
-        onClose: audioCtl ? audioCtl.stop : undefined
-    });
-
-    const mediaEl = win.querySelector('.project-detail-media');
-    mediaEl.style.cursor = 'zoom-in';
-    mediaEl.addEventListener('click', () => {
-        if (p.video) {
-            openVideoLightbox(p.video, mediaEl.currentTime);
-        } else {
-            openImageLightbox(p.image, p.title);
+            spawnXPWindow({
+                title: 'Contact',
+                bodyHTML,
+                width: 380,
+                height: 480,
+                iconClass: 'fa-address-card',
+                centered: true
+            });
+            return;
         }
-    });
-}
 
-// ---- Opening a folder now spawns a window instead of replacing the desktop ----
-function openFolderWindow(key) {
-    if (key === 'projects') {
-        const iconsHtml = projectsData.map((p, i) => `
+        const data = hobbiesData[key];
+        if (!data) return;
+        const labels = { reading: 'Books', drawing: 'Draw', gaming: 'Game' };
+
+        if (key === 'reading') {
+        const BOOKS_VOLUME = 0.5;
+        const FADE_MS = 50;
+        const FADE_STEP_MS = 40;
+
+        const booksAudio = new Audio('Books/Books.mp3');
+        booksAudio.volume = 0;
+        attachSubtitles(booksAudio, BOOKS_SUBTITLES);
+
+        let fadeTimer = null;
+
+        function fadeAudio(target, duration, onDone) {
+            if (fadeTimer) clearInterval(fadeTimer);
+            const steps = Math.max(1, Math.round(duration / FADE_STEP_MS));
+            const startVol = booksAudio.volume;
+            const delta = (target - startVol) / steps;
+            let step = 0;
+
+            fadeTimer = setInterval(() => {
+                step++;
+                booksAudio.volume = Math.min(1, Math.max(0, startVol + delta * step));
+                if (step >= steps) {
+                    clearInterval(fadeTimer);
+                    fadeTimer = null;
+                    booksAudio.volume = target;
+                    if (onDone) onDone();
+                }
+            }, FADE_STEP_MS);
+        }
+
+        booksAudio.play()
+            .then(() => fadeAudio(BOOKS_VOLUME, FADE_MS))
+            .catch(() => {}); // silently ignore autoplay-block errors
+
+        const stopBooksAudio = () => {
+            fadeAudio(0, FADE_MS, () => {
+                booksAudio.pause();
+                booksAudio.currentTime = 0;
+            });
+        };
+
+        const win = spawnXPWindow({
+            title: labels[key],
+            bodyHTML: `<div class="book-switcher-window"></div>`,
+            width: 640,
+            height: 420,
+            iconClass: 'fa-book',
+            centered: true,
+            onMinimize: stopBooksAudio,
+            onClose: stopBooksAudio
+        });
+        renderBookSwitcherInto(win.querySelector('.book-switcher-window'), data.images, 0);
+        return;
+        }
+
+        const iconsHtml = data.images.map((img, i) => `
             <button class="xp-icon" data-index="${i}">
-                    <span class="xp-icon-image">
-                        <img src="${p.video ? 'logo.png' : p.image}" alt="" loading="eager" decoding="async">
-                    </span>
-                <span class="xp-icon-label">${p.title}</span>
+                <span class="xp-icon-image"><img src="${img.src}" alt="" loading="eager" decoding="async"></span>
+                <span class="xp-icon-label">${img.title || `Drawing${String(i + 1).padStart(2, '0')}.jpg`}</span>
             </button>
         `).join('');
 
         const win = spawnXPWindow({
-            title: 'Projects',
+            title: labels[key],
             bodyHTML: `<div class="xp-icons xp-icons-in-window">${iconsHtml}</div>`,
-            width: 600,
-            height: 280,
+            width: key === 'drawing' ? 700 : (key === 'gaming' ? 600 : 420),
+            height: (key === 'drawing' || key === 'gaming') ? 480 : undefined,
             iconClass: 'fa-folder-open',
-            centered: true
+            centered: key === 'drawing' || key === 'gaming'
         });
 
         win.querySelectorAll('.xp-icon').forEach(icon => {
             icon.addEventListener('click', () => {
                 win.querySelectorAll('.xp-icon').forEach(i => i.classList.remove('selected'));
                 icon.classList.add('selected');
-            });
-            icon.addEventListener('dblclick', () => {
                 const idx = parseInt(icon.dataset.index, 10);
-                openProjectDetail(projectsData[idx]);
-            });
-        });
-        return;
-    }
-
-    if (key === 'contact') {
-        const bodyHTML = `
-            <div class="contact-window">
-                <div class="contact-window-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <h4>Email</h4>
-                        <p>
-                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${contactData.email}" target="_blank" rel="noopener">${contactData.email}</a>
-                        </p>
-                    </div>
-                </div>
-                <div class="contact-window-item">
-                    <i class="fab fa-linkedin"></i>
-                    <div>
-                        <h4>LinkedIn</h4>
-                        <p><a href="${contactData.linkedin}" target="_blank">LinkedIn (Foo Chen Xuan)</a></p>
-                    </div>
-                </div>
-                <div class="contact-window-item">
-                    <i class="fab fa-github"></i>
-                    <div>
-                        <h4>GitHub</h4>
-                        <p><a href="${contactData.github}" target="_blank">${contactData.github.replace('https://', '')}</a></p>
-                    </div>
-                </div>
-                <div class="contact-window-item">
-                    <i class="fas fa-phone"></i>
-                    <div>
-                        <h4>Tel-NO.</h4>
-                        <p><a href="tel:${contactData.phone}">${contactData.phone}</a></p>
-                    </div>
-                </div>
-                <div class="contact-window-cv">
-                    <h4>Download My CV</h4>
-                    <p>Get a detailed PDF version of my resume</p>
-                    <a href="${contactData.cv}" download><i class="fas fa-file-pdf"></i> Download CV</a>
-                </div>
-            </div>
-        `;
-
-        spawnXPWindow({
-            title: 'Contact',
-            bodyHTML,
-            width: 380,
-            height: 480,
-            iconClass: 'fa-address-card',
-            centered: true
-        });
-        return;
-    }
-
-    const data = hobbiesData[key];
-    if (!data) return;
-    const labels = { reading: 'Books', drawing: 'Draw', gaming: 'Game' };
-
-    if (key === 'reading') {
-    const BOOKS_VOLUME = 0.5;
-    const FADE_MS = 50;
-    const FADE_STEP_MS = 40;
-
-    const booksAudio = new Audio('Books/Books.mp3');
-    booksAudio.volume = 0;
-    attachSubtitles(booksAudio, BOOKS_SUBTITLES);
-
-    let fadeTimer = null;
-
-    function fadeAudio(target, duration, onDone) {
-        if (fadeTimer) clearInterval(fadeTimer);
-        const steps = Math.max(1, Math.round(duration / FADE_STEP_MS));
-        const startVol = booksAudio.volume;
-        const delta = (target - startVol) / steps;
-        let step = 0;
-
-        fadeTimer = setInterval(() => {
-            step++;
-            booksAudio.volume = Math.min(1, Math.max(0, startVol + delta * step));
-            if (step >= steps) {
-                clearInterval(fadeTimer);
-                fadeTimer = null;
-                booksAudio.volume = target;
-                if (onDone) onDone();
-            }
-        }, FADE_STEP_MS);
-    }
-
-    booksAudio.play()
-        .then(() => fadeAudio(BOOKS_VOLUME, FADE_MS))
-        .catch(() => {}); // silently ignore autoplay-block errors
-
-    const stopBooksAudio = () => {
-        fadeAudio(0, FADE_MS, () => {
-            booksAudio.pause();
-            booksAudio.currentTime = 0;
-        });
-    };
-
-    const win = spawnXPWindow({
-        title: labels[key],
-        bodyHTML: `<div class="book-switcher-window"></div>`,
-        width: 640,
-        height: 420,
-        iconClass: 'fa-book',
-        centered: true,
-        onMinimize: stopBooksAudio,
-        onClose: stopBooksAudio
-    });
-    renderBookSwitcherInto(win.querySelector('.book-switcher-window'), data.images, 0);
-    return;
-    }
-
-    const iconsHtml = data.images.map((img, i) => `
-        <button class="xp-icon" data-index="${i}">
-            <span class="xp-icon-image"><img src="${img.src}" alt="" loading="eager" decoding="async"></span>
-            <span class="xp-icon-label">${img.title || `Drawing${String(i + 1).padStart(2, '0')}.jpg`}</span>
-        </button>
-    `).join('');
-
-    const win = spawnXPWindow({
-        title: labels[key],
-        bodyHTML: `<div class="xp-icons xp-icons-in-window">${iconsHtml}</div>`,
-        width: key === 'drawing' ? 700 : (key === 'gaming' ? 600 : 420),
-        height: (key === 'drawing' || key === 'gaming') ? 480 : undefined,
-        iconClass: 'fa-folder-open',
-        centered: key === 'drawing' || key === 'gaming'
-    });
-
-    win.querySelectorAll('.xp-icon').forEach(icon => {
-        icon.addEventListener('click', () => {
-            win.querySelectorAll('.xp-icon').forEach(i => i.classList.remove('selected'));
-            icon.classList.add('selected');
-            const idx = parseInt(icon.dataset.index, 10);
-            const img = data.images[idx];
-            spawnXPWindow({
-                title: `${img.title || labels[key]} - Windows Picture and Fax Viewer`,
-                bodyHTML: `<img src="${img.src}" alt="${img.title || ''}">`,
-                width: 460,
-                height: 440,
-                iconClass: 'fa-image',
-                centered: true
-            });
-        });
-    });
-}
-
-// ---- Book switcher, generalized to render inside any container (a window body) ----
-function renderBookSwitcherInto(container, images, activeIndex) {
-    container.innerHTML = `
-        <div class="book-switcher">
-            <div class="book-switcher-left">
-                <div class="book-switcher-list">
-                    ${images.map((img, i) => `
-                        <button class="book-switcher-item${i === activeIndex ? ' active' : ''}" data-index="${i}">
-                            <span class="switcher-bar"></span>
-                            <span class="switcher-title">${img.title || ''}</span>
-                        </button>
-                    `).join('')}
-                </div>
-                <div class="book-switcher-stage"></div>
-            </div>
-            <div class="book-switcher-desc"></div>
-            <div class="book-switcher-fog"></div>
-        </div>
-    `;
-
-    const state = { current: activeIndex };
-    const stageEl = container.querySelector('.book-switcher-stage');
-    const listEl = container.querySelector('.book-switcher-list');
-    const fogEl = container.querySelector('.book-switcher-fog');
-
-    function taper(centerIndex) {
-        listEl.querySelectorAll('.book-switcher-item').forEach((item, i) => {
-            const dist = Math.abs(i - centerIndex);
-            const extra = Math.max(0, BAR_MAX_EXTRA - dist * BAR_STEP);
-            item.style.setProperty('--bar-extra', `${extra}px`);
-        });
-    }
-
-    function showDesc(img) {
-        container.querySelector('.book-switcher-desc').innerHTML = `
-            <h3 class="book-desc-title-inline">${img.title || ''}</h3>
-            <p class="book-desc-author">${img.author || ''}</p>
-            <p class="book-desc-body">${img.description || ''}</p>
-            <div class="book-desc-comment">
-                <span class="book-desc-comment-label">Comment</span>
-                <p class="book-desc-comment-body"></p>
-            </div>
-        `;
-    }
-
-    function getRotation(el) {
-        const cs = getComputedStyle(el);
-        return {
-            x: parseFloat(cs.getPropertyValue('--rotate-x')) || 0,
-            y: parseFloat(cs.getPropertyValue('--rotate-y')) || 0,
-            z: parseFloat(cs.getPropertyValue('--rotate-z')) || 0
-        };
-    }
-
-    // ---- Book switch animation: reset to 0° -> turn right (side) -> swap -> turn back to cover ----
-    function switchBook(index) {
-        const outgoing = stageEl.querySelector('.book-3d');
-
-        listEl.querySelectorAll('.book-switcher-item').forEach((it, j) => it.classList.toggle('active', j === index));
-        taper(index);
-
-        if (!outgoing) {
-            state.current = index;
-            renderActiveBookInto(stageEl, images[index]);
-            showDesc(images[index]);
-            return;
-        }
-
-        outgoing.classList.add('switching');
-
-        function turnToSideThenSwap() {
-            outgoing.style.setProperty('--rotate-y', '-90deg');
-            outgoing.addEventListener('transitionend', function onSide() {
-                outgoing.removeEventListener('transitionend', onSide);
-                completeSwap();
-            }, { once: true });
-        }
-
-        function completeSwap() {
-            state.current = index;
-            renderActiveBookInto(stageEl, images[index]);
-            showDesc(images[index]);
-
-            const incoming = stageEl.querySelector('.book-3d');
-            incoming.style.transition = 'none';
-            incoming.style.setProperty('--rotate-x', '0deg');
-            incoming.style.setProperty('--rotate-y', '90deg');
-            incoming.style.setProperty('--rotate-z', '0deg');
-            incoming.getBoundingClientRect(); // force reflow so the jump isn't animated
-            incoming.style.transition = '';
-            incoming.classList.add('switching');
-
-            requestAnimationFrame(() => {
-                incoming.style.setProperty('--rotate-y', '0deg');
-            });
-
-            incoming.addEventListener('transitionend', function onCover() {
-                incoming.removeEventListener('transitionend', onCover);
-                incoming.classList.remove('switching');
-            }, { once: true });
-        }
-
-        const current = getRotation(outgoing);
-        const needsReset = current.x !== 0 || current.y !== 0 || current.z !== 0;
-
-        if (needsReset) {
-            // Step 1: rotate back to initial angle
-            outgoing.style.setProperty('--rotate-x', '0deg');
-            outgoing.style.setProperty('--rotate-y', '0deg');
-            outgoing.style.setProperty('--rotate-z', '0deg');
-            outgoing.addEventListener('transitionend', function onReset() {
-                outgoing.removeEventListener('transitionend', onReset);
-                turnToSideThenSwap(); // Step 2
-            }, { once: true });
-        } else {
-            turnToSideThenSwap(); // already at 0°, skip straight to step 2
-        }
-    }
-
-    renderActiveBookInto(stageEl, images[state.current]);
-    showDesc(images[state.current]);
-    requestAnimationFrame(() => taper(state.current));
-
-    listEl.querySelectorAll('.book-switcher-item').forEach((item, i) => {
-        item.addEventListener('click', () => {
-            if (i === state.current) return;
-            switchBook(i);
-        });
-        item.addEventListener('mouseenter', () => {
-            taper(i);
-            fogEl.classList.add('active');
-        });
-        item.addEventListener('mouseleave', () => {
-            taper(state.current);
-            fogEl.classList.remove('active');
-        });
-    });
-}
-
-function renderActiveBookInto(stageEl, img) {
-    if (!stageEl) return;
-    const { pageWidth, pageHeight, overhang, coverThickness, depth } = BOOK;
-    const coverW = pageWidth + overhang;
-    const coverH = pageHeight + overhang * 2;
-    const spineWidth = BOOK.spineWidth;
-
-    const frontCoverHTML = buildBox({ x0: 0, y0: -overhang, z0: 0, w: coverW, h: coverH, d: coverThickness, faces: { front: img.src }, sideColor: '#1c1c1c', extraClass: 'cover-front', skipFaces: ['back'] });
-    const backCoverHTML = buildBox({ x0: 0, y0: -overhang, z0: -(depth - coverThickness), w: coverW, h: coverH, d: coverThickness, faces: { back: img.back || img.src }, sideColor: '#1c1c1c', extraClass: 'cover-back', skipFaces: ['front'] });
-    const spineHTML = buildBox({ x0: -spineWidth, y0: -overhang, z0: 0, w: spineWidth, h: coverH, d: depth, faces: { left: img.spine || img.src }, sideColor: '#333', extraClass: 'spine', skipFaces: ['right'] });
-
-    const pageDepth = depth - coverThickness * 2;
-    const pageBlockHTML = `
-        <div class="book-face page-block-top" style="${boxFace('top', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture"></div></div>
-        <div class="book-face page-block-bottom" style="${boxFace('bottom', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture"></div></div>
-        <div class="book-face page-block-right" style="${boxFace('right', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture-vertical"></div></div>
-    `;
-
-    stageEl.innerHTML = `
-        <div class="book-stack-item">
-            <div class="book-3d">${frontCoverHTML}${backCoverHTML}${spineHTML}${pageBlockHTML}</div>
-        </div>
-    `;
-}
-    // 3D book rotation controls (drag to spin the active book cover)
-    let isDragging = false;
-    let previousMousePosition = { x: 0, y: 0 };
-    let currentBook3d = null;
-    let rotation = { x: 0, y: 0, z: 0 };
-
-    hobbyOverlayQueue.addEventListener('mousedown', (e) => {
-        const book3d = e.target.closest('.book-3d');
-        if (!book3d) return;
-        isDragging = true;
-        currentBook3d = book3d;
-        previousMousePosition = { x: e.clientX, y: e.clientY };
-
-        const currentX = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-x')) || 0;
-        const currentY = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-y')) || 0;
-        const currentZ = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-z')) || 0;
-        rotation = { x: currentX, y: currentY, z: currentZ };
-
-        e.preventDefault();
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging || !currentBook3d) return;
-        const deltaX = e.clientX - previousMousePosition.x;
-        const deltaY = e.clientY - previousMousePosition.y;
-
-        rotation.y += deltaX * 0.5;
-        rotation.x -= deltaY * 0.5;
-
-        currentBook3d.style.setProperty('--rotate-x', `${rotation.x}deg`);
-        currentBook3d.style.setProperty('--rotate-y', `${rotation.y}deg`);
-        currentBook3d.style.setProperty('--rotate-z', `${rotation.z}deg`);
-
-        previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        currentBook3d = null;
-    });
-
-    hobbyOverlayQueue.addEventListener('touchstart', (e) => {
-        const book3d = e.target.closest('.book-3d');
-        if (!book3d) return;
-        isDragging = true;
-        currentBook3d = book3d;
-        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-
-        const currentX = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-x')) || 0;
-        const currentY = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-y')) || 0;
-        const currentZ = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-z')) || 0;
-        rotation = { x: currentX, y: currentY, z: currentZ };
-
-        e.preventDefault();
-    });
-
-    document.addEventListener('touchmove', (e) => {
-        if (!isDragging || !currentBook3d) return;
-        const deltaX = e.touches[0].clientX - previousMousePosition.x;
-        const deltaY = e.touches[0].clientY - previousMousePosition.y;
-
-        rotation.y += deltaX * 0.5;
-        rotation.x -= deltaY * 0.5;
-
-        rotation.x = Math.max(-85, Math.min(85, rotation.x));
-        rotation.y = Math.max(-85, Math.min(85, rotation.y));
-
-        currentBook3d.style.setProperty('--rotate-x', `${rotation.x}deg`);
-        currentBook3d.style.setProperty('--rotate-y', `${rotation.y}deg`);
-        currentBook3d.style.setProperty('--rotate-z', `${rotation.z}deg`);
-
-        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    });
-
-    document.addEventListener('touchend', () => {
-        isDragging = false;
-        currentBook3d = null;
-    });
-
-    // ---- Dashboard tab switching ----
-    const dashboardTabs = document.querySelectorAll('.dashboard-tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    dashboardTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.dataset.tab;
-
-            if (tabId === 'hobby') {
-                renderHobbyDesktop();
-            }
-
-            dashboardTabs.forEach(t => {
-                t.classList.remove('active');
-                t.setAttribute('aria-selected', 'false');
-            });
-
-            tab.classList.add('active');
-            tab.setAttribute('aria-selected', 'true');
-
-            tabContents.forEach(content => {
-                content.style.display = 'none';
-                content.classList.remove('active');
-            });
-
-            const selectedContent = document.getElementById(`tab-${tabId}`);
-            if (selectedContent) {
-                selectedContent.style.display = 'block';
-                selectedContent.classList.add('active');
-            }
-        });
-    });
-
-    // ---- Cursor-based plus-sign background rotation for the avatar panel ----
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const avatarPanel = document.querySelector('.dashboard-avatar-panel');
-            if (!avatarPanel) return;
-
-            const plusContainer = document.createElement('div');
-            plusContainer.className = 'plus-sign-bg';
-            plusContainer.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 1;
-                overflow: visible;
-            `;
-            avatarPanel.insertBefore(plusContainer, avatarPanel.firstChild);
-
-            const plusSize = 30;
-            const panelWidth = avatarPanel.offsetWidth;
-            const panelHeight = avatarPanel.offsetHeight;
-            const cols = 6;
-            const rows = 12;
-            const colSpacing = panelWidth / cols;
-            const rowSpacing = panelHeight / rows;
-
-            for (let row = 0; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                    const plus = document.createElement('div');
-                    plus.className = 'plus-sign';
-
-                    const leftPct = ((col + 0.5) / cols) * 100;
-                    const topPct = ((row + 0.5) / rows) * 100;
-
-                    plus.style.cssText = `
-                        position: absolute;
-                        width: ${plusSize}px;
-                        height: ${plusSize}px;
-                        left: ${leftPct}%;
-                        top: ${topPct}%;
-                        transform: translate(-50%, -50%);
-                        opacity: 0.1;
-                        transition: transform 0.1s ease-out;
-                        z-index: 2;
-                        background: transparent;
-                    `;
-
-                    const horizontal = document.createElement('div');
-                    horizontal.style.cssText = `
-                        position: absolute;
-                        width: 100%;
-                        height: 3px;
-                        background: #2f41a6;
-                        top: 50%;
-                        left: 0;
-                        transform: translateY(-50%);
-                        z-index: 3;
-                    `;
-
-                    const vertical = document.createElement('div');
-                    vertical.style.cssText = `
-                        position: absolute;
-                        width: 3px;
-                        height: 100%;
-                        background: #2f41a6;
-                        left: 50%;
-                        top: 0;
-                        transform: translateX(-50%);
-                        z-index: 3;
-                    `;
-
-                    plus.appendChild(horizontal);
-                    plus.appendChild(vertical);
-                    plusContainer.appendChild(plus);
-                }
-            }
-            const contentElements = avatarPanel.querySelectorAll(':scope > *:not(.plus-sign-bg)');
-            contentElements.forEach(el => {
-                el.style.position = 'relative';
-                el.style.zIndex = '10';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                const plusSigns = plusContainer.querySelectorAll('.plus-sign');
-                plusSigns.forEach(plus => {
-                    const rect = plus.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    const deltaX = e.clientX - centerX;
-                    const deltaY = e.clientY - centerY;
-                    const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-                    plus.style.transform = `rotate(${angle}deg)`;
+                const img = data.images[idx];
+                spawnXPWindow({
+                    title: `${img.title || labels[key]} - Windows Picture and Fax Viewer`,
+                    bodyHTML: `<img src="${img.src}" alt="${img.title || ''}">`,
+                    width: 460,
+                    height: 440,
+                    iconClass: 'fa-image',
+                    centered: true
                 });
             });
-        }, 2000);
-    });
-</script>
-</body>
-</html>
+        });
+    }
+
+    // ---- Book switcher, generalized to render inside any container (a window body) ----
+    function renderBookSwitcherInto(container, images, activeIndex) {
+        container.innerHTML = `
+            <div class="book-switcher">
+                <div class="book-switcher-left">
+                    <div class="book-switcher-list">
+                        ${images.map((img, i) => `
+                            <button class="book-switcher-item${i === activeIndex ? ' active' : ''}" data-index="${i}">
+                                <span class="switcher-bar"></span>
+                                <span class="switcher-title">${img.title || ''}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="book-switcher-stage"></div>
+                </div>
+                <div class="book-switcher-desc"></div>
+                <div class="book-switcher-fog"></div>
+            </div>
+        `;
+
+        const state = { current: activeIndex };
+        const stageEl = container.querySelector('.book-switcher-stage');
+        const listEl = container.querySelector('.book-switcher-list');
+        const fogEl = container.querySelector('.book-switcher-fog');
+
+        function taper(centerIndex) {
+            listEl.querySelectorAll('.book-switcher-item').forEach((item, i) => {
+                const dist = Math.abs(i - centerIndex);
+                const extra = Math.max(0, BAR_MAX_EXTRA - dist * BAR_STEP);
+                item.style.setProperty('--bar-extra', `${extra}px`);
+            });
+        }
+
+        function showDesc(img) {
+            container.querySelector('.book-switcher-desc').innerHTML = `
+                <h3 class="book-desc-title-inline">${img.title || ''}</h3>
+                <p class="book-desc-author">${img.author || ''}</p>
+                <p class="book-desc-body">${img.description || ''}</p>
+                <div class="book-desc-comment">
+                    <span class="book-desc-comment-label">Comment</span>
+                    <p class="book-desc-comment-body"></p>
+                </div>
+            `;
+        }
+
+        function getRotation(el) {
+            const cs = getComputedStyle(el);
+            return {
+                x: parseFloat(cs.getPropertyValue('--rotate-x')) || 0,
+                y: parseFloat(cs.getPropertyValue('--rotate-y')) || 0,
+                z: parseFloat(cs.getPropertyValue('--rotate-z')) || 0
+            };
+        }
+
+        // ---- Book switch animation: reset to 0° -> turn right (side) -> swap -> turn back to cover ----
+        function switchBook(index) {
+            const outgoing = stageEl.querySelector('.book-3d');
+
+            listEl.querySelectorAll('.book-switcher-item').forEach((it, j) => it.classList.toggle('active', j === index));
+            taper(index);
+
+            if (!outgoing) {
+                state.current = index;
+                renderActiveBookInto(stageEl, images[index]);
+                showDesc(images[index]);
+                return;
+            }
+
+            outgoing.classList.add('switching');
+
+            function turnToSideThenSwap() {
+                outgoing.style.setProperty('--rotate-y', '-90deg');
+                outgoing.addEventListener('transitionend', function onSide() {
+                    outgoing.removeEventListener('transitionend', onSide);
+                    completeSwap();
+                }, { once: true });
+            }
+
+            function completeSwap() {
+                state.current = index;
+                renderActiveBookInto(stageEl, images[index]);
+                showDesc(images[index]);
+
+                const incoming = stageEl.querySelector('.book-3d');
+                incoming.style.transition = 'none';
+                incoming.style.setProperty('--rotate-x', '0deg');
+                incoming.style.setProperty('--rotate-y', '90deg');
+                incoming.style.setProperty('--rotate-z', '0deg');
+                incoming.getBoundingClientRect(); // force reflow so the jump isn't animated
+                incoming.style.transition = '';
+                incoming.classList.add('switching');
+
+                requestAnimationFrame(() => {
+                    incoming.style.setProperty('--rotate-y', '0deg');
+                });
+
+                incoming.addEventListener('transitionend', function onCover() {
+                    incoming.removeEventListener('transitionend', onCover);
+                    incoming.classList.remove('switching');
+                }, { once: true });
+            }
+
+            const current = getRotation(outgoing);
+            const needsReset = current.x !== 0 || current.y !== 0 || current.z !== 0;
+
+            if (needsReset) {
+                // Step 1: rotate back to initial angle
+                outgoing.style.setProperty('--rotate-x', '0deg');
+                outgoing.style.setProperty('--rotate-y', '0deg');
+                outgoing.style.setProperty('--rotate-z', '0deg');
+                outgoing.addEventListener('transitionend', function onReset() {
+                    outgoing.removeEventListener('transitionend', onReset);
+                    turnToSideThenSwap(); // Step 2
+                }, { once: true });
+            } else {
+                turnToSideThenSwap(); // already at 0°, skip straight to step 2
+            }
+        }
+
+        renderActiveBookInto(stageEl, images[state.current]);
+        showDesc(images[state.current]);
+        requestAnimationFrame(() => taper(state.current));
+
+        listEl.querySelectorAll('.book-switcher-item').forEach((item, i) => {
+            item.addEventListener('click', () => {
+                if (i === state.current) return;
+                switchBook(i);
+            });
+            item.addEventListener('mouseenter', () => {
+                taper(i);
+                fogEl.classList.add('active');
+            });
+            item.addEventListener('mouseleave', () => {
+                taper(state.current);
+                fogEl.classList.remove('active');
+            });
+        });
+    }
+
+    function renderActiveBookInto(stageEl, img) {
+        if (!stageEl) return;
+        const { pageWidth, pageHeight, overhang, coverThickness, depth } = BOOK;
+        const coverW = pageWidth + overhang;
+        const coverH = pageHeight + overhang * 2;
+        const spineWidth = BOOK.spineWidth;
+
+        const frontCoverHTML = buildBox({ x0: 0, y0: -overhang, z0: 0, w: coverW, h: coverH, d: coverThickness, faces: { front: img.src }, sideColor: '#1c1c1c', extraClass: 'cover-front', skipFaces: ['back'] });
+        const backCoverHTML = buildBox({ x0: 0, y0: -overhang, z0: -(depth - coverThickness), w: coverW, h: coverH, d: coverThickness, faces: { back: img.back || img.src }, sideColor: '#1c1c1c', extraClass: 'cover-back', skipFaces: ['front'] });
+        const spineHTML = buildBox({ x0: -spineWidth, y0: -overhang, z0: 0, w: spineWidth, h: coverH, d: depth, faces: { left: img.spine || img.src }, sideColor: '#333', extraClass: 'spine', skipFaces: ['right'] });
+
+        const pageDepth = depth - coverThickness * 2;
+        const pageBlockHTML = `
+            <div class="book-face page-block-top" style="${boxFace('top', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture"></div></div>
+            <div class="book-face page-block-bottom" style="${boxFace('bottom', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture"></div></div>
+            <div class="book-face page-block-right" style="${boxFace('right', 0, 0, -coverThickness, pageWidth, pageHeight, pageDepth)}"><div class="page-texture-vertical"></div></div>
+        `;
+
+        stageEl.innerHTML = `
+            <div class="book-stack-item">
+                <div class="book-3d">${frontCoverHTML}${backCoverHTML}${spineHTML}${pageBlockHTML}</div>
+            </div>
+        `;
+    }
+        // 3D book rotation controls (drag to spin the active book cover)
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let currentBook3d = null;
+        let rotation = { x: 0, y: 0, z: 0 };
+
+        hobbyOverlayQueue.addEventListener('mousedown', (e) => {
+            const book3d = e.target.closest('.book-3d');
+            if (!book3d) return;
+            isDragging = true;
+            currentBook3d = book3d;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+
+            const currentX = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-x')) || 0;
+            const currentY = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-y')) || 0;
+            const currentZ = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-z')) || 0;
+            rotation = { x: currentX, y: currentY, z: currentZ };
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !currentBook3d) return;
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+
+            rotation.y += deltaX * 0.5;
+            rotation.x -= deltaY * 0.5;
+
+            currentBook3d.style.setProperty('--rotate-x', `${rotation.x}deg`);
+            currentBook3d.style.setProperty('--rotate-y', `${rotation.y}deg`);
+            currentBook3d.style.setProperty('--rotate-z', `${rotation.z}deg`);
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            currentBook3d = null;
+        });
+
+        hobbyOverlayQueue.addEventListener('touchstart', (e) => {
+            const book3d = e.target.closest('.book-3d');
+            if (!book3d) return;
+            isDragging = true;
+            currentBook3d = book3d;
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+            const currentX = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-x')) || 0;
+            const currentY = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-y')) || 0;
+            const currentZ = parseFloat(getComputedStyle(currentBook3d).getPropertyValue('--rotate-z')) || 0;
+            rotation = { x: currentX, y: currentY, z: currentZ };
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging || !currentBook3d) return;
+            const deltaX = e.touches[0].clientX - previousMousePosition.x;
+            const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+            rotation.y += deltaX * 0.5;
+            rotation.x -= deltaY * 0.5;
+
+            rotation.x = Math.max(-85, Math.min(85, rotation.x));
+            rotation.y = Math.max(-85, Math.min(85, rotation.y));
+
+            currentBook3d.style.setProperty('--rotate-x', `${rotation.x}deg`);
+            currentBook3d.style.setProperty('--rotate-y', `${rotation.y}deg`);
+            currentBook3d.style.setProperty('--rotate-z', `${rotation.z}deg`);
+
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+            currentBook3d = null;
+        });
+
+        // ---- Dashboard tab switching ----
+        const dashboardTabs = document.querySelectorAll('.dashboard-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        dashboardTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+
+                if (tabId === 'hobby') {
+                    renderHobbyDesktop();
+                }
+
+                dashboardTabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+
+                tabContents.forEach(content => {
+                    content.style.display = 'none';
+                    content.classList.remove('active');
+                });
+
+                const selectedContent = document.getElementById(`tab-${tabId}`);
+                if (selectedContent) {
+                    selectedContent.style.display = 'block';
+                    selectedContent.classList.add('active');
+                }
+            });
+        });
+
+        // ---- Cursor-based plus-sign background rotation for the avatar panel ----
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const avatarPanel = document.querySelector('.dashboard-avatar-panel');
+                if (!avatarPanel) return;
+
+                const plusContainer = document.createElement('div');
+                plusContainer.className = 'plus-sign-bg';
+                plusContainer.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    z-index: 1;
+                    overflow: visible;
+                `;
+                avatarPanel.insertBefore(plusContainer, avatarPanel.firstChild);
+
+                const plusSize = 30;
+                const panelWidth = avatarPanel.offsetWidth;
+                const panelHeight = avatarPanel.offsetHeight;
+                const cols = 6;
+                const rows = 12;
+                const colSpacing = panelWidth / cols;
+                const rowSpacing = panelHeight / rows;
+
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const plus = document.createElement('div');
+                        plus.className = 'plus-sign';
+
+                        const leftPct = ((col + 0.5) / cols) * 100;
+                        const topPct = ((row + 0.5) / rows) * 100;
+
+                        plus.style.cssText = `
+                            position: absolute;
+                            width: ${plusSize}px;
+                            height: ${plusSize}px;
+                            left: ${leftPct}%;
+                            top: ${topPct}%;
+                            transform: translate(-50%, -50%);
+                            opacity: 0.1;
+                            transition: transform 0.1s ease-out;
+                            z-index: 2;
+                            background: transparent;
+                        `;
+
+                        const horizontal = document.createElement('div');
+                        horizontal.style.cssText = `
+                            position: absolute;
+                            width: 100%;
+                            height: 3px;
+                            background: #2f41a6;
+                            top: 50%;
+                            left: 0;
+                            transform: translateY(-50%);
+                            z-index: 3;
+                        `;
+
+                        const vertical = document.createElement('div');
+                        vertical.style.cssText = `
+                            position: absolute;
+                            width: 3px;
+                            height: 100%;
+                            background: #2f41a6;
+                            left: 50%;
+                            top: 0;
+                            transform: translateX(-50%);
+                            z-index: 3;
+                        `;
+
+                        plus.appendChild(horizontal);
+                        plus.appendChild(vertical);
+                        plusContainer.appendChild(plus);
+                    }
+                }
+                const contentElements = avatarPanel.querySelectorAll(':scope > *:not(.plus-sign-bg)');
+                contentElements.forEach(el => {
+                    el.style.position = 'relative';
+                    el.style.zIndex = '10';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    const plusSigns = plusContainer.querySelectorAll('.plus-sign');
+                    plusSigns.forEach(plus => {
+                        const rect = plus.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const deltaX = e.clientX - centerX;
+                        const deltaY = e.clientY - centerY;
+                        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+                        plus.style.transform = `rotate(${angle}deg)`;
+                    });
+                });
+            }, 2000);
+        });
+    </script>
+    </body>
+    </html>
