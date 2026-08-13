@@ -78,6 +78,35 @@ p, h1, h2, h3, h4, h5, h6, span, strong, .dashboard-personal-details strong {
 }
 
 /* Text Selection Styling */
+.boot-start-prompt {
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-size: 1.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    opacity: 1;
+    animation: bootPromptPulse 1.6s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.boot-start-prompt.hidden {
+    opacity: 0;
+    animation: none; 
+}
+
+@keyframes bootPromptPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
 ::selection {
     background: var(--green);
     color: var(--black);
@@ -2029,6 +2058,74 @@ position: relative;
     border-top: 1px solid #4fa3ff;
     box-shadow: 0 -1px 4px rgba(0,0,0,0.4);
     z-index: 100;
+}
+
+.xp-start-menu {
+    position: absolute;
+    left: 4px;
+    bottom: 38px;
+    width: 220px;
+    background: #ece9d8;
+    border: 1px solid #0831d9;
+    border-radius: 6px 6px 3px 3px;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.5);
+    overflow: hidden;
+    z-index: 500;
+    display: none;
+    flex-direction: column;
+}
+
+.xp-start-menu.active { display: flex; }
+
+.xp-start-menu-header {
+    background: linear-gradient(180deg, #3d95ff 0%, #1958e0 45%, #0f45c4 55%, #1d5fe0 100%);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.xp-start-menu-header img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.xp-start-menu-items {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: #fff;
+}
+
+.xp-start-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    color: #000;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.xp-start-menu-item:hover {
+    background: linear-gradient(180deg, #2a8ae0, #1657d6);
+    color: #fff;
+}
+
+.xp-start-menu-item i {
+    width: 18px;
+    text-align: center;
 }
 
 .xp-start-btn {

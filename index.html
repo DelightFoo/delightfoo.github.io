@@ -19,6 +19,7 @@
     <body>
     <div class="boot-overlay" id="bootOverlay">
         <div class="boot-text" id="bootText"><span class="boot-cursor" id="bootCursor"></span></div>
+        <div class="boot-start-prompt" id="bootStartPrompt">Click anywhere to start</div>
         <div class="boot-webcam-container" id="bootWebcamContainer">
             <video id="bootWebcamVideo" autoplay playsinline muted></video>
             <canvas id="bootEyeDetectionCanvas"></canvas>
@@ -338,11 +339,15 @@
                     }
 
                     bootWebcamStatus.textContent = 'Position your face for eye scan';
+                    startPresentEyesLoop();
                     startBootEyeDetection();
 
                 } catch (err) {
                     console.error('Error starting boot webcam:', err);
                     bootWebcamStatus.textContent = 'Camera error - skipping scan';
+                    stopPresentEyesLoop();
+                    if (introAudio) introAudio.volume = 0.2;
+                    playSkippedScanAudio();
                     setTimeout(continueBootSequence, 2000);
                 }
             }
@@ -502,6 +507,7 @@
                 }
                 bootWebcamVideo.srcObject = null;
                 bootWebcamContainer.classList.remove('active');
+                stopPresentEyesLoop();
             }
 
             function showBootEyeResult(imageData) {
@@ -518,17 +524,21 @@
                     earthCanvas.classList.add('active');
                 }
 
+                stopPresentEyesLoop();
+                playScanningAudio();
+
                 setTimeout(() => {
                     bootEyeResultOverlay.classList.remove('active');
                     if (earthCanvas) {
                         earthCanvas.classList.remove('active');
                     }
+                    stopScanningAudio();
+                    playAccessGrantedAudio();
                     lines.push('>- access granted');
                     lines.push('>- booting...');
                     typeNextChar();
                 }, 3000);
             }
-
             function continueBootSequence() {
                 bootEyeResultOverlay.classList.remove('active');
                 bootOverlay.classList.add('open');
@@ -539,9 +549,20 @@
             }
 
             document.body.style.overflow = 'hidden';
-            typeNextChar();
-
             initEarth();
+
+            const bootStartPrompt = document.getElementById('bootStartPrompt');
+
+            function beginBootSequence() {
+                if (bootStartPrompt) bootStartPrompt.classList.add('hidden');
+                playIntroAudio();
+                typeNextChar();
+            }
+
+            ['click', 'keydown', 'touchstart'].forEach(evt => {
+                document.addEventListener(evt, beginBootSequence, { once: true });
+            });
+
         });
 
         function initEarth() {
@@ -673,6 +694,14 @@
             { text: "Yet,  it is quick and fun.", start:7.75},
             { text: "Well, you can't ask for a better one in this niche.", start: 9.75 }
         ];
+
+        const MOBILEMP_SUBTITLES = [
+            { text: "Get rid of youtube ads! especially when running.", start: 0 },
+            { text: "Pressing the tiny 'skip ads' button when heavy-breathing and running,", start:3},
+            { text: "might have make you lost balance and get yourself killed.", start:6.85},
+            { text: "It is clean and simple, you can import the song list directly from youtube,", start: 9.75 },
+            { text: "switch among playlists, shuffle, able to play in background and off-screen.", start: 14.75 }
+        ];
         // ---- Project showcase (PROJECT tab) ----
         const projectsData = [
             {
@@ -687,6 +716,8 @@
                 desc: "Enable user to login Google Account, authorise permission to read and write google drive. Allow user to import youtube music list. Offline player plays music from google drive, able to play in background and screen-off.",
                 image: "logo.png",
                 video: "",
+                audio: "Projects/mobile MP.mp3",
+                subtitles: MOBILEMP_SUBTITLES,
                 tags: ["Kotlin", "Android", "Google OAuth", "Google Drive API", "python", "yt-dlp"]
             },
             {
@@ -856,8 +887,117 @@
         const footerSubtitleEl = document.getElementById('footerSubtitle');
 
 
+        let introAudio = null;
+        let introAudioStarted = false;
+
+        function playIntroAudio() {
+            if (introAudioStarted) return;
+            if (!introAudio) {
+                introAudio = new Audio('Booting Doors/Intro.mp3');
+                introAudio.volume = 0.6;
+            }
+            introAudio.play()
+                .then(() => { introAudioStarted = true; })
+                .catch(() => {
+                    console.log('Intro audio blocked by browser autoplay policy — waiting for interaction.');
+                });
+        }
+
+        function playSkippedScanAudio() {
+            const audio = new Audio(encodeURI('Booting Doors/Skipped Scan.mp3'));
+            audio.volume = 0.6;
+            audio.play().catch(err => {
+                console.log('Skipped Scan audio blocked:', err);
+            });
+        }
+
+        let presentEyesAudio = null;
+        let presentEyesTimeout = null;
+        let presentEyesInterval = null;
+
+        function startPresentEyesLoop() {
+            if (presentEyesInterval || presentEyesTimeout) return;
+
+            presentEyesAudio = new Audio(encodeURI('Booting Doors/Present Eyes.mp3'));
+            presentEyesAudio.volume = 0.6;
+
+            function playOnce() {
+                presentEyesAudio.currentTime = 0;
+                presentEyesAudio.play().catch(err => {
+                    console.log('Present Eyes audio blocked:', err);
+                });
+            }
+
+            playOnce();
+
+            presentEyesAudio.addEventListener('ended', () => {
+                presentEyesTimeout = setTimeout(playOnce, 1000);
+            });
+
+            presentEyesInterval = setInterval(() => {
+                if (presentEyesAudio && presentEyesAudio.paused) {
+                    playOnce();
+                }
+            }, 1000);
+        }
+
+        function stopPresentEyesLoop() {
+            if (presentEyesInterval) {
+                clearInterval(presentEyesInterval);
+                presentEyesInterval = null;
+            }
+            if (presentEyesTimeout) {
+                clearTimeout(presentEyesTimeout);
+                presentEyesTimeout = null;
+            }
+            if (presentEyesAudio) {
+                presentEyesAudio.pause();
+                presentEyesAudio.currentTime = 0;
+                presentEyesAudio = null;
+            }
+        }
+        let scanningAudio = null;
+
+        function playScanningAudio() {
+            scanningAudio = new Audio(encodeURI('Booting Doors/Scanning.mp3'));
+            scanningAudio.volume = 0.6;
+            scanningAudio.play().catch(err => {
+                console.log('Scanning audio blocked:', err);
+            });
+        }
+
+        function stopScanningAudio() {
+            if (scanningAudio) {
+                scanningAudio.pause();
+                scanningAudio.currentTime = 0;
+                scanningAudio = null;
+            }
+        }
+
+        function playAccessGrantedAudio() {
+            const audio = new Audio(encodeURI('Booting Doors/Access Granted.mp3'));
+            audio.volume = 0.6;
+            audio.play().catch(err => {
+                console.log('Access Granted audio blocked:', err);
+            });
+        }
+
+        let windowsXPAudioPlayed = false;
+
+        function playWindowsXPAudio() {
+            if (windowsXPAudioPlayed) return;
+            windowsXPAudioPlayed = true;
+
+            const audio = new Audio(encodeURI('Windows XP.mp3'));
+            audio.volume = 0.6;
+            audio.play().catch(err => {
+                console.log('Windows XP audio blocked:', err);
+            });
+        }
+
         function createFadingAudio(src, { volume = 0.5, fadeMs = 50, fadeStepMs = 10 } = {}) {
         const audio = new Audio(src);
+        audio.preload = 'auto';
         audio.volume = 0;
         let fadeTimer = null;
 
@@ -1103,11 +1243,11 @@
         hobbyOverlayQueue.classList.add('xp-desktop-mode');
 
         const folders = [
-            { key: 'projects', label: 'Projects' },
-            { key: 'reading', label: 'Books' },
-            { key: 'drawing', label: 'Drawings' },
-            { key: 'gaming', label: 'Games' },
-            { key: 'contact', label: 'Contact' }
+            { key: 'projects', label: 'Projects', icon: 'fa-folder-open' },
+            { key: 'reading', label: 'Books', icon: 'fa-book' },
+            { key: 'drawing', label: 'Drawings', icon: 'fa-pencil-alt' },
+            { key: 'gaming', label: 'Games', icon: 'fa-gamepad' },
+            { key: 'contact', label: 'Contact', icon: 'fa-address-card' }
         ];
 
         const iconsHtml = folders.map(f => `
@@ -1117,12 +1257,26 @@
             </button>
         `).join('');
 
+        const startMenuItemsHtml = folders.map(f => `
+            <button class="xp-start-menu-item" data-key="${f.key}">
+                <i class="fas ${f.icon}"></i>
+                <span>${f.label}</span>
+            </button>
+        `).join('');
+
         hobbyOverlayQueue.innerHTML = `
             <div class="xp-desktop">
                 <div class="xp-icons">${iconsHtml}</div>
                 <div class="xp-windows" id="xpWindows"></div>
+                <div class="xp-start-menu" id="xpStartMenu">
+                    <div class="xp-start-menu-header">
+                        <img src="logo.png" alt="">
+                        <span>Foo Chen Xuan</span>
+                    </div>
+                    <div class="xp-start-menu-items">${startMenuItemsHtml}</div>
+                </div>
                 <div class="xp-taskbar">
-                    <button class="xp-start-btn"><span class="xp-start-icon"></span>start</button>
+                    <button class="xp-start-btn" id="xpStartBtn"><span class="xp-start-icon"></span>start</button>
                     <div class="xp-taskbar-items" id="xpTaskbarItems"></div>
                     <div class="xp-tray"><span class="xp-clock" id="xpClock">--:--</span></div>
                 </div>
@@ -1134,6 +1288,8 @@
 
         const desktopEl = hobbyOverlayQueue.querySelector('.xp-desktop');
         const iconEls = hobbyOverlayQueue.querySelectorAll('.xp-folder-icon');
+        const startBtn = document.getElementById('xpStartBtn');
+        const startMenu = document.getElementById('xpStartMenu');
 
         iconEls.forEach(icon => {
             icon.addEventListener('click', () => {
@@ -1145,9 +1301,23 @@
             });
         });
 
+        // ---- Start button + menu ----
+        startBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            startMenu.classList.toggle('active');
+        });
+
+        startMenu.querySelectorAll('.xp-start-menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                startMenu.classList.remove('active');
+                openFolderWindow(item.dataset.key);
+            });
+        });
+
         desktopEl.addEventListener('click', (e) => {
             if (e.target.closest('.xp-icon') || e.target.closest('.xp-window') || e.target.closest('.xp-taskbar')) return;
             iconEls.forEach(i => i.classList.remove('selected'));
+            startMenu.classList.remove('active');
         });
     }
 
@@ -1171,7 +1341,7 @@
 
         let audioCtl = null;
         if (p.audio) {
-            audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 50, fadeStepMs: 10 });
+            audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 0, fadeStepMs: 10 });
             attachSubtitles(audioCtl.audio, p.subtitles || []);
             audioCtl.start();
         }
@@ -1628,6 +1798,7 @@
                 const tabId = tab.dataset.tab;
 
                 if (tabId === 'hobby') {
+                    playWindowsXPAudio();
                     renderHobbyDesktop();
                 }
 
