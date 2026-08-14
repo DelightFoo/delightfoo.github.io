@@ -883,6 +883,7 @@ html {
 }
 
 .dashboard-avatar-stage {
+    --badge-size: 56px;
     display: grid;
     place-items: end start;
     min-height: 0;
@@ -890,10 +891,88 @@ html {
     max-height: 55svh;
     aspect-ratio: 4 / 5;
     align-self: start;
-    padding: 1rem;
+    position: relative;
+    border: 5px solid #fc0e75;
     background:
         repeating-linear-gradient(to bottom, transparent 0 3px, rgba(192, 254, 4, 0.1) 3px 4px),
         radial-gradient(circle at 50% 45%, rgba(192, 254, 4, 0.13), transparent 55%);
+}
+
+.dashboard-avatar-plus {
+    position: absolute;
+    right: 0px;
+    width: 56px;
+    height: 56px;
+    background: #fc0e75;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.dashboard-avatar-plus-glyph::before,
+.dashboard-avatar-plus-glyph::after {
+    content: '';
+    position: absolute;
+    background: #000;
+}
+
+.dashboard-avatar-plus-glyph::before {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 15%;      /* stroke thickness — tweak this */
+    transform: translateY(-50%);
+}
+
+/* vertical bar */
+.dashboard-avatar-plus-glyph::after {
+    left: 50%;
+    top: 0;
+    width: 15%;       /* stroke thickness — tweak this */
+    height: 100%;
+    transform: translateX(-50%);
+}
+
+.dashboard-avatar-plus-glyph {
+    position: relative;
+    display: inline-block;
+    width: 60%;
+    height: 60%;
+    transform: rotate(0deg);
+}
+
+.dashboard-avatar-plus-glyph.spinning {
+    animation: plusSpin 0.9s linear infinite;
+}
+
+@keyframes plusSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.dashboard-avatar-plus-glyph.settling {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* continuous spin while hovered */
+.dashboard-avatar-plus-glyph {
+    display: inline-block;
+    transform: rotate(0deg);
+}
+
+.dashboard-avatar-plus-glyph.spinning {
+    animation: plusSpin 0.9s linear infinite;
+}
+
+@keyframes plusSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.dashboard-avatar-plus-glyph.settling {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dashboard-avatar-stage span {
@@ -908,6 +987,53 @@ html {
     justify-content: space-between;
     gap: 0.5rem;
     padding-top: 0.25rem;
+}
+
+.avatar-marquee {
+    position: absolute;
+    left: 0;
+    right: calc(var(--badge-size) - 1px); 
+    bottom: 0px;
+    height: 56px;
+    overflow: hidden;
+    background: #fc0e75;
+    z-index: 4;
+    clip-path: inset(0 0 0 100%);
+    transition: clip-path 0.4s ease;
+}
+
+
+.avatar-marquee.expanded {
+    clip-path: inset(0 0 0 0%);
+}
+
+.avatar-marquee-track {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: max-content;
+    animation: avatarMarqueeLoop 8s linear infinite;
+    animation-play-state: paused;
+}
+
+.avatar-marquee-track span {
+    flex-shrink: 0;
+    padding: 0 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: #000;
+    white-space: nowrap;
+}
+
+.avatar-marquee-track.running {
+    animation-play-state: running;
+}
+
+@keyframes avatarMarqueeLoop {
+    from { transform: translateX(0%); }
+    to   { transform: translateX(-50%); }
 }
 
 .dashboard-workspace {
@@ -2191,6 +2317,144 @@ position: relative;
     border-bottom: none;
     border-radius: 3px 3px 0 0;
 }
+
+
+.game-switcher-window { width: 100%; height: 100%; }
+
+.game-switcher {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+}
+
+.game-switcher-media { position: absolute; inset: 0; }
+.game-switcher-media video,
+.game-switcher-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* the fading fog panel pinned to the bottom */
+.game-wheel {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+.game-wheel.active { opacity: 1; }
+
+.game-wheel-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.game-wheel-spoke {
+    stroke: rgba(255,255,255,0.28);
+    stroke-width: 1;
+    transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.game-wheel-spoke.active {
+    stroke: var(--green, #c0fe04);
+    stroke-width: 1.5;
+}
+
+.game-wheel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+}
+
+.game-wheel-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--green, #c0fe04);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px var(--green, #c0fe04);
+}
+
+.game-wheel-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 0.35rem 0.9rem;
+    background: rgba(0,0,0,0.72);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.75);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    pointer-events: none;
+    text-align: center;
+}
+
+.game-wheel-item.active {
+    background: var(--green, #c0fe04);
+    border-color: var(--green, #c0fe04);
+    color: #000;
+    font-weight: 700;
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 0 12px rgba(192, 254, 4, 0.6);
+}
+
+.game-switcher-fog {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 42%;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    z-index: 2;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.92) 0%,
+        rgba(0,0,0,0.75) 55%,
+        rgba(0,0,0,0.15) 90%,
+        rgba(0,0,0,0) 100%
+    );
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* bordered game thumbnail */
+.game-switcher-thumb {
+    flex: 0 0 120px;
+    height: 100%;
+    border: 2px solid var(--green, #c0fe04);
+    overflow: hidden;
+    background: #000;
+}
+.game-switcher-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* borderless description */
+.game-switcher-desc { flex: 1; min-width: 0; overflow-y: auto; color: #fff; }
+.game-desc-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    color: #fff;
+}
+.game-desc-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
+}
+
 
 /* Contact Section */
 .contact-content {

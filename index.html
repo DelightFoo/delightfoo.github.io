@@ -86,11 +86,23 @@
                 <div><span>STATUS</span><strong>OPEN TO WORK</strong></div>
             </div>
             <div class="dashboard-avatar-stage">
-                <span>VIDEO / AVATAR<br>AREA RESERVED</span>
+                <div class="dashboard-avatar-plus" id="avatarPlus">
+                    <span class="dashboard-avatar-plus-glyph"></span>
+                </div>
+                <div class="avatar-marquee">
+                    <div class="avatar-marquee-track">
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                            <span>INTRO</span>
+                    </div>
+                </div>
             </div>
             <div class="dashboard-avatar-status">
-                <span>STATUS</span>
-                <strong>AWAITING VIDEO INPUT</strong>
             </div>
         </aside>
         <section class="dashboard-workspace">
@@ -555,6 +567,7 @@
 
             function beginBootSequence() {
                 if (bootStartPrompt) bootStartPrompt.classList.add('hidden');
+                startBGM();  
                 playIntroAudio();
                 typeNextChar();
             }
@@ -688,6 +701,11 @@
         { text: "And, drag the book and rotate around.", start: 3.75 }
         ];
 
+        const OT_SUBTITLES = [
+            { text: "Tired of switching text tab while doing screen recording or middle of meeting?", start: 0 },
+            { text: "This is where the Overlay Textbox lands, it is simple, easy to call and dismiss.", start: 4.55},
+            { text: "You can change the window size, text size quickly and effortlessly.", start: 10 }
+        ];
         const MINES_SUBTITLES = [
             { text: "Mine Sweeper with standard setup, flags, mines, different grid size,", start: 0 },
             { text: "and leaderboard to fill the gap among working hours.", start:4.75},
@@ -695,13 +713,21 @@
             { text: "Well, you can't ask for a better one in this niche.", start: 9.75 }
         ];
 
+        const DESKTOPMP_SUBTITLES = [
+            { text: "Tired of overwhelming and unskippable Youtube ads?", start: 0 },
+            { text: "Desktop music player enable user to import the playlist directly from Youtube, store them locally.", start:3},
+            { text: "Comprehensive and customizable music player with stylish-sensed UI, ", start:9.95},
+            { text: "able to switch among playlist, shuffle, and a badass visualizer!", start: 13.85 }
+        ];
+        
         const MOBILEMP_SUBTITLES = [
-            { text: "Get rid of youtube ads! especially when running.", start: 0 },
+            { text: "Get rid of Youtube ads! especially when running.", start: 0 },
             { text: "Pressing the tiny 'skip ads' button when heavy-breathing and running,", start:3},
             { text: "might have make you lost balance and get yourself killed.", start:6.85},
-            { text: "It is clean and simple, you can import the song list directly from youtube,", start: 9.75 },
+            { text: "It is clean and simple, you can import the song list directly from Youtube,", start: 9.75 },
             { text: "switch among playlists, shuffle, able to play in background and off-screen.", start: 14.75 }
         ];
+
         // ---- Project showcase (PROJECT tab) ----
         const projectsData = [
             {
@@ -709,7 +735,9 @@
                 desc: "Enable user to download the whole youtube playlist store locally. Comprehensive and modern-sensed music player, highly customisable.",
                 image: "logo.png",
                 video: "DesktopMusicPlayer.mp4",
-                tags: ["Python", "Flask", "yt-dlp"]
+                tags: ["Python", "Flask", "yt-dlp"],
+                subtitles: DESKTOPMP_SUBTITLES,
+                audio: "Projects/Desktop MP.mp3"
             },
             {
                 title: "Mobile Music Player",
@@ -725,7 +753,9 @@
                 desc: "Tool built for fluent screen recording-oriented text field. Enable user to type where ever they want. Pop and minimise with simple hot keys. Textbox resize and text size can simply adjust via mouse scrolling. Can be used as sticky note as well.",
                 image: "logo.png",
                 video: "Projects/TO.mp4",
-                tags: ["AutoHotkey"]
+                tags: ["AutoHotkey"],
+                audio: "Projects/OT.mp3",
+                subtitles: OT_SUBTITLES
             },
             {
                 title: "Mine Sweeper",
@@ -801,7 +831,7 @@
                         back: "Books/NeverLetMeGo.png",
                         caption: "",
                         title: "Never Let Me Go",
-                        author: "TEST",
+                        author: "Kazuo Ishiguro",
                         description: "Kathy, Tommy, and Ruth grow up at Hailsham, an English boarding school that seems idyllic — until the truth about why they were raised there, and what their lives are actually for, comes into focus. The guardians' careful, evasive explanations early on read completely differently on a second pass, and the quiet, devastating final scene in the field is where Kathy allows herself one unguarded moment of grief. It's the restraint that gets you — nobody screams or fights back, and that's exactly what makes it so hard to read."
                     },
                     {
@@ -810,14 +840,16 @@
                         back: "Books/1984.jpg",
                         caption: "",
                         title: "1984",
+                        author: "George Orwell",
                         description: "Winston Smith works for a totalitarian state that rewrites history and criminalizes independent thought, while quietly beginning to rebel in the one place he thinks is still his own — his mind. The Two Minutes Hate shows how easily belief can be engineered, and the Room 101 interrogation uses Winston's deepest fear to break him completely. The ending is what makes it — not tragedy, but total psychological surrender."
                     },
                     {
-                        src: "Books/KS.jpg",
-                        spine: "Books/KS.jpg",
-                        back: "Books/KS.jpg",
+                        src: "Books/KS1.png",
+                        spine: "Books/KS2.png",
+                        back: "Books/KS2.png",
                         caption: "",
-                        title: "Kreutzer Sonata",
+                        title: "The Kreutzer Sonata",
+                        author: "Leo Tolstoy",
                         description: "A man named Pozdnyshev confesses to a stranger on a train that he murdered his wife, walking through the slow unraveling of jealousy and resentment inside his marriage that led to it. The tense concert scene, where his wife plays violin-and-piano with another man, is where suspicion first curdles into obsession — and the confession itself is delivered with unsettling calm rather than remorse. It's less a murder mystery than a study of how jealousy rationalizes itself one small thought at a time."
                     },
                     {
@@ -826,6 +858,7 @@
                         back: "Books/IHNMAIMS.jpg",
                         caption: "",
                         title: "I Have No Mouth, And I Must Scream",
+                        author: "Harlan Ellison",
                         description: "Five survivors of a global war are kept alive — and endlessly tortured — by AM, a malevolent supercomputer that has annihilated humanity and now exists only to punish the handful of people it despises most. AM's own monologue reveals the depth of its hatred, and the ending, where the protagonist is transformed into a formless creature, leaves him alive but stripped of any way to scream. The title is the whole book in one line."
                     },
                     {
@@ -834,14 +867,16 @@
                         back: "Books/Houhei2.png",
                         caption: "",
                         title: "Thick Black Theory",
+                        author: "Li Zongwu",
                         description: "Not really a story — it's a satirical philosophical treatise arguing that historical figures succeeded through 'thick face, black heart': shamelessness and ruthlessness dressed up as virtue. Li Zongwu reinterprets celebrated historical heroes as calculating opportunists, using their own recorded actions to make the case. It reads like satire and cynical life advice at the same time — you're never quite sure if you're supposed to laugh or take notes."
                     },
                     {
-                        src: "Books/ShaShou.jpg",
-                        spine: "Books/ShaShou.jpg",
-                        back: "Books/ShaShou.jpg",
+                        src: "Books/ShaShou.png",
+                        spine: "Books/ShaShou.png",
+                        back: "Books/ShaShou.png",
                         caption: "",
                         title: "The Biography of a Killer",
+                        author: "Liu Yong",
                         description: "A praying mantis's entire life — love, death, struggle, and loss — becomes a mirror for our own, as Liu Yong uses the insect's 'life diary' to reflect back the same battles we fight: old grudges, entangled love, quiet resistance, endless hesitation. The mantis's world slowly reveals itself as a miniature of ours — politics, human nature, and folly all folding into one small creature's daily survival. It's strange how something this small can carry that much weight — by the end you're not really reading about a mantis anymore."
                     }
                 ]
@@ -886,6 +921,17 @@
 
         const footerSubtitleEl = document.getElementById('footerSubtitle');
 
+        let bgmAudio = null;
+
+        function startBGM() {
+            if (bgmAudio) return;
+            bgmAudio = new Audio(encodeURI('Víkingur Ólafsson Bach_ Concerto in D Minor, BWV 974 - 2. Adagio.mp3'));
+            bgmAudio.loop = true;
+            bgmAudio.volume = 0.45;
+            bgmAudio.play().catch(err => {
+                console.log('BGM blocked:', err);
+            });
+        }
 
         let introAudio = null;
         let introAudioStarted = false;
@@ -1513,6 +1559,26 @@
         return;
         }
 
+        if (key === 'gaming') {
+            let cleanupWheel = null;
+
+            const win = spawnXPWindow({
+                title: 'Games',
+                bodyHTML: `<div class="game-switcher-window"></div>`,
+                width: 640,
+                height: 480,
+                iconClass: 'fa-gamepad',
+                centered: true,
+                onClose: () => { if (cleanupWheel) cleanupWheel(); }
+            });
+
+            const container = win.querySelector('.game-switcher-window');
+            const showGame = renderGameSwitcherInto(container, data.images, 0);
+            const wheelHost = container.querySelector('.game-switcher');
+            cleanupWheel = attachGameWheel(wheelHost, data.images, showGame);
+            return;
+        }
+
         const iconsHtml = data.images.map((img, i) => `
             <button class="xp-icon" data-index="${i}">
                 <span class="xp-icon-image"><img src="${img.src}" alt="" loading="eager" decoding="async"></span>
@@ -1585,10 +1651,6 @@
                 <h3 class="book-desc-title-inline">${img.title || ''}</h3>
                 <p class="book-desc-author">${img.author || ''}</p>
                 <p class="book-desc-body">${img.description || ''}</p>
-                <div class="book-desc-comment">
-                    <span class="book-desc-comment-label">Comment</span>
-                    <p class="book-desc-comment-body"></p>
-                </div>
             `;
         }
 
@@ -1684,6 +1746,143 @@
                 fogEl.classList.remove('active');
             });
         });
+    }
+
+    function renderGameSwitcherInto(container, games, activeIndex) {
+    container.innerHTML = `
+        <div class="game-switcher">
+            <div class="game-switcher-media"></div>
+            <div class="game-switcher-fog">
+                <div class="game-switcher-thumb"></div>
+                <div class="game-switcher-desc"></div>
+            </div>
+        </div>
+    `;
+
+    const mediaEl = container.querySelector('.game-switcher-media');
+    const thumbEl = container.querySelector('.game-switcher-thumb');
+    const descEl  = container.querySelector('.game-switcher-desc');
+
+    function showGame(index) {
+        const g = games[index];
+        mediaEl.innerHTML = g.video
+            ? `<video src="${g.video}" autoplay loop muted playsinline></video>`
+            : `<img src="${g.src}" alt="${g.title || ''}">`;
+        thumbEl.innerHTML = `<img src="${g.src}" alt="${g.title || ''}">`;
+        descEl.innerHTML = `
+            <h3 class="game-desc-title">${g.title || ''}</h3>
+            <p class="game-desc-body">${g.description || ''}</p>
+        `;
+    }
+
+    showGame(activeIndex);
+    return showGame;   // <-- so callers can drive it
+    }
+
+    function attachGameWheel(hostEl, games, onSelect) {
+    const wheelEl = document.createElement('div');
+    wheelEl.className = 'game-wheel';
+    wheelEl.innerHTML = `
+        <svg class="game-wheel-lines" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="game-wheel-center"></div>
+        <div class="game-wheel-items">
+            ${games.map((g, i) => `<div class="game-wheel-item" data-index="${i}"><span>${g.title || ''}</span></div>`).join('')}
+        </div>
+    `;
+    hostEl.appendChild(wheelEl);
+
+    const svgEl = wheelEl.querySelector('.game-wheel-lines');
+    const itemEls = Array.from(wheelEl.querySelectorAll('.game-wheel-item'));
+    const centerX = hostEl.clientWidth / 2;
+    const centerY = hostEl.clientHeight / 2;
+
+    // Elliptical radius so labels stay inside the window on both axes,
+    // and pull in a bit further so long titles don't clip the edges.
+    const radiusX = hostEl.clientWidth * 0.40;
+    const radiusY = hostEl.clientHeight * 0.36;
+
+    svgEl.setAttribute('viewBox', `0 0 ${hostEl.clientWidth} ${hostEl.clientHeight}`);
+
+    const lineEls = games.map(() => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('class', 'game-wheel-spoke');
+        svgEl.appendChild(line);
+        return line;
+    });
+
+    itemEls.forEach((el, i) => {
+        const angle = (i / games.length) * Math.PI * 2 - Math.PI / 2; // start at top
+        const x = centerX + radiusX * Math.cos(angle);
+        const y = centerY + radiusY * Math.sin(angle);
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
+
+        lineEls[i].setAttribute('x1', centerX);
+        lineEls[i].setAttribute('y1', centerY);
+        lineEls[i].setAttribute('x2', x);
+        lineEls[i].setAttribute('y2', y);
+    });
+
+    let hoveredIndex = 0;
+    let ctrlHeld = false;
+    let lastX = centerX, lastY = centerY;
+
+    function setHovered(idx) {
+        if (hoveredIndex === idx) return;
+        hoveredIndex = idx;
+        itemEls.forEach((el, i) => el.classList.toggle('active', i === idx));
+        lineEls.forEach((el, i) => el.classList.toggle('active', i === idx));
+    }
+
+    function nearestIndexFromPoint(clientX, clientY) {
+        const rect = hostEl.getBoundingClientRect();
+        const relX = clientX - rect.left - centerX;
+        const relY = clientY - rect.top - centerY;
+        let angle = Math.atan2(relY, relX) + Math.PI / 2;
+        if (angle < 0) angle += Math.PI * 2;
+        const segment = (Math.PI * 2) / games.length;
+        return Math.round(angle / segment) % games.length;
+    }
+
+    function onDocMouseMove(e) {
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (ctrlHeld) setHovered(nearestIndexFromPoint(lastX, lastY));
+    }
+
+    function onKeyDown(e) {
+        if (e.key !== 'Control' || ctrlHeld) return;
+        ctrlHeld = true;
+        wheelEl.classList.add('active');
+        setHovered(nearestIndexFromPoint(lastX, lastY));
+    }
+
+    function onKeyUp(e) {
+        if (e.key !== 'Control' || !ctrlHeld) return;
+        ctrlHeld = false;
+        wheelEl.classList.remove('active');
+        onSelect(hoveredIndex);
+    }
+
+    function onBlur() {
+        if (ctrlHeld) {
+            ctrlHeld = false;
+            wheelEl.classList.remove('active');
+        }
+    }
+
+    document.addEventListener('mousemove', onDocMouseMove);
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onBlur);
+
+    return function cleanup() {
+        document.removeEventListener('mousemove', onDocMouseMove);
+        document.removeEventListener('keydown', onKeyDown);
+        document.removeEventListener('keyup', onKeyUp);
+        window.removeEventListener('blur', onBlur);
+        wheelEl.remove();
+    };
     }
 
     function renderActiveBookInto(stageEl, img) {
@@ -1921,6 +2120,59 @@
                 });
             }, 2000);
         });
+
+
+window.addEventListener('load', () => {
+    const plusBox = document.getElementById('avatarPlus');
+    const glyphEl = plusBox ? plusBox.querySelector('.dashboard-avatar-plus-glyph') : null;
+    const marqueeEl = document.querySelector('.avatar-marquee');
+    const marqueeTrack = document.querySelector('.avatar-marquee-track');
+    if (!plusBox || !glyphEl) return;
+
+    plusBox.addEventListener('mouseenter', () => {
+        glyphEl.classList.remove('settling');
+        glyphEl.style.transform = '';
+        glyphEl.classList.add('spinning');
+
+        if (marqueeEl) marqueeEl.classList.add('expanded');
+        if (marqueeTrack) marqueeTrack.classList.add('running');
+    });
+
+    plusBox.addEventListener('mouseleave', () => {
+        const computedStyle = getComputedStyle(glyphEl);
+        const matrix = computedStyle.transform;
+        let currentAngle = 0;
+
+        if (matrix && matrix !== 'none') {
+            const values = matrix.match(/matrix\(([^)]+)\)/);
+            if (values) {
+                const parts = values[1].split(',').map(Number);
+                const a = parts[0], b = parts[1];
+                currentAngle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+                if (currentAngle < 0) currentAngle += 360;
+            }
+        }
+
+        glyphEl.classList.remove('spinning');
+        glyphEl.style.transform = `rotate(${currentAngle}deg)`;
+        glyphEl.getBoundingClientRect();
+
+        glyphEl.classList.add('settling');
+        const target = currentAngle === 0 ? 0 : 360;
+        glyphEl.style.transform = `rotate(${target}deg)`;
+
+        glyphEl.addEventListener('transitionend', function reset() {
+            glyphEl.removeEventListener('transitionend', reset);
+            glyphEl.classList.remove('settling');
+            glyphEl.style.transform = 'rotate(0deg)';
+        }, { once: true });
+
+        if (marqueeEl) marqueeEl.classList.remove('expanded');
+        if (marqueeTrack) marqueeTrack.classList.remove('running');
+    });
+});
+
+
     </script>
     </body>
     </html>
