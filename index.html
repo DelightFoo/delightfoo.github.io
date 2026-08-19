@@ -78,27 +78,22 @@
     <!-- Compact dashboard: single-viewport portfolio UI -->
     <div class="compact-dashboard" aria-label="Portfolio dashboard preview">
         <aside class="dashboard-avatar-panel">
-            <div class="dashboard-panel-label">FCX / VISUAL CHANNEL</div>
+            <div class="dashboard-panel-label">F76---00CX23</div>
             <div class="dashboard-personal-details">
                 <div><span>NAME</span><strong>FOO CHEN XUAN</strong></div>
                 <div><span>ROLE</span><strong>SOFTWARE ENGINEER</strong></div>
                 <div><span>BASE</span><strong>JOHOR, MALAYSIA</strong></div>
                 <div><span>STATUS</span><strong>OPEN TO WORK</strong></div>
             </div>
-            <div class="dashboard-avatar-stage">
+            <div class="dashboard-avatar-stage" id="avatarStage">
+                <canvas class="avatar-frame-canvas" id="avatarFrameCanvas"></canvas>
                 <div class="dashboard-avatar-plus" id="avatarPlus">
                     <span class="dashboard-avatar-plus-glyph"></span>
                 </div>
                 <div class="avatar-marquee">
                     <div class="avatar-marquee-track">
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
-                            <span>INTRO</span>
+                        <span>INTRO</span><span>INTRO</span><span>INTRO</span><span>INTRO</span>
+                        <span>INTRO</span><span>INTRO</span><span>INTRO</span><span>INTRO</span>
                     </div>
                 </div>
             </div>
@@ -871,9 +866,9 @@
                         description: "Not really a story — it's a satirical philosophical treatise arguing that historical figures succeeded through 'thick face, black heart': shamelessness and ruthlessness dressed up as virtue. Li Zongwu reinterprets celebrated historical heroes as calculating opportunists, using their own recorded actions to make the case. It reads like satire and cynical life advice at the same time — you're never quite sure if you're supposed to laugh or take notes."
                     },
                     {
-                        src: "Books/ShaShou.png",
-                        spine: "Books/ShaShou.png",
-                        back: "Books/ShaShou.png",
+                        src: "Books/shaShou.png",
+                        spine: "Books/shaShou.png",
+                        back: "Books/shaShou.png",
                         caption: "",
                         title: "The Biography of a Killer",
                         author: "Liu Yong",
@@ -1021,7 +1016,7 @@
         }
 
         function playAccessGrantedAudio() {
-            const audio = new Audio(encodeURI('Booting Doors/Access Granted.mp3'));
+            const audio = new Audio(encodeURI('Booting Doors/access granted.mp3'));
             audio.volume = 0.6;
             audio.play().catch(err => {
                 console.log('Access Granted audio blocked:', err);
@@ -2129,6 +2124,44 @@ window.addEventListener('load', () => {
     const marqueeTrack = document.querySelector('.avatar-marquee-track');
     if (!plusBox || !glyphEl) return;
 
+    let introClickAudio = null;
+    let introClickTimeout = null;
+
+    function startIntroClickAudio() {
+        if (introClickAudio) return; // already running
+
+        introClickAudio = new Audio(encodeURI('click-for-intro.mp3'));
+        introClickAudio.volume = 0.6;
+        introClickAudio.loop = false; // handled manually now, so native loop stays off
+
+        function playOnce() {
+            if (!introClickAudio) return; // stopped in the meantime
+            introClickAudio.currentTime = 0;
+            introClickAudio.play().catch(err => {
+                console.log('Intro click audio blocked:', err);
+            });
+        }
+
+        introClickAudio.addEventListener('ended', () => {
+            if (!introClickAudio) return;
+            introClickTimeout = setTimeout(playOnce, 300);
+        });
+
+        playOnce();
+    }
+
+    function stopIntroClickAudio() {
+        if (introClickTimeout) {
+            clearTimeout(introClickTimeout);
+            introClickTimeout = null;
+        }
+        if (introClickAudio) {
+            introClickAudio.pause();
+            introClickAudio.currentTime = 0;
+            introClickAudio = null;
+        }
+    }
+
     plusBox.addEventListener('mouseenter', () => {
         glyphEl.classList.remove('settling');
         glyphEl.style.transform = '';
@@ -2136,6 +2169,8 @@ window.addEventListener('load', () => {
 
         if (marqueeEl) marqueeEl.classList.add('expanded');
         if (marqueeTrack) marqueeTrack.classList.add('running');
+
+        startIntroClickAudio();
     });
 
     plusBox.addEventListener('mouseleave', () => {
@@ -2169,10 +2204,148 @@ window.addEventListener('load', () => {
 
         if (marqueeEl) marqueeEl.classList.remove('expanded');
         if (marqueeTrack) marqueeTrack.classList.remove('running');
+
+        stopIntroClickAudio();
     });
 });
 
 
-    </script>
+window.addEventListener('load', () => {
+    const stage = document.getElementById('avatarStage');
+    const stack = document.getElementById('avatarVideoStack');
+    if (!stage || !stack) return;
+
+    const VIDEO_BASE = 'Avatar/videos/';
+
+    // All 16 zones (8 direct + 8 transition) share one uniform angular width,
+    // so no direction dominates the scrub range and switching between
+    // adjacent zones feels evenly paced. 360 / 16 = 22.5deg each.
+    const ZONE_WIDTH_DEG = 22.5;
+    const ZONE_HALF_DEG = ZONE_WIDTH_DEG / 2;
+
+    // Fraction (0-1) of the direction-specific max reach that still counts
+    // as "idle zone" (no directional video yet).
+    const IDLE_RADIUS_FRACTION = 0.12;
+
+    // 16 zone keys in clockwise order, each centered ZONE_WIDTH_DEG apart,
+    // starting straight up. Alternates blue / purple / red / purple.
+    const ZONE_KEYS = [
+        'up', 'tr-up-upright', 'up-right', 'tr-upright-right',
+        'right', 'tr-right-downright', 'down-right', 'tr-downright-down',
+        'down', 'tr-down-downleft', 'down-left', 'tr-downleft-left',
+        'left', 'tr-left-upleft', 'up-left', 'tr-upleft-up'
+    ];
+
+    // ---- Build 16 equal-width contiguous angular ranges covering 0-360deg ----
+    function buildZoneRanges() {
+        return ZONE_KEYS.map((key, i) => {
+            const center = i * ZONE_WIDTH_DEG;
+            return { key, start: center - ZONE_HALF_DEG, end: center + ZONE_HALF_DEG };
+        });
+    }
+
+    const ZONE_RANGES = buildZoneRanges();
+    const ALL_KEYS = ['idle', ...ZONE_KEYS];
+
+    // ---- Build & preload one <video> per zone, stacked in the same spot ----
+    const videos = {};
+    ALL_KEYS.forEach(key => {
+        const v = document.createElement('video');
+        v.src = `${VIDEO_BASE}${key}.mp4`;
+        v.muted = true;
+        v.playsInline = true;
+        v.preload = 'auto';
+        v.className = 'avatar-video';
+        if (key === 'idle') {
+            v.loop = true;
+            v.autoplay = true;
+            v.classList.add('avatar-video-active');
+        }
+        stack.appendChild(v);
+        videos[key] = v;
+    });
+
+    let activeKey = 'idle';
+
+    function setActive(key) {
+        if (key === activeKey) return;
+        videos[activeKey].classList.remove('avatar-video-active');
+        if (activeKey !== 'idle') videos[activeKey].pause();
+
+        videos[key].classList.add('avatar-video-active');
+        if (key === 'idle') {
+            videos.idle.play().catch(() => {});
+        }
+        activeKey = key;
+    }
+
+    // 0deg = straight up, increasing clockwise (matches the zone map).
+    function angleFromVector(dx, dy) {
+        let deg = Math.atan2(dx, -dy) * (180 / Math.PI);
+        if (deg < 0) deg += 360;
+        return deg;
+    }
+
+    function zoneKeyForAngle(deg) {
+        const base = ZONE_RANGES[0].start;
+        let shifted = deg - base;
+        if (shifted < 0) shifted += 360;
+        for (const r of ZONE_RANGES) {
+            const s = r.start - base, e = r.end - base;
+            if (shifted >= s && shifted < e) return r.key;
+        }
+        return ZONE_RANGES[0].key;
+    }
+
+    // Distance from center to the stage's rectangular edge along direction (ux,uy).
+    function maxReach(ux, uy, halfW, halfH) {
+        const tX = ux !== 0 ? halfW / Math.abs(ux) : Infinity;
+        const tY = uy !== 0 ? halfH / Math.abs(uy) : Infinity;
+        return Math.min(tX, tY);
+    }
+
+    function handleMove(clientX, clientY) {
+        const rect = stage.getBoundingClientRect();
+        const cx = rect.width / 2, cy = rect.height / 2;
+        const dx = clientX - rect.left - cx;
+        const dy = clientY - rect.top - cy;
+        const dist = Math.hypot(dx, dy);
+
+        const halfW = rect.width / 2, halfH = rect.height / 2;
+        const reach = maxReach(dx / (dist || 1), dy / (dist || 1), halfW, halfH);
+        const idleThreshold = reach * IDLE_RADIUS_FRACTION;
+
+        if (dist <= idleThreshold) {
+            setActive('idle');
+            return;
+        }
+
+        const deg = angleFromVector(dx, dy);
+        const key = zoneKeyForAngle(deg);
+        setActive(key);
+
+        // Rescale so radius = 0 right at the idle-zone edge (not at dead
+        // center) — otherwise every clip's first ~IDLE_RADIUS_FRACTION of
+        // frames gets skipped the instant you leave idle, causing a jump.
+        const radius = Math.min(1, (dist - idleThreshold) / (reach - idleThreshold));
+        const v = videos[key];
+        if (v.readyState >= 1 && v.duration) {
+            v.currentTime = radius * v.duration;
+        }
+    }
+
+    let raf = null;
+    stage.addEventListener('mousemove', (e) => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+            handleMove(e.clientX, e.clientY);
+            raf = null;
+        });
+    });
+
+    stage.addEventListener('mouseleave', () => setActive('idle'));
+});
+
+   </script>
     </body>
     </html>
