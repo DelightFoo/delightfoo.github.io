@@ -2212,139 +2212,88 @@ window.addEventListener('load', () => {
 
 window.addEventListener('load', () => {
     const stage = document.getElementById('avatarStage');
-    const stack = document.getElementById('avatarVideoStack');
-    if (!stage || !stack) return;
+    const canvas = document.getElementById('avatarFrameCanvas');
+    if (!stage || !canvas) return;
 
-    const VIDEO_BASE = 'Avatar/videos/';
+    const ctx = canvas.getContext('2d');
 
-    // All 16 zones (8 direct + 8 transition) share one uniform angular width,
-    // so no direction dominates the scrub range and switching between
-    // adjacent zones feels evenly paced. 360 / 16 = 22.5deg each.
-    const ZONE_WIDTH_DEG = 22.5;
-    const ZONE_HALF_DEG = ZONE_WIDTH_DEG / 2;
+    const FRAME_BASE = 'Avatar/frames/360/'; // Avatar/frames/360/frame_000.webp .. frame_359.webp
+    const FRAME_EXT = 'webp';
+    const FRAME_COUNT = 360; // one frame per degree
 
-    // Fraction (0-1) of the direction-specific max reach that still counts
-    // as "idle zone" (no directional video yet).
-    const IDLE_RADIUS_FRACTION = 0.12;
+    // Below this pixel distance from center, the angle is too noisy to
+    // trust (atan2 gets unstable right at the origin) — just hold whatever
+    // frame was last shown instead of flickering.
+    const DEAD_ZONE_RADIUS = 6;
 
-    // 16 zone keys in clockwise order, each centered ZONE_WIDTH_DEG apart,
-    // starting straight up. Alternates blue / purple / red / purple.
-    const ZONE_KEYS = [
-        'up', 'tr-up-upright', 'up-right', 'tr-upright-right',
-        'right', 'tr-right-downright', 'down-right', 'tr-downright-down',
-        'down', 'tr-down-downleft', 'down-left', 'tr-downleft-left',
-        'left', 'tr-left-upleft', 'up-left', 'tr-upleft-up'
-    ];
+    // ---- Preload all 360 frames ----
+    const frames = new Array(FRAME_COUNT);
+    for (let i = 0; i < FRAME_COUNT; i++) {
+        const img = new Image();
+        img.src = `${FRAME_BASE}frame_${String(i).padStart(3, '0')}.${FRAME_EXT}`;
+        frames[i] = img;
+    }
+    frames[0].onload = () => drawFrame(0);
 
-    // ---- Build 16 equal-width contiguous angular ranges covering 0-360deg ----
-    function buildZoneRanges() {
-        return ZONE_KEYS.map((key, i) => {
-            const center = i * ZONE_WIDTH_DEG;
-            return { key, start: center - ZONE_HALF_DEG, end: center + ZONE_HALF_DEG };
-        });
+    function resizeCanvas() {
+        const rect = stage.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    new ResizeObserver(resizeCanvas).observe(stage);
+    resizeCanvas();
+
+    function drawFrame(index) {
+        const img = frames[index];
+        if (!img || !img.complete || img.naturalWidth === 0) return;
+
+        const rect = stage.getBoundingClientRect();
+        const canvasW = rect.width, canvasH = rect.height;
+        const scale = Math.max(canvasW / img.naturalWidth, canvasH / img.naturalHeight);
+        const drawW = img.naturalWidth * scale, drawH = img.naturalHeight * scale;
+        const offsetX = (canvasW - drawW) / 2, offsetY = (canvasH - drawH) / 2;
+
+        ctx.clearRect(0, 0, canvasW, canvasH);
+        ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
     }
 
-    const ZONE_RANGES = buildZoneRanges();
-    const ALL_KEYS = ['idle', ...ZONE_KEYS];
-
-    // ---- Build & preload one <video> per zone, stacked in the same spot ----
-    const videos = {};
-    ALL_KEYS.forEach(key => {
-        const v = document.createElement('video');
-        v.src = `${VIDEO_BASE}${key}.mp4`;
-        v.muted = true;
-        v.playsInline = true;
-        v.preload = 'auto';
-        v.className = 'avatar-video';
-        if (key === 'idle') {
-            v.loop = true;
-            v.autoplay = true;
-            v.classList.add('avatar-video-active');
-        }
-        stack.appendChild(v);
-        videos[key] = v;
-    });
-
-    let activeKey = 'idle';
-
-    function setActive(key) {
-        if (key === activeKey) return;
-        videos[activeKey].classList.remove('avatar-video-active');
-        if (activeKey !== 'idle') videos[activeKey].pause();
-
-        videos[key].classList.add('avatar-video-active');
-        if (key === 'idle') {
-            videos.idle.play().catch(() => {});
-        }
-        activeKey = key;
-    }
-
-    // 0deg = straight up, increasing clockwise (matches the zone map).
+    // 0deg = straight up, increasing clockwise.
     function angleFromVector(dx, dy) {
         let deg = Math.atan2(dx, -dy) * (180 / Math.PI);
         if (deg < 0) deg += 360;
         return deg;
     }
 
-    function zoneKeyForAngle(deg) {
-        const base = ZONE_RANGES[0].start;
-        let shifted = deg - base;
-        if (shifted < 0) shifted += 360;
-        for (const r of ZONE_RANGES) {
-            const s = r.start - base, e = r.end - base;
-            if (shifted >= s && shifted < e) return r.key;
-        }
-        return ZONE_RANGES[0].key;
-    }
+    let currentIndex = 0;
 
-    // Distance from center to the stage's rectangular edge along direction (ux,uy).
-    function maxReach(ux, uy, halfW, halfH) {
-        const tX = ux !== 0 ? halfW / Math.abs(ux) : Infinity;
-        const tY = uy !== 0 ? halfH / Math.abs(uy) : Infinity;
-        return Math.min(tX, tY);
-    }
-
-    function handleMove(clientX, clientY) {
+    function handleMove(localX, localY) {
         const rect = stage.getBoundingClientRect();
         const cx = rect.width / 2, cy = rect.height / 2;
-        const dx = clientX - rect.left - cx;
-        const dy = clientY - rect.top - cy;
+        const dx = localX - cx, dy = localY - cy;
         const dist = Math.hypot(dx, dy);
 
-        const halfW = rect.width / 2, halfH = rect.height / 2;
-        const reach = maxReach(dx / (dist || 1), dy / (dist || 1), halfW, halfH);
-        const idleThreshold = reach * IDLE_RADIUS_FRACTION;
-
-        if (dist <= idleThreshold) {
-            setActive('idle');
-            return;
-        }
+        if (dist < DEAD_ZONE_RADIUS) return; // hold last frame, avoid center-jitter
 
         const deg = angleFromVector(dx, dy);
-        const key = zoneKeyForAngle(deg);
-        setActive(key);
-
-        // Rescale so radius = 0 right at the idle-zone edge (not at dead
-        // center) — otherwise every clip's first ~IDLE_RADIUS_FRACTION of
-        // frames gets skipped the instant you leave idle, causing a jump.
-        const radius = Math.min(1, (dist - idleThreshold) / (reach - idleThreshold));
-        const v = videos[key];
-        if (v.readyState >= 1 && v.duration) {
-            v.currentTime = radius * v.duration;
+        const index = Math.round(deg) % FRAME_COUNT;
+        if (index !== currentIndex) {
+            currentIndex = index;
+            drawFrame(currentIndex);
         }
     }
 
-    let raf = null;
     stage.addEventListener('mousemove', (e) => {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-            handleMove(e.clientX, e.clientY);
-            raf = null;
-        });
+        const rect = stage.getBoundingClientRect();
+        handleMove(e.clientX - rect.left, e.clientY - rect.top);
     });
-
-    stage.addEventListener('mouseleave', () => setActive('idle'));
 });
+
+
+
 
    </script>
     </body>

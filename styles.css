@@ -1416,7 +1416,7 @@ html {
 .hobby-overlay-backdrop {
     position: absolute;
     inset: 0;
-    background: rgb(255, 59, 59);
+    background: rgb(0, 98, 255);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     transition: background 0.25s ease;
