@@ -691,6 +691,9 @@
             animate();
         }
 
+        const GAMES_SUBTITLES = [
+            { text: "Press CTRL to switch between games.", start: 0 }
+        ];
         const BOOKS_SUBTITLES = [
         { text: "Click on the lines on your left side to navigate between books.", start: 0 },
         { text: "And, drag the book and rotate around.", start: 3.75 }
@@ -1100,6 +1103,7 @@
 
         function clearLine() {
             footerSubtitleEl.classList.remove('visible');
+            footerSubtitleEl.textContent = '';   // <-- reset so future ticks re-trigger showLine()
         }
 
         function tick() {
@@ -1195,42 +1199,47 @@
         xpDragState = null;
     });
 
-    function spawnXPWindow({ title, bodyHTML, width = 380, height, iconClass = 'fa-folder-open', centered = false, onMinimize, onClose } = {}) {
-        const windowsContainer = document.getElementById('xpWindows');
-        if (!windowsContainer) return null;
+function spawnXPWindow({ title, bodyHTML, width = 380, height, iconClass = 'fa-folder-open', centered = false, maximized = false, onMinimize, onRestore, onClose } = {}) {
+    const windowsContainer = document.getElementById('xpWindows');
+    if (!windowsContainer) return null;
 
-        xpWindowCount++;
+    xpWindowCount++;
 
-        const win = document.createElement('div');
-        win.className = 'xp-window';
-        win.style.width = `${width}px`;
-        if (height) win.style.height = `${height}px`;
+    const win = document.createElement('div');
+    win.className = 'xp-window';
+    win.style.width = `${width}px`;
+    if (height) win.style.height = `${height}px`;
 
-        if (centered) {
-            const rect = windowsContainer.getBoundingClientRect();
-            const winHeight = height || 420;
-            win.style.left = `${Math.max(0, (rect.width - width) / 2)}px`;
-            win.style.top = `${Math.max(0, (rect.height - winHeight) / 2)}px`;
-        } else {
-            const offset = (xpWindowCount % 6) * 24;
-            win.style.left = `${60 + offset}px`;
-            win.style.top = `${30 + offset}px`;
-        }
+    if (centered) {
+        const rect = windowsContainer.getBoundingClientRect();
+        const winHeight = height || 420;
+        win.style.left = `${Math.max(0, (rect.width - width) / 2)}px`;
+        win.style.top = `${Math.max(0, (rect.height - winHeight) / 2)}px`;
+    } else {
+        const offset = (xpWindowCount % 6) * 24;
+        win.style.left = `${60 + offset}px`;
+        win.style.top = `${30 + offset}px`;
+    }
 
-        win.style.zIndex = ++xpZCounter;
-        win.innerHTML = `
-            <div class="xp-titlebar">
-                <span class="xp-titlebar-icon"><i class="fas ${iconClass}"></i></span>
-                <span class="xp-titlebar-text">${title}</span>
-                <div class="xp-titlebar-controls">
-                    <button class="xp-win-btn xp-min" aria-label="Minimize">_</button>
-                    <button class="xp-win-btn xp-max" aria-label="Maximize">&#9633;</button>
-                    <button class="xp-win-btn xp-close" aria-label="Close">&times;</button>
-                </div>
+    win.style.zIndex = ++xpZCounter;
+
+    if (maximized) {
+        win.classList.add('maximized');   // <-- new: opens already maximized
+    }
+
+    win.innerHTML = `
+        <div class="xp-titlebar">
+            <span class="xp-titlebar-icon"><i class="fas ${iconClass}"></i></span>
+            <span class="xp-titlebar-text">${title}</span>
+            <div class="xp-titlebar-controls">
+                <button class="xp-win-btn xp-min" aria-label="Minimize">_</button>
+                <button class="xp-win-btn xp-max" aria-label="Maximize">&#9633;</button>
+                <button class="xp-win-btn xp-close" aria-label="Close">&times;</button>
             </div>
-            <div class="xp-window-body">${bodyHTML}</div>
-        `;
-        windowsContainer.appendChild(win);
+        </div>
+        <div class="xp-window-body">${bodyHTML}</div>
+    `;
+    windowsContainer.appendChild(win);
 
         if (centered) {
             requestAnimationFrame(() => {
@@ -1273,8 +1282,10 @@
                 win.classList.remove('minimized');
                 win.style.zIndex = ++xpZCounter;
                 setActiveTaskbar();
+                if (onRestore) onRestore();
             } else {
                 win.classList.toggle('minimized');
+                if (onMinimize) onMinimize(); 
             }
         });
 
@@ -1377,52 +1388,53 @@
         });
     }
 
-    function openProjectDetail(p) {
-        const mediaHTML = p.video
-            ? `<video src="${p.video}" class="project-detail-media" muted loop autoplay playsinline></video>`
-            : `<img src="${p.image}" class="project-detail-media" alt="${p.title}">`;
+function openProjectDetail(p) {
+    const mediaHTML = p.video
+        ? `<video src="${p.video}" class="project-detail-media" muted loop autoplay playsinline></video>`
+        : `<img src="${p.image}" class="project-detail-media" alt="${p.title}">`;
 
-        const bodyHTML = `
-            <div class="project-detail">
-                <div class="project-detail-media-wrap">${mediaHTML}</div>
-                <div class="project-detail-body">
-                    <h3 class="project-detail-title">${p.title}</h3>
-                    <div class="project-detail-tags">
-                        ${(p.tags || []).map(t => `<span class="project-detail-tag">${t}</span>`).join('')}
-                    </div>
-                    <p class="project-detail-desc">${p.desc}</p>
+    const bodyHTML = `
+        <div class="project-detail">
+            <div class="project-detail-media-wrap">${mediaHTML}</div>
+            <div class="project-detail-body">
+                <h3 class="project-detail-title">${p.title}</h3>
+                <div class="project-detail-tags">
+                    ${(p.tags || []).map(t => `<span class="project-detail-tag">${t}</span>`).join('')}
                 </div>
+                <p class="project-detail-desc">${p.desc}</p>
             </div>
-        `;
+        </div>
+    `;
 
-        let audioCtl = null;
-        if (p.audio) {
-            audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 0, fadeStepMs: 10 });
-            attachSubtitles(audioCtl.audio, p.subtitles || []);
-            audioCtl.start();
-        }
-
-        const win = spawnXPWindow({
-            title: `${p.title} - Project Viewer`,
-            bodyHTML,
-            width: 480,
-            height: 480,
-            iconClass: 'fa-diagram-project',
-            centered: true,
-            onMinimize: audioCtl ? audioCtl.stop : undefined,
-            onClose: audioCtl ? audioCtl.stop : undefined
-        });
-
-        const mediaEl = win.querySelector('.project-detail-media');
-        mediaEl.style.cursor = 'zoom-in';
-        mediaEl.addEventListener('click', () => {
-            if (p.video) {
-                openVideoLightbox(p.video, mediaEl.currentTime);
-            } else {
-                openImageLightbox(p.image, p.title);
-            }
-        });
+    let audioCtl = null;
+    if (p.audio) {
+        audioCtl = createFadingAudio(p.audio, { volume: 0.5, fadeMs: 0, fadeStepMs: 10 });
+        attachSubtitles(audioCtl.audio, p.subtitles || []);
+        audioCtl.start();
     }
+
+    const win = spawnXPWindow({
+        title: `${p.title} - Project Viewer`,
+        bodyHTML,
+        width: 480,
+        height: 480,
+        iconClass: 'fa-diagram-project',
+        centered: true,
+        maximized: true,   // <-- new
+        onMinimize: audioCtl ? audioCtl.stop : undefined,
+        onClose: audioCtl ? audioCtl.stop : undefined
+    });
+
+    const mediaEl = win.querySelector('.project-detail-media');
+    mediaEl.style.cursor = 'zoom-in';
+    mediaEl.addEventListener('click', () => {
+        if (p.video) {
+            openVideoLightbox(p.video, mediaEl.currentTime);
+        } else {
+            openImageLightbox(p.image, p.title);
+        }
+    });
+}
 
     // ---- Opening a folder now spawns a window instead of replacing the desktop ----
     function openFolderWindow(key) {
@@ -1442,7 +1454,8 @@
                 width: 600,
                 height: 280,
                 iconClass: 'fa-folder-open',
-                centered: true
+                centered: true,
+                maximized: true 
             });
 
             win.querySelectorAll('.xp-icon').forEach(icon => {
@@ -1505,7 +1518,8 @@
                 width: 380,
                 height: 480,
                 iconClass: 'fa-address-card',
-                centered: true
+                centered: true,
+                maximized: true 
             });
             return;
         }
@@ -1562,7 +1576,9 @@
             height: 420,
             iconClass: 'fa-book',
             centered: true,
+            maximized: true ,
             onMinimize: stopBooksAudio,
+            onRestore: () => booksAudio.play().then(() => fadeAudio(BOOKS_VOLUME, FADE_MS)).catch(() => {}),
             onClose: stopBooksAudio
         });
         renderBookSwitcherInto(win.querySelector('.book-switcher-window'), data.images, 0);
@@ -1572,6 +1588,15 @@
         if (key === 'gaming') {
             let cleanupWheel = null;
 
+            const gamesAudio = createFadingAudio('Games/games.mp3', {
+                volume: 0.5,
+                fadeMs: 400,
+                fadeStepMs: 20
+            });
+            gamesAudio.audio.loop = false;
+            attachSubtitles(gamesAudio.audio, GAMES_SUBTITLES);
+            gamesAudio.start();
+
             const win = spawnXPWindow({
                 title: 'Games',
                 bodyHTML: `<div class="game-switcher-window"></div>`,
@@ -1579,7 +1604,13 @@
                 height: 480,
                 iconClass: 'fa-gamepad',
                 centered: true,
-                onClose: () => { if (cleanupWheel) cleanupWheel(); }
+                maximized: true,
+                onMinimize: gamesAudio.stop,
+                onRestore: gamesAudio.start,   // <-- new: resume when un-minimized
+                onClose: () => {
+                    gamesAudio.stop();
+                    if (cleanupWheel) cleanupWheel();
+                }
             });
 
             const container = win.querySelector('.game-switcher-window');
@@ -1602,7 +1633,8 @@
             width: key === 'drawing' ? 700 : (key === 'gaming' ? 600 : 420),
             height: (key === 'drawing' || key === 'gaming') ? 480 : undefined,
             iconClass: 'fa-folder-open',
-            centered: key === 'drawing' || key === 'gaming'
+            centered: key === 'drawing' || key === 'gaming',
+            maximized: true 
         });
 
         win.querySelectorAll('.xp-icon').forEach(icon => {
@@ -1617,7 +1649,8 @@
                     width: 460,
                     height: 440,
                     iconClass: 'fa-image',
-                    centered: true
+                    centered: true,
+                    maximized: true 
                 });
             });
         });
@@ -1789,11 +1822,11 @@
     return showGame;   // <-- so callers can drive it
     }
 
-    function attachGameWheel(hostEl, games, onSelect) {
+function attachGameWheel(hostEl, games, onSelect) {
     const wheelEl = document.createElement('div');
     wheelEl.className = 'game-wheel';
     wheelEl.innerHTML = `
-        <svg class="game-wheel-lines" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg class="game-wheel-lines" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
         <div class="game-wheel-center"></div>
         <div class="game-wheel-items">
             ${games.map((g, i) => `<div class="game-wheel-item" data-index="${i}"><span>${g.title || ''}</span></div>`).join('')}
@@ -1803,49 +1836,47 @@
 
     const svgEl = wheelEl.querySelector('.game-wheel-lines');
     const itemEls = Array.from(wheelEl.querySelectorAll('.game-wheel-item'));
-    const centerX = hostEl.clientWidth / 2;
-    const centerY = hostEl.clientHeight / 2;
 
-    // Elliptical radius so labels stay inside the window on both axes,
-    // and pull in a bit further so long titles don't clip the edges.
-    const radiusX = hostEl.clientWidth * 0.40;
-    const radiusY = hostEl.clientHeight * 0.36;
-
-    svgEl.setAttribute('viewBox', `0 0 ${hostEl.clientWidth} ${hostEl.clientHeight}`);
-
-    const lineEls = games.map(() => {
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('class', 'game-wheel-spoke');
-        svgEl.appendChild(line);
-        return line;
-    });
+    const RADIUS_X_PCT = 40;
+    const RADIUS_Y_PCT = 36;
 
     itemEls.forEach((el, i) => {
-        const angle = (i / games.length) * Math.PI * 2 - Math.PI / 2; // start at top
-        const x = centerX + radiusX * Math.cos(angle);
-        const y = centerY + radiusY * Math.sin(angle);
-        el.style.left = `${x}px`;
-        el.style.top = `${y}px`;
+        const angle = (i / games.length) * Math.PI * 2 - Math.PI / 2;
+        const xPct = 50 + RADIUS_X_PCT * Math.cos(angle);
+        const yPct = 50 + RADIUS_Y_PCT * Math.sin(angle);
+        el.style.left = `${xPct}%`;
+        el.style.top = `${yPct}%`;
+    });
 
-        lineEls[i].setAttribute('x1', centerX);
-        lineEls[i].setAttribute('y1', centerY);
-        lineEls[i].setAttribute('x2', x);
-        lineEls[i].setAttribute('y2', y);
+    games.forEach((_, i) => {
+        const boundaryAngle = ((i + 0.5) / games.length) * Math.PI * 2 - Math.PI / 2;
+        const xPct = 50 + RADIUS_X_PCT * Math.cos(boundaryAngle);
+        const yPct = 50 + RADIUS_Y_PCT * Math.sin(boundaryAngle);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('class', 'game-wheel-boundary');
+        line.setAttribute('x1', 50);
+        line.setAttribute('y1', 50);
+        line.setAttribute('x2', xPct);
+        line.setAttribute('y2', yPct);
+        line.setAttribute('vector-effect', 'non-scaling-stroke');
+        svgEl.appendChild(line);
     });
 
     let hoveredIndex = 0;
     let ctrlHeld = false;
-    let lastX = centerX, lastY = centerY;
+    let lastX = 0, lastY = 0;   // ✅ safe default, no undefined reference
 
     function setHovered(idx) {
         if (hoveredIndex === idx) return;
         hoveredIndex = idx;
         itemEls.forEach((el, i) => el.classList.toggle('active', i === idx));
-        lineEls.forEach((el, i) => el.classList.toggle('active', i === idx));
     }
 
     function nearestIndexFromPoint(clientX, clientY) {
         const rect = hostEl.getBoundingClientRect();
+        const centerX = rect.width / 2;    // ✅ computed fresh each call
+        const centerY = rect.height / 2;
         const relX = clientX - rect.left - centerX;
         const relY = clientY - rect.top - centerY;
         let angle = Math.atan2(relY, relX) + Math.PI / 2;
@@ -1893,9 +1924,10 @@
         window.removeEventListener('blur', onBlur);
         wheelEl.remove();
     };
-    }
+}
 
-    function renderActiveBookInto(stageEl, img) {
+
+function renderActiveBookInto(stageEl, img) {
         if (!stageEl) return;
         const { pageWidth, pageHeight, overhang, coverThickness, depth } = BOOK;
         const coverW = pageWidth + overhang;
